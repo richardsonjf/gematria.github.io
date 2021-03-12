@@ -99,10 +99,6 @@ class cipher {
 				this.cArr2 = [1040,1041,1042,1043,1044,1045,1025,1046,1047,1048,1049,1050,1051,1052,1053,1054,1055,1056,1057,1058,1059,1060,1061,1062,1063,1064,1065,1066,1067,1068,1069,1070,1071] // caps
 				Build_GemVals(this)
 				break;
-			case "Korean":
-				this.cArr = [12593,12596,12599,12601,12609,12610,12613,12615,12616,12618,12619,12620,12621,12622,12623,12625,12627,12629,12631,12635,12636,12640,12641,12643]
-				Build_GemVals(this)
-				break;
 		}
 
 		if (impMods.indexOf("Exception") > -1) {this.Exception = true}
@@ -132,10 +128,7 @@ class cipher {
 		if (impMods.indexOf("BeatusOrdinal") > -1) {this.Make_BeatusOrdinal()}
 		if (impMods.indexOf("BeatusReduction") > -1) {this.Make_BeatusReduction()}
 		if (impMods.indexOf("BeatusExtended") > -1) {this.Make_BeatusExtended()}
-		if (impMods.indexOf("RussianE") > -1) {this.Make_RussianE()}
-		if (impMods.indexOf("RussianRevE") > -1) {this.Make_RussianRevE()}
 		if (impMods.indexOf("EnglishCustom") > -1) {this.Make_CustomCipher()}
-		//if (impMods.indexOf("KoreanOrdinal") > -1) {this.Make_KoreanOrdinal()}
 	}
 
 	Gematria(impVal, impType, wLink = false, impHistory = false) {
@@ -579,14 +572,6 @@ class cipher {
 		this.vArr = [1,2,3,4,5,6,7,8,9,9,10,20,30,40,50,60,70,80,90,100,200,200,200,300,400,500]
 		this.vArr2 = [1,2,3,4,5,6,7,8,9,9,10,20,30,40,50,60,70,80,90,100,200,200,200,300,400,500]
 	}
-	Make_RussianE() {
-		this.vArr = [1,2,3,4,5,6,6,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33]
-		this.vArr2 = [1,2,3,4,5,6,6,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33]
-	}
-	Make_RussianRevE() {
-		this.vArr = [33,32,31,30,29,28,28,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
-		this.vArr2 = [33,32,31,30,29,28,28,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
-	}
 	Make_CustomCipher() {
 		// if array is empty, populate it with Ordinal values
 		this.vArr = customvalues
@@ -765,9 +750,6 @@ function Build_Ciphers() {
 			case "RU Reverse Single Reduction": allCiphers[allCiphers.length] = new cipher(key, "Russian", 100, 216, 209, "Reverse", "SingleReduction"); break;
 			case "RU Reverse Sumerian": allCiphers[allCiphers.length] = new cipher(key, "Russian", 220, 208, 148, "Reverse", "SumerianNum"); break;
 			
-			// case "RU Ordinal E": allCiphers[allCiphers.length] = new cipher(key, "Russian", 0, 128, 0, "RussianE"); break;
-			// case "RU Reverse Ordinal E": allCiphers[allCiphers.length] = new cipher(key, "Russian", 80, 160, 20, "RussianRevE"); break;
-			
 			case "Bacon Simple": allCiphers[allCiphers.length] = new cipher(key, "English", 80, 235, 21, "BaconSimple"); break;
 			case "Bacon Reverse": allCiphers[allCiphers.length] = new cipher(key, "English", 0, 186, 0, "BaconReverse"); break;
 			case "Bacon Short": allCiphers[allCiphers.length] = new cipher(key, "English", 100, 216, 209, "BaconShort"); break;
@@ -780,9 +762,6 @@ function Build_Ciphers() {
 			case "Beatus Ordinal": allCiphers[allCiphers.length] = new cipher(key, "English", 186, 85, 211, "BeatusOrdinal"); break;
 			
 			case "English Custom": allCiphers[allCiphers.length] = new cipher(key, "English", 224, 224, 32, "EnglishCustom"); break;
-			
-			case "KR Ordinal": allCiphers[allCiphers.length] = new cipher(key, "Korean", 0, 186, 0); break;
-			case "KR Reverse Ordinal": allCiphers[allCiphers.length] = new cipher(key, "Korean", 80, 235, 21, "Reverse"); break;
 
 		}
 	}
@@ -791,7 +770,7 @@ function Build_Ciphers() {
 }
 
 function Set_Categories() {
-	catArr = ["English", "English (Special)", "Reverse", "Jewish", "Kabbalah", "Mathematical", "Other", "Foreign", "Russian", "Korean", "Custom"]
+	catArr = ["English", "English (Special)", "Reverse", "Jewish", "Kabbalah", "Mathematical", "Other", "Foreign", "Russian", "Custom"]
 
 	cipherArray["English Ordinal"] = "English"
 	cipherArray["Full Reduction"] = "English"
@@ -873,9 +852,6 @@ function Set_Categories() {
 	
 	cipherArray["RU Extended"] = "Russian"
 	cipherArray["RU Reverse Extended"] = "Russian"
-
-	// cipherArray["RU Ordinal E"] = "Russian"
-	// cipherArray["RU Reverse Ordinal E"] = "Russian"
 	
 	cipherArray["Bacon Simple"] = "English (Special)"
 	cipherArray["Bacon Reverse"] = "English (Special)"
@@ -887,9 +863,6 @@ function Set_Categories() {
 	cipherArray["Beatus of Liebana"] = "English (Special)"
 	cipherArray["Beatus Reduction"] = "English (Special)"
 	cipherArray["Beatus Ordinal"] = "English (Special)"
-	
-	cipherArray["KR Ordinal"] = "Korean"
-	cipherArray["KR Reverse Ordinal"] = "Korean"
 	
 	cipherArray["English Custom"] = "Custom"
 	
@@ -937,7 +910,7 @@ function Add_AllCiphers(impBool = false) {
 		if (openCiphers.indexOf(cN) == -1 && cN.indexOf("Hebrew") == -1 && cN.indexOf("Greek") == -1
 		&& cN.indexOf("RU") == -1 && cN.indexOf("Custom") == -1 &&
 		cN.indexOf("Bacon Simple") == -1 && cN.indexOf("Bacon Reverse") == -1 && cN.indexOf("Bacon Short") == -1 && cN.indexOf("Kaye") == -1 && cN.indexOf("Illuminati") == -1 &&
-		cN.indexOf("Beatus") == -1 && cN.indexOf("KR") == -1) {
+		cN.indexOf("Beatus") == -1) {
 			for (z = 0; z < allCiphers.length; z++) {
 				if (allCiphers[z].Nickname == cN) {
 					openCiphers.splice(q, 0, cN)
