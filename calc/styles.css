@@ -304,14 +304,14 @@ body {
 	text-align: center;
 	font-size: 114%;
 	color: orange;
-	background: RGB(30,30,30);
+	background: rgb(30,30,30);
 	padding-right: 2px;
 	padding-left: 2px;
 }
 .CipherEnd {
 	font-size: 90%;
 	text-align: center;
-	background: RGB(21,21,21);
+	background: rgb(21,21,21);
 	padding-top: 2px;
 	padding-bottom: 2px;
 }

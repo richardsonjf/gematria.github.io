@@ -72,7 +72,7 @@ function download(fileName, fileData) {
 function open_img_window(element) {
 	var imageURL,imgName, wnd
 	if ( $(element).length ) { // if specified element exists
-		html2canvas($(element)[0], {allowTaint: true, backgroundColor: "rgba(30,30,30,0)", width: $(element).outerWidth(), height: $(element).outerHeight()} ).then((canvas) => { // e.g. html2canvas($("#ChartTable")[0]).then ...
+		html2canvas($(element)[0], {allowTaint: true, backgroundColor: "rgba(16,16,16,1.0)", width: $(element).outerWidth(), height: $(element).outerHeight()} ).then((canvas) => { // e.g. html2canvas($("#ChartTable")[0]).then ...
 			//allowTaint: true, backgroundColor: "rgba(0,0,0,0)" - render white bg as transparent
 			//width: $(element).width(), height: $(element).height() - get proper element dimensions
 			//console.log("done ... ");

@@ -168,7 +168,7 @@ function Open_History() {
 		if (x % 25 == 0 && !opt_CompactHistoryTable) {
 			ms += '<tr><td class="MPhrase"><font style="color: orange;">Word or Phrase</font></td>'
 			for (z = 0; z < ciphersOn.length; z++) {
-				ms += '<td class="HistoryHead" style="color: RGB(' + ciphersOn[z].RGB.join() +')">' // color of cipher displayed in the table
+				ms += '<td class="HistoryHead" style="color: rgb(' + ciphersOn[z].rgb.join() +')">' // color of cipher displayed in the table
 				ms += ciphersOn[z].Nickname
 				ms += "</td>"
 			}
@@ -190,7 +190,7 @@ function Open_History() {
 				// r = aCipher.R;
 				// g = aCipher.G;
 				// b = aCipher.B;
-				//col = aCipher.RGB
+				//col = aCipher.rgb
 				col = "0,255,0"
 				a = 1.0
 				
@@ -215,8 +215,8 @@ function Open_History() {
 				// numcol = r+','+g+','+b+','+a
 				numcol = col+','+a
 				
-				//ms += '<td><font style="color: RGB(' + aCipher.RGB.join() + '")>' + gemSum + '</font></td>'
-				//ms += '<td><font style="color: RGB(' + numcol + '")>' + gemSum + '</font></td>'
+				//ms += '<td><font style="color: rgb(' + aCipher.rgb.join() + '")>' + gemSum + '</font></td>'
+				//ms += '<td><font style="color: rgb(' + numcol + '")>' + gemSum + '</font></td>'
 				//ms += '<td class="phraseValue" onclick="tdToggleHighlight('+gemVal+')"><font style="color: rgba('+numcol+')">' + gemSum + '</font></td>'
 				ms += '<td class="phraseValue"><font style="color: rgba('+numcol+')">' + gemSum + '</font></td>'
 			}
@@ -232,7 +232,7 @@ function Open_History() {
 				// r = aCipher.R;
 				// g = aCipher.G;
 				// b = aCipher.B;
-				col = aCipher.RGB
+				col = aCipher.rgb
 				a = 1.0
 				
 				//console.log("highlt_num.includes('"+aCipher.Gematria(sHistory[x], 2, false, true)+"'))")
@@ -248,8 +248,8 @@ function Open_History() {
 				// numcol = r+','+g+','+b+','+a
 				numcol = col+','+a
 				
-				//ms += '<td><font style="color: RGB(' + aCipher.RGB.join() + '")>' + gemSum + '</font></td>'
-				//ms += '<td><font style="color: RGB(' + numcol + '")>' + gemSum + '</font></td>'
+				//ms += '<td><font style="color: rgb(' + aCipher.rgb.join() + '")>' + gemSum + '</font></td>'
+				//ms += '<td><font style="color: rgb(' + numcol + '")>' + gemSum + '</font></td>'
 				//ms += '<td class="phraseValue" onclick="tdToggleHighlight('+gemVal+')"><font style="color: rgba('+numcol+')">' + gemSum + '</font></td>'
 				ms += '<td class="phraseValue"><font style="color: rgba('+numcol+')">' + gemSum + '</font></td>'
 			}
@@ -313,7 +313,7 @@ function Populate_Breakdown(impName = breakCipher, impBool = false) {
 		if (opt_Summ == true && opt_Breakdown !== "Classic") {
 			rStr += '<div id="SimpleBreak">'
 			rStr += '<div class="breakPhrase">' + qMark + sVal() + qMark +' = </div><div class="breakSum">' + aCipher.sumArr.reduce(getSum) + '</div>'
-			rStr += ' <div class="breakCipher"><font style="color: RGB(' + aCipher.RGB.join() + ')">(' + aCipher.Nickname + ')</font></div><div id="SimpleBreak"></div>'
+			rStr += ' <div class="breakCipher"><font style="color: rgb(' + aCipher.rgb.join() + ')">(' + aCipher.Nickname + ')</font></div><div id="SimpleBreak"></div>'
 		}
 
 		if (opt_Breakdown == "Chart") {
@@ -328,7 +328,7 @@ function Populate_Breakdown(impName = breakCipher, impBool = false) {
 						rStr += '<td class="BreakChar">' + String.fromCharCode(aCipher.cp[x]) + '</td>'
 					}
 				} else {
-					rStr += '<td class="BreakWordSum" rowspan="2"><font style="color: RGB(' + aCipher.RGB.join() + ')">' + aCipher.sumArr[wCount] + '</font></td>'
+					rStr += '<td class="BreakWordSum" rowspan="2"><font style="color: rgb(' + aCipher.rgb.join() + ')">' + aCipher.sumArr[wCount] + '</font></td>'
 
 					if (breakArr.indexOf(wCount) > -1) {
 						rStr += '</tr><tr>'
@@ -342,7 +342,7 @@ function Populate_Breakdown(impName = breakCipher, impBool = false) {
 					wCount++
 				}
 			}
-			rStr += '<td class="BreakPhraseSum" rowspan="2"><font style="color: RGB(' + aCipher.RGB.join() + ')">' + aCipher.sumArr.reduce(getSum) + '</font></td>'
+			rStr += '<td class="BreakPhraseSum" rowspan="2"><font style="color: rgb(' + aCipher.rgb.join() + ')">' + aCipher.sumArr.reduce(getSum) + '</font></td>'
 			rStr += '</tr><tr>'
 			for (z; z < x; z++) {
 				if (aCipher.cv[z] !== " ") {
@@ -367,7 +367,7 @@ function Populate_Breakdown(impName = breakCipher, impBool = false) {
 					isFirst = false
 				}
 			}
-			rStr += ' = </div> <div class="breakSum">' + aCipher.sumArr.reduce(getSum) + '</div> <div class="breakCipher"><font style="color: RGB(' + aCipher.RGB.join() + ')">(' + aCipher.Nickname + ')</font></div>'
+			rStr += ' = </div> <div class="breakSum">' + aCipher.sumArr.reduce(getSum) + '</div> <div class="breakCipher"><font style="color: rgb(' + aCipher.rgb.join() + ')">(' + aCipher.Nickname + ')</font></div>'
 
 		} else if (opt_Breakdown == "Compact") {
 			var tdCount
@@ -396,7 +396,7 @@ function Populate_Breakdown(impName = breakCipher, impBool = false) {
 				}
 				tdCount++
 			}
-			rStr += '<td class="BreakPhraseSum" rowspan="2"><font style="color: RGB(' + aCipher.RGB.join() + ')">' + aCipher.sumArr.reduce(getSum) + '</font></td>'
+			rStr += '<td class="BreakPhraseSum" rowspan="2"><font style="color: rgb(' + aCipher.rgb.join() + ')">' + aCipher.sumArr.reduce(getSum) + '</font></td>'
 			rStr += '</tr><tr>'
 			tdCount++
 			for (z; z < x; z++) {
@@ -404,7 +404,7 @@ function Populate_Breakdown(impName = breakCipher, impBool = false) {
 					rStr += '<td class="BreakVal">' + aCipher.cv[z] + '</td>'
 				}
 			}
-			rStr += '</tr><tr><td colspan=' + tdCount + ' class="CipherEnd"><font style="color: RGB(' + aCipher.RGB.join() + ')">' + aCipher.Nickname + '</font></td></tr></table>'
+			rStr += '</tr><tr><td colspan=' + tdCount + ' class="CipherEnd"><font style="color: rgb(' + aCipher.rgb.join() + ')">' + aCipher.Nickname + '</font></td></tr></table>'
 		}
 	} else {
 		rStr = ""
@@ -708,21 +708,21 @@ function Build_CharTable(impCipher) {
 	}
 	
 	// gradient table background based on cipher color
-	rStr += 'style="background: rgb(16,16,16) -webkit-linear-gradient(0deg,rgba('+impCipher.RGB.join()+',0.2),#00000080); '
-	rStr += 'background: rgb(16,16,16) -o-linear-gradient(0deg,rgba('+impCipher.RGB.join()+',0.2),#00000080); '
-	rStr += 'background: rgb(16,16,16) -moz-linear-gradient(0deg,rgba('+impCipher.RGB.join()+',0.2),#00000080); '
-	rStr += 'background: rgb(16,16,16) linear-gradient(0deg,rgba('+impCipher.RGB.join()+',0.2),#00000080);">'
+	rStr += 'style="background: rgb(16,16,16) -webkit-linear-gradient(0deg,rgba('+impCipher.rgb.join()+',0.2),#00000080); '
+	rStr += 'background: rgb(16,16,16) -o-linear-gradient(0deg,rgba('+impCipher.rgb.join()+',0.2),#00000080); '
+	rStr += 'background: rgb(16,16,16) -moz-linear-gradient(0deg,rgba('+impCipher.rgb.join()+',0.2),#00000080); '
+	rStr += 'background: rgb(16,16,16) linear-gradient(0deg,rgba('+impCipher.rgb.join()+',0.2),#00000080);">'
 	rStr += '<tr>'
 
 	rStr += '<td colspan="' + impCipher.cArr.length + '">'
 	rStr += '<button id="MoveUp" class="CipherButton" onclick="Slide_Cipher(' + "'up'" + ')" value="Move Up" style="float: left"><B>Move Up</B></button>'
-	rStr += '<B><font style="font-size: 150%; color: RGB(' + impCipher.RGB.join() +')">' + impCipher.Nickname + '</font></B>'
+	rStr += '<B><font style="font-size: 150%; color: rgb(' + impCipher.rgb.join() +')">' + impCipher.Nickname + '</font></B>'
 	rStr += '<button id="MoveDown" class="CipherButton" onclick="Slide_Cipher(' + "'down'" + ')" value="Move Down" style="float: right"><B>Move Down</B></button></B>'
 	rStr += '</td></tr><tr>'
 
 	if (impCipher.cArr.length < 30 && impCipher.vArr.reduce(getSum) < 200) {
 		for (x = 0; x < impCipher.cArr.length; x++) {
-			rStr += '<td class="ChartChar" font style="color: rgb(' + impCipher.RGB.join() +')">' + String.fromCharCode(impCipher.cArr[x]) + '</td>'
+			rStr += '<td class="ChartChar" font style="color: rgb(' + impCipher.rgb.join() +')">' + String.fromCharCode(impCipher.cArr[x]) + '</td>'
 		}
 		rStr += '</tr><tr>'
 		for (x = 0; x < impCipher.cArr.length; x++) {
@@ -738,9 +738,9 @@ function Build_CharTable(impCipher) {
 				}
 				rStr += '</tr><tr>'
 			}
-			rStr += '<td class="ChartChar" font style="color: rgb(' + impCipher.RGB.join() +')">' + String.fromCharCode(impCipher.cArr[x]) + '</td>'
+			rStr += '<td class="ChartChar" font style="color: rgb(' + impCipher.rgb.join() +')">' + String.fromCharCode(impCipher.cArr[x]) + '</td>'
 		}
-		if (impCipher.cArr.length % 2 == 1) { rStr += '<td class="ChartChar" font style="color: rgb(' + impCipher.RGB.join() +')"></td>' } // empty character cell to make even rows
+		if (impCipher.cArr.length % 2 == 1) { rStr += '<td class="ChartChar" font style="color: rgb(' + impCipher.rgb.join() +')"></td>' } // empty character cell to make even rows
 		rStr += '</tr><tr>'
 		for (y; y < x; y++) {
 			rStr += '<td class="ChartVal">' + impCipher.vArr[y] + '</td>'
@@ -1070,7 +1070,7 @@ function Open_Ciphers(impOpt = cOption, impBool = false) {
 				}
 			}
 			hStr += '<input type="checkbox" id="' + replaceAll(key, " ", "") + '_Box" onclick="set_Ciphers()" value="' + key + '" '
-			hStr += keyOn + '><span class="checkboxCipherFont" style="color: RGB(' + aCipher.RGB.join() + ')">' + aCipher.Nickname + '</span></input><BR>'
+			hStr += keyOn + '><span class="checkboxCipherFont" style="color: rgb(' + aCipher.rgb.join() + ')">' + aCipher.Nickname + '</span></input><BR>'
 		}
 		if (thisCat == cOption && thisCat == "Custom") { // special menu for Custom category
 				keyOn = "unchecked"
@@ -1087,7 +1087,7 @@ function Open_Ciphers(impOpt = cOption, impBool = false) {
 					}
 				}
 				hStr += '<input type="checkbox" id="' + replaceAll(key, " ", "") + '_Box" onclick="set_Ciphers()" value="' + key + '" '
-				hStr += keyOn + '><span class="checkboxCipherFont" style="color: RGB(' + aCipher.RGB.join() + ')">' + aCipher.Nickname + '</span></input><BR>'
+				hStr += keyOn + '><span class="checkboxCipherFont" style="color: rgb(' + aCipher.rgb.join() + ')">' + aCipher.Nickname + '</span></input><BR>'
 		}
 	}
 
@@ -1247,9 +1247,9 @@ function ValClass(impType = 1) {if (impType == 1) {return ' class="GemVal"'} els
 function ValID (impCipher) {return ' id="' + impCipher.Nickname + '_Sum"'}
 function CipherColor(impCipher) {
 	if (opt_MatrixCodeRain) {
-		return ' style="color: RGB(' + impCipher.RGB.join() +'); text-shadow: 0px 0px 20px rgb('+impCipher.RGB.join()+');"'
+		return ' style="color: rgb(' + impCipher.rgb.join() +'); text-shadow: 0px 0px 20px rgb('+impCipher.rgb.join()+');"'
 	} else {
-		return ' style="color: RGB(' + impCipher.RGB.join() +');"' // no shadow for static background
+		return ' style="color: rgb(' + impCipher.rgb.join() +');"' // no shadow for static background
 	}
 }
 function HeadClass() {return ' class="GemHead"'}
