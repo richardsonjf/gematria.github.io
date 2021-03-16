@@ -1,59 +1,71 @@
-<html>
-<head>
-<Title>Gematria Calculator - [ravic-norsou]</Title>
-
+<!DOCTYPE html>
 <script src="lib/jquery.min.js"></script>
 <script src="lib/html2canvas.min.js"></script>
+<!-- use v1.0.0-alpha.12, otherwise remove scrollbar and scroll to the very top of page to avoid white stripes -->
 
-<script src="calc/gematriaNGG.js"></script>
-<script src="calc/ijavaNGG.js"></script>
+<script src="calc/calc.js"></script>
+<script src="calc/gematria.js"></script>
+<script src="calc/ciphers.js"></script>
+<script src="calc/breakdown.js"></script>
+<script src="calc/custom-colors.js"></script>
+
 <script src="calc/highlighter.js"></script>
-<script src="calc/history.js"></script>
-
-</head>
-
-
+<script src="calc/screenshot.js"></script>
+<script src="calc/export-csv.js"></script>
 
 <link rel="stylesheet" type="text/css" href="calc/styles.css">
 
-<body onload="Page_Launch()">
+<script>
+// 250 ms after page finishes loading
+$(window).load(function(){
+	$("#loader").delay(250).fadeOut("fast");
+});
+</script>
+
+<style>
+#loader{
+	z-index:999999;
+	display:block;
+	position:fixed;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+	background:rgb(22,26,34);
+}
+</style>
+
+<body onload="initCalc()">
+<!-- Use "onload" otherwise Build_Ciphers() fails - "Cannot access 'cipher' before initialization" -->
+
+<div id="loader"></div>
 <canvas id="canv"></canvas>
 
-<!-- screenshot, html2canvas -->
-<center><div id="screenshotToolbar"></div></center><p>
-	
 <center>
-	
-<div id="MenuSpot"></div><br>
 
-<div id="MainTable"><table><tr>
-	<td><center>
-		<h3>Enter word, phrase or number:</h3>
-	</center></td>
+	<div id="calcOptionsPanel"></div>
+	<div id="ciphMenu"></div>
 
-	</tr><tr>
+	<div id="inputArea">
+	  <input id="phraseBox" autofocus type="text" autocomplete="off" oninput="updateEnabledCiphTable(); updateWordBreakdown(breakCipher);" onkeydown="phraseBoxKeypress(event.keyCode)" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)" style="width: 500px; min-width: 500px; font-size: 125%"></input>
+	  <right><input id="highlightBox" type="text" autocomplete="off" style="width: 200px; min-width: 200px; font-size: 125%"></input><span id="clearFilterButton"></span></right>
+	</div>
 
-	<td><center><input id="SearchField" autofocus type="text" oninput="FieldChange(sVal())" style="width: 500px; min-width: 500px; font-size: 125%" onkeydown="navHistory(event.keyCode) "ondrop="dropHandler(event)" ondragover="dragOverHandler(event)"></input>
-	<right><input id="Highlight" type="text" style="width: 200px; min-width: 200px; font-size: 125%"></input><span id="clearFilterButton"></span></right>
+	<div id="resultArea"></div>
 
-	</center><P>
-
-	<div id="Gematria_Table"></div>
-	<div id="BreakdownSpot"></div>
-
-	</td>
-</tr></table></div>
-
-	<P>
-	<center><div id="ChartSpot" style="min-height: 182px;"></div></center><P>
-	<div id="MiscSpot"></div>
-	
+	<div id="BreakdownDetails">
+		<div id="BreakdownSpot"></div>
+		<div id="ChartSpot"></div>
+	</div>
 </center>
+
+
+<center>	
+	<div id="HistoryTableArea"></div>
+</center>
+
 </body>
 
-
-
-<!-- add after page elements are created -->
 <script src="calc/coderain.js"></script>
-<script src="calc/screenshot.js"></script>
-</HTML>
+
+</html>
