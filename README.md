@@ -1,6 +1,4 @@
 # Gematria Calculator
-
-### Based on [Gematrinator.com](https://www.gematrinator.com/calculator/index.php) (original calculator by Derek Tikkuri)
 ---
 
 ### List of features:
@@ -59,37 +57,6 @@
 
 ### Miscellaneous:
 - Characters with diacritic marks are recognized properly (Latin, Greek)
-- Removed history limit (100 items)
-- Phrase is no longer added to history on mouse over ciphers (unfinished phrases cannot be added accidentally)
 - History table is automatically updated on cipher toggle
 - All available matches found with auto highlighter are displayed in console (debug)
 - New option: "Matrix Code Rain" - disable dynamic background if you prefer "classic" gray color background
-- CSS changes (visual style)
-- Removed unused code
-
----
-
-### More custom ciphers
-There is a way to temporarily add multiple properly named and colored custom ciphers.
-1. Open the page with "Experimental" calculator in your browser
-2. Open "Developer Tools" in browser (press "F12" or "Ctrl+Shift+I")
-3. Switch to "Console" tab, paste the code below and press "Enter"
-4. A new cipher under "Other" category will be added and it will be available until you reload the page
-
-```
-cipherName = "Test Cipher";
-ciphCategory = "Other";
-R = 110;
-G = 179;
-B = 77;
-lowerCaseValues = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26];
-upperCaseValues = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26];
-
-// ======================
-
-allCiphers[allCiphers.length] = new cipher(cipherName, "English", R, G, B);
-cipherArray[cipherName] = ciphCategory;
-allCiphers[allCiphers.length-1].vArr = lowerCaseValues;
-allCiphers[allCiphers.length-1].vArr2 = upperCaseValues;
-Build_Open_Ciphers();
-```
