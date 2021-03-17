@@ -1,3 +1,5 @@
+// ========================== Highlighter ===========================
+
 var userHistory = [] // a copy of user's history before filtering is applied
 var userOpenCiphers = [] // a copy of user's choice of ciphers
 var ctrlIsPressed = false; // allow Ctrl modifier key
@@ -143,7 +145,7 @@ $(document).ready(function(){
 			var val = $(this).html(); // get gematria value from element
 			document.getElementById("phraseBox").value = val; // insert phrase into search box
 			updateWordBreakdown() // update breakdown for current phrase
-			updateEnabledCiphTable() // update enabled cipher values
+			updateEnabledCipherTable() // update enabled cipher values
 			document.getElementById("phraseBox").focus(); // focus input
 		}
 	});
@@ -237,7 +239,7 @@ function RemoveNotMatchingPhrases() {
 			}
 		}		
 
-		updateEnabledCiphTable() // update ciphers
+		updateEnabledCipherTable() // update ciphers
 	}
 	
 	if (optFiltSameCipherMatch) {
@@ -363,7 +365,7 @@ function RemoveNotMatchingPhrases() {
 		console.log("hltBoolArr:")
 		console.log(hltBoolArr)
 
-		updateEnabledCiphTable() // update ciphers
+		updateEnabledCipherTable() // update ciphers
 	}
 	
 	var o = '<input id="btn-clear-active-filter" type="button" value="X" onclick="removeActiveFilter()"/>'
@@ -394,7 +396,7 @@ function removeActiveFilter() {
 	userOpenCiphers = [] // clear saved user ciphers
 	
 	//Open_Ciphers()
-	updateEnabledCiphTable() // update ciphers
+	updateEnabledCipherTable() // update ciphers
 	updateHistoryTable() // update history
 }
 

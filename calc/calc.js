@@ -1,12 +1,15 @@
 // ============================== Init ==============================
 
+var cipherList = [] // list of all available ciphers
+var defaultCipherArray = [] // default ciphers
+var cCat = []; // list of all available cipher categories
+
 // Layout
 var cipherMenuColumns = 4 // number of columns for all available ciphers table
 var enabledCiphColumns = 4 // number of columns for enabled ciphers table (for phrase)
 var cipherMenuOpened = false // is cipher menu open
 
 var enabledCiphCount = 0 // number of enabled ciphers
-var cCat = []; // list of all available cipher categories
 
 // Cipher colors
 var origColors = [] // preserve original cipher colors
@@ -28,9 +31,44 @@ var optWeightedAutoHlt = false // color grade matches found with auto highlighte
 var optFiltSameCipherMatch = false; // filter shows only phrases that match in the same cipher
 var optFiltCrossCipherMatch = true; // filter shows only ciphers that have matching values
 
+function initCalc() { // run after page has finished loading
+	getAvailableCipherCategories()
+	initColorArrays()
+	createCiphersMenu()
+	createOptionsMenu()
+	createColorMenu()
+	createExportMenu()
+	enableDefaultCiphers()
+}
+
+// ========================= Ciphers Menu ===========================
+
+function createCiphersMenu() { // create menu with all cipher catergories
+	var o = document.getElementById("calcOptionsPanel").innerHTML
+
+	o += '<div class="dropdown">' // Options drop down hover menu
+	o += '<button class="dropbtn">Ciphers</button>'
+	o += '<div class="dropdown-content">'
+
+	o += '<input id="toggleCatBtn" class="intBtn2" type="button" value="Empty" onclick="disableAllCiphers()">'
+	o += '<input id="toggleCatBtn" class="intBtn2" type="button" value="Default" onclick="enableDefaultCiphers()">'
+	o += '<input id="toggleCatBtn" class="intBtn2" type="button" value="All" onclick="enableAllCiphers()">'
+
+	// o += '<div style="margin: 0.6em;"></div>'
+	o += '<hr style="background-color: rgb(77,77,77); height: 1px; border: none; margin: 0.75em;">'
+	// o += '<center><span style="font-size: 80%; color: rgb(222,222,222); "> Categories: </span></center>'
+	// o += '<div style="margin: 0.2em;"></div>'
+	for (i = 0; i < cCat.length; i++) {
+		o += '<input id="toggleCatBtn" class="intBtn2" type="button" value="'+cCat[i]+'" onclick="toggleCipherCategory(&quot;'+cCat[i]+'&quot;)">'
+	}
+	o += '</div></div>'
+
+	document.getElementById("calcOptionsPanel").innerHTML = o
+}
+
 // ========================= Options Menu ===========================
 
-function createCalcOptionsMenu() {
+function createOptionsMenu() {
 
 	var o = document.getElementById("calcOptionsPanel").innerHTML
 
@@ -257,76 +295,54 @@ function conf_WB() {
 	}
 }
 
-// ========================== Cipher Menu ===========================
+// ========================= Color Functions ========================
 
-function createColumnControls() { // add elements to adjust layout
-	// var o = document.getElementById("colorCtrlPanel").innerHTML
-	// document.getElementById("colorCtrlPanel").innerHTML = o
-}
-
-function updateCipherMenuLayout() {
-	if (cipherMenuOpened) {
-		createAvailCipherMenu()
-		populateColorValues()
-	}
-}
-
-function updateTables() {
-	for (i = 0; i < cipherList.length; i++) {
-		if (cipherList[i].cipherName == breakCipher && !cipherList[i].enabled) { // if previous breakdown cipher is not enabled
-			for (n = 0; n < cipherList.length; n++) {
-				if (cipherList[n].enabled) {
-					breakCipher = cipherList[n].cipherName // load first enabled cipher instead
-					break
-				}
-			}
-		}
-	}
-	//console.log(breakCipher)
-	updateEnabledCiphTable() // update enabled cipher table
-	updateHistoryTable() // update history table
-	updateWordBreakdown(breakCipher, true) // update word breakdown and choose first enabled cipher
-}
-
-function createCiphCategories() { // create buttons for each cipher catergory
+function createColorMenu() {
 	var o = document.getElementById("calcOptionsPanel").innerHTML
 
-	o += '<div class="dropdown">' // Options drop down hover menu
-	o += '<button class="dropbtn">Ciphers</button>'
-	o += '<div class="dropdown-content">'
+	o += '<div class="dropdown">'
+	o += '<button class="dropbtn">Color</button>'
+	o += '<div class="dropdown-content" style="width: 157px">'
 
-	o += '<input id="toggleCatBtn" class="intBtn2" type="button" value="Empty" onclick="disableAllCiphers()">'
-	o += '<input id="toggleCatBtn" class="intBtn2" type="button" value="Default" onclick="enableDefaultCiphers()">'
-	o += '<input id="toggleCatBtn" class="intBtn2" type="button" value="All" onclick="enableAllCiphers()">'
+	o += '<input id="toggleCatBtn" class="intBtn2" type="button" value="Color Controls" onclick="toggleIndColorControlsMenu()">'
+	o += '<div style="margin: 0.75em;"></div>'
+	o += '<input id="copyColorsButton" class="intBtn2" type="button" value="Reset Colors" onclick="resetColorControls()">'
+	o += '<div style="margin: 0.5em;"></div>'
 
-	// o += '<div style="margin: 0.6em;"></div>'
-	o += '<hr style="background-color: rgb(77,77,77); height: 1px; border: none; margin: 0.75em;">'
-	// o += '<center><span style="font-size: 80%; color: rgb(222,222,222); "> Categories: </span></center>'
-	// o += '<div style="margin: 0.2em;"></div>'
-	for (i = 0; i < cCat.length; i++) {
-		o += '<input id="toggleCatBtn" class="intBtn2" type="button" value="'+cCat[i]+'" onclick="toggleCipherCategory(&quot;'+cCat[i]+'&quot;)">'
-	}
+	o += '<center>'
+	o += '<span style="font-size: 90%; color: rgb(222,222,222);">Global HSLA: </span>'
+	o += '<div style="margin: 0.1em;"></div>'
+	o += '<table>'
+	o += '<tr><td style="font-size: 80%;">Hue</td>'
+	o += '<td><input type="number" step="5" min="-360" max="360" value="0" class="col_slider" id="globalSliderHue" oninput="changeCipherColors(&quot;globalSliderHue&quot;, &quot;Hue&quot;)"></td>'
+	o += '</tr><tr><td style="font-size: 80%;">Saturation</td>'
+	o += '<td><input type="number" step="2" min="-100" max="100" value="0" class="col_slider" id="globalSliderSaturation" oninput="changeCipherColors(&quot;globalSliderSaturation&quot;, &quot;Saturation&quot;)"></td>'
+	o += '</tr><tr><td style="font-size: 80%;">Lightness</td>'
+	o += '<td><input type="number" step="2" min="-100" max="100" value="0" class="col_slider" id="globalSliderLightness" oninput="changeCipherColors(&quot;globalSliderLightness&quot;, &quot;Lightness&quot;)"></td>'
+	o += '</tr><tr><td style="font-size: 80%;">Alpha</td>'
+	o += '<td><input type="number" step="0.02" min="-1.0" max="1.0" value="0" class="col_slider" id="globalSliderAlpha" oninput="changeCipherColors(&quot;globalSliderAlpha&quot;, &quot;Alpha&quot;)"></td>'
+	
+	// column controls
+	o += '</tr><tr><td colspan=2><div style="margin: 0.4em;"></div></td>'
+	o += '</tr><tr><td colspan=2 style="font-size: 90%; color: rgb(222,222,222); text-align: center;">Cipher Columns:<td>'
+
+	o += '</tr><tr><td style="font-size: 80%;">Color Menu</td>'
+	o += '<td><input type="number" step="1" min="1" max="10" value="'+cipherMenuColumns+'" class="col_slider" id="avail_ciphers_columns" oninput="updIndColorCtrlLayout()"></td>'
+	o += '</tr><tr><td style="font-size: 80%;">Active</td>'
+	o += '<td><input type="number" step="1" min="1" max="10" value="'+enabledCiphColumns+'" class="col_slider" id="enabled_ciphers_columns" oninput="updateTables()"></td>'
+	o += '</tr></table>'
+	o += '</center>'
+
+
 	o += '</div></div>'
-
 	document.getElementById("calcOptionsPanel").innerHTML = o
 }
 
-function toggleCipherMenu() { // show/hide all available ciphers menu
-	if (!cipherMenuOpened) {
-		createAvailCipherMenu()
-		populateColorValues()
-		cipherMenuOpened = true
-	} else {
-		document.getElementById("ciphMenu").innerHTML = "" // clear
-		cipherMenuOpened = false
-	}
-}
-
-function createAvailCipherMenu() { // create checkboxes to toggle each available cipher
+function displayIndColorControls() { // display control menu to adjust each cipher
 	var cipher_columns = cipherMenuColumns
 	if (document.getElementById("enabled_ciphers_columns") != null ) cipher_columns = document.getElementById("avail_ciphers_columns").value // update value
 	
-	document.getElementById("ciphMenu").innerHTML = "" // clear previous table
+	document.getElementById("indColorCtrlMenu").innerHTML = "" // clear previous table
 	
 	var cur_ciph_index = 0 // index of current of enabled cipher that will be added to the table (total # of ciphers added so far + 1)
 	var new_row_opened = false // condition to open new row inside table
@@ -359,32 +375,24 @@ function createAvailCipherMenu() { // create checkboxes to toggle each available
 	}
 	o += '</tbody></table>'
 	
-	document.getElementById("ciphMenu").innerHTML += o
+	document.getElementById("indColorCtrlMenu").innerHTML += o
 }
 
-// ========================= Color Functions ========================
-
-function copyToClipboard(txt) {
-    var dummy = document.createElement("textarea");
-    document.body.appendChild(dummy);
-    dummy.value = txt;
-    dummy.select();
-    document.execCommand("copy");
-    document.body.removeChild(dummy);
+function updIndColorCtrlLayout() {
+	if (cipherMenuOpened) {
+		displayIndColorControls()
+		populateColorValues()
+	}
 }
 
-function loadCustomCipherColors() { // load colors defined in custom-colors.js
-	if (typeof ciphColors !== 'undefined') { // check if variable is declared
-		if (ciphColors.length == cipherList.length) { // check correct length
-			for (i = 0; i < cipherList.length; i++) {
-				cipherList[i].H = ciphColors[i].H
-				cipherList[i].S = ciphColors[i].S
-				cipherList[i].L = ciphColors[i].L
-				cipherList[i].A = ciphColors[i].A
-			}
-		} else {
-			console.log("Incorrect number of ciphers is defined inside 'custom-colors.js' ...\nDefault colors are loaded.")
-		}
+function toggleIndColorControlsMenu() { // show/hide individual color controls
+	if (!cipherMenuOpened) {
+		displayIndColorControls()
+		populateColorValues()
+		cipherMenuOpened = true
+	} else {
+		document.getElementById("indColorCtrlMenu").innerHTML = "" // clear
+		cipherMenuOpened = false
 	}
 }
 
@@ -397,48 +405,6 @@ function initColorArrays() { // store original cipher colors and current modifie
 		chkboxColors.push(tmp) // individual controls
 	}
 	globColors = {H:0, S:0, L:0, A:0}
-}
-
-function createColorControls() { // add global cipher color controls
-	var o = document.getElementById("calcOptionsPanel").innerHTML
-
-	o += '<div class="dropdown">' // Options drop down hover menu
-	o += '<button class="dropbtn">Color</button>'
-	o += '<div class="dropdown-content" style="width: 157px">'
-
-	o += '<input id="toggleCatBtn" class="intBtn2" type="button" value="Color Controls" onclick="toggleCipherMenu()">'
-	o += '<div style="margin: 0.5em;"></div>'
-	o += '<input id="copyColorsButton" class="intBtn2" type="button" value="Export Colors" onclick="copyAllCipherColors()">'
-	o += '<input id="copyColorsButton" class="intBtn2" type="button" value="Reset Colors" onclick="resetColorControls()">'
-	o += '<div style="margin: 0.5em;"></div>'
-
-	o += '<center>'
-	o += '<span style="font-size: 90%; color: rgb(222,222,222);">Global HSLA: </span>'
-	o += '<div style="margin: 0.1em;"></div>'
-	o += '<table>'
-	o += '<tr><td style="font-size: 80%;">Hue</td>'
-	o += '<td><input type="number" step="5" min="-360" max="360" value="0" class="col_slider" id="globalSliderHue" oninput="changeCipherColors(&quot;globalSliderHue&quot;, &quot;Hue&quot;)"></td>'
-	o += '</tr><tr><td style="font-size: 80%;">Saturation</td>'
-	o += '<td><input type="number" step="2" min="-100" max="100" value="0" class="col_slider" id="globalSliderSaturation" oninput="changeCipherColors(&quot;globalSliderSaturation&quot;, &quot;Saturation&quot;)"></td>'
-	o += '</tr><tr><td style="font-size: 80%;">Lightness</td>'
-	o += '<td><input type="number" step="2" min="-100" max="100" value="0" class="col_slider" id="globalSliderLightness" oninput="changeCipherColors(&quot;globalSliderLightness&quot;, &quot;Lightness&quot;)"></td>'
-	o += '</tr><tr><td style="font-size: 80%;">Alpha</td>'
-	o += '<td><input type="number" step="0.02" min="-1.0" max="1.0" value="0" class="col_slider" id="globalSliderAlpha" oninput="changeCipherColors(&quot;globalSliderAlpha&quot;, &quot;Alpha&quot;)"></td>'
-	
-	// column controls
-	o += '</tr><tr><td colspan=2><div style="margin: 0.4em;"></div></td>'
-	o += '</tr><tr><td colspan=2 style="font-size: 90%; color: rgb(222,222,222); text-align: center;">Cipher Columns:<td>'
-
-	o += '</tr><tr><td style="font-size: 80%;">Color Menu</td>'
-	o += '<td><input type="number" step="1" min="1" max="10" value="'+cipherMenuColumns+'" class="col_slider" id="avail_ciphers_columns" oninput="updateCipherMenuLayout()"></td>'
-	o += '</tr><tr><td style="font-size: 80%;">Active</td>'
-	o += '<td><input type="number" step="1" min="1" max="10" value="'+enabledCiphColumns+'" class="col_slider" id="enabled_ciphers_columns" oninput="updateTables()"></td>'
-	o += '</tr></table>'
-	o += '</center>'
-
-
-	o += '</div></div>'
-	document.getElementById("calcOptionsPanel").innerHTML = o
 }
 
 function resetColorControls() { // set all color controls to zero
@@ -473,72 +439,6 @@ function resetColorControls() { // set all color controls to zero
 	changeCipherColors("globalSliderAlpha", "Alpha")
 
 	updateTables() // update
-}
-
-function copyAllCipherColors() {
-	if (!cipherMenuOpened) { // open cipher menu if not opened
-		createAvailCipherMenu()
-		populateColorValues()
-		cipherMenuOpened = true
-	}
-
-	// Simple output format
-/*	var c_col, c_name, out = ""
-	for (i = 0; i < cipherList.length; i++) {
-		c_name = cipherList[i].cipherName
-		c_col = document.getElementById("cipherHSLA"+i).value // HSLA box
-		out += c_name+": "+c_col+"\n"
-	}*/
-
-	var c_col, tmp_HSLA
-	var out = 
-		'/*\n'+
-		'Comment "// var ciphColors = [" (line 6) to use default values from ciphers.js\n'+
-		'If length of ciphColors does not match the amount of ciphers, default colors are used\n'+
-		'*/\n\n'
-	out += "var ciphColors = [\n" // open array
-	for (i = 0; i < cipherList.length; i++) {
-		c_col = document.getElementById("cipherHSLA"+i).value // HSLA box
-		tmp_HSLA = c_col.split(", ") // split string into array by delimiter 
-		//out += "    {H:"+tmp_HSLA[0]+", S:"+tmp_HSLA[1]+", L:"+tmp_HSLA[2]+", A:"+tmp_HSLA[3]+"}" // no padding, no color normalization
-		out += "    {H:"+colFmt(tmp_HSLA[0], 'H')+"S:"+colFmt(tmp_HSLA[1], 'S')+"L:"+colFmt(tmp_HSLA[2], 'L')+"A:"+colFmt(tmp_HSLA[3], 'A')+"}" // create object
-		if (i+1 < cipherList.length) out += ", // "+cipherList[i].cipherName+"\n" // new line if not last item
-	}
-	out += "  // "+cipherList[cipherList.length-1].cipherName // add last cipher name
-	out += "\n]" // close array
-	
-	console.log(out)
-	//copyToClipboard(out)
-	document.getElementById("ciphMenu").innerHTML = "" // close color menu
-	cipherMenuOpened = false
-	
-	//alert("Color values were copied to clipboard!")
-
-	out = 'data:text/js;charset=utf-8,'+encodeURIComponent(out) // format as text file
-	download("custom-colors.js", out); // download file
-}
-
-function colFmt(val, mode) { // normalize HSLA color values
-	if (mode == "H") {
-		if (val < 0) { val = val % 360 + 360 } // fix 0-360 range
-		else { val = val % 360 }
-		val = String(val+",   ").substring(0,5) // padding
-	} else if (mode == "S") {
-		val = clampNum(val, 0, 100)
-		val = String(val+",   ").substring(0,5)
-	} else if (mode == "L") {
-		val = clampNum(val, 0, 100)
-		val = String(val+",   ").substring(0,5)
-	} else if (mode == "A") { // for Alpha
-		val = clampNum(val, 0, 1)
-		val = val.toFixed(2) // 2 digits after decimal
-		val = String(val+"   ").substring(0,4)
-	}
-	return val
-}
-
-function clampNum(number, min, max) { // clamp number within specified range
-	return Math.max(min, Math.min(number, max))
 }
 
 function changeCipherColors(elem_id, col_mode, cipher_index) {
@@ -595,20 +495,25 @@ function populateColorValues() { // update color controls for each individual ci
 
 // ====================== Enabled Cipher Table ======================
 
-function getCipherCategories() {
+function getAvailableCipherCategories() { // list categories, define default (base) ciphers
 	var c = ""
 	for (i = 0; i < cipherList.length; i++) {
 		c = cipherList[i].cipherCategory
 		if (cCat.indexOf(c) == -1) cCat.push(c)
+		if (cipherList[i].enabled) defaultCipherArray.push(cipherList[i].cipherName) // default ciphers
 	}
 }
 
-function disableAllCiphers() {
-	var cur_chkbox
-	for (i = 0; i < cipherList.length; i++) {
-		cur_chkbox = document.getElementById("cipher_chkbox"+i)
-		cipherList[i].enabled = false // if checkbox exists toggle state (next line)
-		if (cur_chkbox != null) cur_chkbox.checked = false
+function enableDefaultCiphers() {
+	disableAllCiphers()
+	//var ciphArr = ["English Ordinal", "Reverse Ordinal", "English Reduction", "Reverse Reduction"]
+	var ciphArr = defaultCipherArray
+	for (n = 0; n < cipherList.length; n++) {
+		if (ciphArr.indexOf(cipherList[n].cipherName) > -1) {
+			cipherList[n].enabled = true // enable cipher
+			cur_chkbox = document.getElementById("cipher_chkbox"+n)
+			if (cur_chkbox != null) cur_chkbox.checked = true // update checkbox if present
+		}
 	}
 	updateTables() // update
 }
@@ -623,16 +528,12 @@ function enableAllCiphers() {
 	updateTables() // update
 }
 
-function enableDefaultCiphers() {
-	disableAllCiphers()
-	//var ciphArr = ["English Ordinal", "Reverse Ordinal", "English Reduction", "Reverse Reduction"]
-	var ciphArr = defaultCipherArray
-	for (n = 0; n < cipherList.length; n++) {
-		if (ciphArr.indexOf(cipherList[n].cipherName) > -1) {
-			cipherList[n].enabled = true // enable cipher
-			cur_chkbox = document.getElementById("cipher_chkbox"+n)
-			if (cur_chkbox != null) cur_chkbox.checked = true // update checkbox if present
-		}
+function disableAllCiphers() {
+	var cur_chkbox
+	for (i = 0; i < cipherList.length; i++) {
+		cur_chkbox = document.getElementById("cipher_chkbox"+i)
+		cipherList[i].enabled = false // if checkbox exists toggle state (next line)
+		if (cur_chkbox != null) cur_chkbox.checked = false
 	}
 	updateTables() // update
 }
@@ -668,6 +569,23 @@ function toggleCipher(c_id, chk = false) {
 	updateTables() // update
 }
 
+function updateTables() {
+	for (i = 0; i < cipherList.length; i++) {
+		if (cipherList[i].cipherName == breakCipher && !cipherList[i].enabled) { // if previous breakdown cipher is not enabled
+			for (n = 0; n < cipherList.length; n++) {
+				if (cipherList[n].enabled) {
+					breakCipher = cipherList[n].cipherName // load first enabled cipher instead
+					break
+				}
+			}
+		}
+	}
+	//console.log(breakCipher)
+	updateEnabledCipherTable() // update enabled cipher table
+	updateHistoryTable() // update history table
+	updateWordBreakdown(breakCipher, true) // update word breakdown and choose first enabled cipher
+}
+
 function updateEnabledCipherCount() {
 	enabledCiphCount = 0 // number of enabled ciphers
 	for (i = 0; i < cipherList.length; i++) { // count all enabled ciphers
@@ -676,15 +594,10 @@ function updateEnabledCipherCount() {
 }
 
 function sVal() {
-	var phr = document.getElementById("phraseBox").value.trim() // get value
-	// if (cipherList.find(o => o.cipherName.includes("RU") && o.enabled == true)) { // if Russian ciphers are enabled (otherwise "е=ё", "и=й")
-	// 	return phr
-	// }
-	// phr = phr.normalize('NFD').replace(/[\u0300-\u036f]/g, "") // remove any diacritic marks (works as you type for word breakdown)
-	return phr
+	return document.getElementById("phraseBox").value.trim() // get value, remove spaces from both sides
 }
 
-function updateEnabledCiphTable() { // draws a table with phrase gematria for enabled ciphers (odd/even)
+function updateEnabledCipherTable() { // draws a table with phrase gematria for enabled ciphers (odd/even)
 	document.getElementById("resultArea").innerHTML = "" // clear previous table
 	
 	updateEnabledCipherCount() // get number of enabled ciphers
@@ -743,62 +656,6 @@ function updateEnabledCiphTable() { // draws a table with phrase gematria for en
 							o += '<td class="phraseGemCiphName"></td>'
 							odd_col = true
 						}
-					}
-				}
-				if (ciph_in_row == result_columns) { // check if row needs to be closed
-					o += '</tr>'
-					ciph_in_row = 0 // reset cipher count
-					new_row_opened = false
-				}
-			}
-		}
-	}
-	o += '</tbody></table>'
-	
-	document.getElementById("resultArea").innerHTML += o
-}
-
-function updateEnabledCiphTable2() { // draws a table with phrase gematria for enabled ciphers
-	document.getElementById("resultArea").innerHTML = "" // clear previous table
-	
-	updateEnabledCipherCount() // get number of enabled ciphers
-	
-	phr = sVal() // grab current phrase
-	// if (enabledCiphCount == 0 || phr == "") return // no enabled ciphers, empty phraseBox
-	
-	var result_columns = document.getElementById("enabled_ciphers_columns").value // number of columns in cipher table, update value
-	// if (enabledCiphCount <= 6) { result_columns = 1 }
-	// else if (enabledCiphCount > 6 && enabledCiphCount <= 20) { result_columns = 2 }
-	// else { result_columns = 4 }
-
-	var cur_ciph_index = 0 // index of current of enabled cipher that will be added to the table (total # of ciphers added so far + 1)
-	var new_row_opened = false // condition to open new row inside table
-	var odd_col = true // odd = "cipher name - value", even = "value - cipher name", used in each row
-	//var n_of_rows = 0 // number of rows inside cipher table
-	var last_row_elements = 0 // number of ciphers in the last row
-	var ciph_in_row = 0 // count active ciphers in row
-	
-	var o = '<table class="phraseGemContainer"><tbody>'
-	
-	//n_of_rows = Math.ceil(cipherList.length / result_columns) // 6.0 => 6 rows, 6.25 => 7 rows
-	last_row_elements = enabledCiphCount % result_columns
-	
-	for (i = 0; i < cipherList.length; i++) { // <= to include last row
-		if (cipherList[i].enabled) { // for active ciphers
-			cur_ciph_index++
-			if (!new_row_opened) { // check if new row has to be opened
-				o += '<tr>'
-				new_row_opened = true
-			}
-			if (ciph_in_row < result_columns) { // until number of ciphers in row equals number of colums
-				o += '<td class="phraseGemCiphName" style="color: hsl('+cipherList[i].H+' '+cipherList[i].S+'% '+cipherList[i].L+'% / '+cipherList[i].A+');">'+HeadLink(cipherList[i])+'</td>'
-				o += '<td class="phraseGemValue" style="color: hsl('+cipherList[i].H+' '+cipherList[i].S+'% '+cipherList[i].L+'% / '+cipherList[i].A+');">'+cipherList[i].calcGematria(phr)+'</td>'
-				ciph_in_row++
-				if (cur_ciph_index == enabledCiphCount && last_row_elements !== 0) { // last enabled cipher is added and last row is not fully populated
-					for (n = 0; n < result_columns - last_row_elements; n++) { // for remaining empty cells in last row
-						o += '<td class="phraseGemCiphName"></td>'
-						o += '<td class="phraseGemValue"></td>'
-						odd_col = false
 					}
 				}
 				if (ciph_in_row == result_columns) { // check if row needs to be closed

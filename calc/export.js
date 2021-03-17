@@ -1,4 +1,6 @@
-function createExportControls() {
+// ========================== Export Menu ===========================
+
+function createExportMenu() {
 	
 	var o = document.getElementById("calcOptionsPanel").innerHTML
 
@@ -46,14 +48,14 @@ $(document).ready(function(){
 				c_l = cipherList[i].L;
 			}
 		}
-		//$(".LetterCounts").html('<span style="color: hsl('+c_h+' '+c_s+'% '+c_l+'% / 1.0); font-weight: 900; font-size: 200%;">Gematria</span><br><hr style="background-color: rgb(77,77,77); height: 2px; border: none;">' + $(".LetterCounts").text());
-		$(".LetterCounts").html('<span style="color: hsl('+c_h+' '+c_s+'% '+c_l+'% / 1.0); font-weight: 900; font-size: 200%;">Gematria</span><br><hr style="background-color: rgb(77,77,77); height: 2px; border: none;">');
+		//$(".LetterCounts").html('<span style="color: hsl('+c_h+' '+c_s+'% '+c_l+'% / 1.0); font-weight: 500; font-size: 200%;">Gematria</span><br><hr style="background-color: rgb(77,77,77); height: 2px; border: none;">' + $(".LetterCounts").text());
+		$(".LetterCounts").html('<span style="color: hsl('+c_h+' '+c_s+'% '+c_l+'% / 1.0); font-weight: 500; font-size: 200%;">Gematria</span><br><hr style="background-color: rgb(77,77,77); height: 2px; border: none;">');
 		openImageWindow("#BreakdownDetails", 1.5);
 		//$(".LetterCounts").text(o); // restore original contents
 	});
 
 	$("body").on("click", "#btn-export-history-png", function () {
-		exportHistoryCSV();
+		exportHistoryCSV(sHistory);
 	});
 	$("body").on("click", "#btn-export-ciphers", function () {
 		exportCiphers();
@@ -80,8 +82,6 @@ function openImageWindow(element, sRatio = window.devicePixelRatio) { // sRatio 
 			wnd.document.body.innerHTML = "<div style='max-height: 100%; max-width: 100%; position: absolute; top: 50%; left: 50%; -webkit-transform: translate(-50%,-50%); transform: translate(-50%,-50%);'><center><br><a href='"+imageURL+"' download='"+imgName+"' style='font-family: arial, sans-serif; color: #dedede' >Download</a></center><br><img src="+canvas.toDataURL("image/png")+"></div>";
 			wnd.document.body.style.backgroundColor = "#000000"; // black background
 		});
-	} else {
-		alert("Empty element cannot be printed!")
 	}
 }
 
@@ -101,3 +101,58 @@ function getTimestamp() {
 	// $("#btn-Convert-Html2Image").attr("download", Date.now()+".png").attr("href", newData); // for <a> element
 	download(Date.now()+".png", newData);
 });*/
+
+function listAllCiphers() { // print cipher names/index to console
+	for (i = 0; i < cipherList.length; i++) {
+		console.log(i+": "+cipherList[i].cipherName)
+	}
+}
+
+function exportCiphers() {
+	var out =
+		'/*\n'+
+		'new cipher(\n'+
+			'\t"English Ordinal", // cipher name\n'+
+			'\t"English", // category\n'+
+			'\t120, 57, 36, 1.0, // hue, saturation, lightness, alpha (opacity)\n'+
+			'\t[97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122], // lowercase characters\n'+
+			'\t[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26], // values\n'+
+			'\ttrue, // characters with diacritic marks have the same value as regular ones, default is "true"\n'+
+			'\ttrue // enabled state, default is "false"\n'+
+		')\n'+
+		'*/\n\n'
+
+	out += "cipherList = [\n"
+	for (i = 0; i < cipherList.length; i++) {
+		
+		var cArr_ = []
+		var vArr_ = []
+		
+		// Read list of characters
+		for (m = 0; m < cipherList[i].cArr.length; m++) {
+			// cArr_.push(String.fromCharCode(cipherList[i].cArr[m])) // character
+			cArr_.push(cipherList[i].cArr[m]) // charcode
+		}
+		
+		// Read values for each character
+		for (m = 0; m < cipherList[i].vArr.length; m++) {
+			vArr_.push(cipherList[i].vArr[m])
+		}
+		
+		out +=
+			'\tnew cipher(\n'+
+			'\t\t"'+cipherList[i].cipherName+'",\n'+
+			'\t\t"'+cipherList[i].cipherCategory+'",\n'+
+			'\t\t'+cipherList[i].H+', '+cipherList[i].S+', '+cipherList[i].L+', '+cipherList[i].A+',\n'+
+			'\t\t'+JSON.stringify(cArr_)+',\n'+
+			'\t\t'+JSON.stringify(vArr_)+',\n'+
+			'\t\t'+cipherList[i].diacriticsAsRegular+',\n'+
+			'\t\t'+cipherList[i].enabled+'\n'+
+			'\t),\n'
+	}
+	out = out.substring(0, out.length-2) + '\n]' // remove last comma and new line, close array
+	console.log(out)
+
+	out = 'data:text/js;charset=utf-8,'+encodeURIComponent(out) // format as text file
+	download("ciphers.js", out); // download file
+}

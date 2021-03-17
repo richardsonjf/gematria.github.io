@@ -1,3 +1,5 @@
+// ================= Word Breakdown & Cipher Chart ==================
+
 var optLetterCount = true // 6 letters, 1 word
 var optSimpleResult = true // Simple Result - phrase = 67 (English Ordinal)
 var optBreakdownType = "Enabled" // "Enabled", "Disabled"
@@ -36,7 +38,7 @@ function updateWordBreakdown(impName = breakCipher, impBool = false) { // false 
 	for (x = 0; x < cipherList.length; x++) {
 		if (cipherList[x].cipherName == impName) {
 			cSpot = x
-			Build_CharTable(cipherList[x])
+			updateCipherChart(cipherList[x])
 			break;
 		}
 	}
@@ -99,7 +101,7 @@ function updateWordBreakdown(impName = breakCipher, impBool = false) { // false 
 	document.getElementById("BreakdownSpot").innerHTML = o
 }
 
-function Build_CharTable(impCipher) {
+function updateCipherChart(impCipher) {
 
 	if (optShowCipherChart == false) {
 		document.getElementById("ChartSpot").innerHTML = ""
@@ -116,7 +118,7 @@ function Build_CharTable(impCipher) {
 	o += '<tbody><tr>'
 
 	o += '<td colspan="' + impCipher.cArr.length + '">'
-	o += '<b><font style="font-size: 150%; color: hsl('+impCipher.H+' '+impCipher.S+'% '+impCipher.L+'% / '+impCipher.A+')">' + impCipher.cipherName + '</font></b>'
+	o += '<font style="font-size: 150%; font-weight: 500; color: hsl('+impCipher.H+' '+impCipher.S+'% '+impCipher.L+'% / '+impCipher.A+')">' + impCipher.cipherName + '</font>'
 	o += '</td></tr><tr>'
 
 	var halfL = impCipher.cArr.length / 2

@@ -1,3 +1,5 @@
+// =========================== Export CSV ===========================
+
 $(document).ready(function(){
 	// change element style on drag-enter event
 	$("body").on("dragenter", "#phraseBox", function () {
@@ -42,7 +44,7 @@ function dropHandler(ev) {
 		var file = event.target.result // full file contents
 		userHist = file.split(/\r\n|\n/) // to string array, line break as separator
 
-		if (typeof databaseMode !== 'undefined' && databaseMode) { exportDatabaseCSV(userHist); return } // line by line, only phrases
+		if (typeof databaseMode !== 'undefined' && databaseMode) { exportHistoryCSV(userHist); return } // line by line, only phrases
 		
 		//userHist.forEach((line) => { // print line by line
 		//	console.log(line)
@@ -91,67 +93,36 @@ function dragOverHandler(ev) {
 	ev.preventDefault() // Prevent default drag behavior (Prevent file from being opened)
 }
 
-function exportHistoryCSV() {
-	if (sHistory.length == 0) {
-		alert("History table is empty!")
-		return
-	}
+function exportHistoryCSV(arr) {
+	if (arr.length == 0) return
 	
+	var t = ""
+	updateEnabledCipherCount()
+
 	// table header (csv format, semicolon as separator)
-	var t = "Word or Phrase"
-	for (i = 0; i < cipherList.length; i++) {
-		if (cipherList[i].enabled) {
-			t += ";"+cipherList[i].cipherName // list of enabled ciphers
-		}
-	}
-	t += "\n" // line break
-	
-	// table contents
-	for (i = 0; i < sHistory.length; i++) {
-		t += sHistory[i].replace(";", "") // add phrase, remove semicolons (it is a separator)
-		for (n = 0; n < cipherList.length; n++) {
-			if (cipherList[n].enabled) {
-				t += ";"+cipherList[n].calcGematria(sHistory[i]) // gematria value for each enabled cipher
+	if (enabledCiphCount > 0) {
+		t = "Word or Phrase"
+		for (i = 0; i < cipherList.length; i++) {
+			if (cipherList[i].enabled) {
+				t += ";"+cipherList[i].cipherName // list of enabled ciphers
 			}
 		}
-		if (i+1 < sHistory.length) t += "\n" // line break, exclude last line
+		t += "\n" // line break
 	}
 	
-	// phrases only
-	//var t = ""
-	//for (i = 0; i < sHistory.length-1; i++) {
-	//	t += sHistory[i]+"\n"
-	//}
-	//t += sHistory[sHistory.length-1] // add last line manually, so there is no empty line
+	// table contents
+	for (i = 0; i < arr.length; i++) {
+		t += arr[i].replace(";", "") // add phrase, remove semicolons (it is a separator)
+		for (n = 0; n < cipherList.length; n++) {
+			if (cipherList[n].enabled) {
+				t += ";"+cipherList[n].calcGematria(arr[i]) // gematria value for each enabled cipher
+			}
+		}
+		if (i+1 < arr.length) t += "\n" // line break, exclude last line
+	}
 	
 	t = 'data:text/plain;charset=utf-8,'+encodeURIComponent(t) // format as text file
 	download(getTimestamp()+"_gematria.txt", t); // download file
-}
-
-function exportDatabaseCSV(phrArrData) {
-
-	// table header (csv format, semicolon as separator)
-	var t = "Word or Phrase"
-	for (i = 0; i < cipherList.length; i++) {
-		if (cipherList[i].enabled) {
-			t += ";"+cipherList[i].cipherName // list of all ciphers
-		}
-	}
-	t += "\n" // line break
-	
-	// table contents
-	for (i = 0; i < phrArrData.length; i++) {
-		t += phrArrData[i].replace(";", "") // add phrase, remove semicolons (it is a separator)
-		for (n = 0; n < cipherList.length; n++) {
-			if (cipherList[n].enabled) {
-				t += ";"+cipherList[n].calcGematria(phrArrData[i]) // gematria value for all ciphers
-			}
-		}
-		if (i+1 < phrArrData.length) t += "\n" // line break, exclude last line
-	}
-	
-	t = 'data:text/plain;charset=utf-8,'+encodeURIComponent(t) // format as text file
-	download(getTimestamp()+"_gematria_database.txt", t); // download file
 }
 
 function download(fileName, fileData) {

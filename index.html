@@ -7,7 +7,6 @@
 <script src="calc/gematria.js"></script>
 <script src="calc/ciphers.js"></script>
 <script src="calc/breakdown.js"></script>
-<script src="calc/custom-colors.js"></script>
 
 <script src="calc/highlighter.js"></script>
 <script src="calc/export.js"></script>
@@ -44,10 +43,10 @@ $(window).load(function(){
 <center>
 
 	<div id="calcOptionsPanel"></div>
-	<div id="ciphMenu"></div>
+	<div id="indColorCtrlMenu"></div>
 
 	<div id="inputArea">
-	  <input id="phraseBox" autofocus type="text" autocomplete="off" oninput="updateEnabledCiphTable(); updateWordBreakdown(breakCipher);" onkeydown="phraseBoxKeypress(event.keyCode)" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)" style="width: 500px; min-width: 500px; font-size: 125%"></input>
+	  <input id="phraseBox" autofocus type="text" autocomplete="off" oninput="updateEnabledCipherTable(); updateWordBreakdown(breakCipher);" onkeydown="phraseBoxKeypress(event.keyCode)" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)" style="width: 500px; min-width: 500px; font-size: 125%"></input>
 	  <right><input id="highlightBox" type="text" autocomplete="off" style="width: 200px; min-width: 200px; font-size: 125%"></input><span id="clearFilterButton"></span></right>
 	</div>
 

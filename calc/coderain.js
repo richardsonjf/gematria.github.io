@@ -1,5 +1,5 @@
-// Matrix code rain (HTML5 canvas)
-				  
+// ================ Matrix code rain (HTML5 canvas) =================
+
 var optMatrixCodeRain = false
 
 var code_rain; // var to clear interval
@@ -13,21 +13,21 @@ function initCodeRain() {
 	canvas = document.getElementById("canv")
 	ctx = canvas.getContext("2d")
 
-	// set the width and height of the canvas
+	// set width and height of the canvas
 	w = canvas.width = document.body.offsetWidth
 	h = canvas.height = height_html
 
 	// draw a plain color rectangle of width and height same as that of the canvas
-	ctx.fillStyle = "#161a22" // "#202020"
+	ctx.fillStyle = "rgb(22,26,34)"
 	ctx.fillRect(0, 0, w, h)
 
-	cols = Math.floor(w / 14) + 1 // 20px
+	cols = Math.floor(w / 14) + 1 // px
 	ypos = Array(cols).fill(0)
 }
 
 function matrix() {
 
-	// Draw a semitransparent black rectangle on top of previous drawing
+	// draw a semitransparent black rectangle on top of previous drawing
 	ctx.fillStyle = "#00000010"
 	if(navigator.userAgent.toLowerCase().indexOf('firefox') == -1) { // if not Firefox
 		ctx.shadowColor = "rgba(0,0,0,0)" // reset blurred shadows for old characters
@@ -35,9 +35,9 @@ function matrix() {
 	}
 	ctx.fillRect(0, 0, w, h)
 
-	// Set color and font in the drawing context
-	ctx.fillStyle = "#002A00" // "#004400"
-	ctx.font = "bold 18pt matrix-font" // monospace
+	// set color and font in the drawing context
+	ctx.fillStyle = "rgb(0,42,0)"
+	ctx.font = "bold 18pt matrix-font"
 	if(navigator.userAgent.toLowerCase().indexOf('firefox') == -1) { // if not Firefox
 		ctx.shadowColor = "rgba(0,255,0,0.2)"
 		ctx.shadowBlur = 4
@@ -54,14 +54,14 @@ function matrix() {
 		text = String.fromCharCode(matrixChars[rndInt(0,aLen-1)])
 
 		// x coordinate of the column, y coordinate is already given
-		x = ind * 14 // 20px
+		x = ind * 14 // px
 		// render the character at (x, y)
 		ctx.fillText(text, x, y)
 
 		// randomly reset the end of the column if it's at least 100px high
 		if (y > 100 + Math.random() * 10000) ypos[ind] = 0
 		// otherwise just move the y coordinate for the column 20px down
-		else ypos[ind] = y + 21 // 20px
+		else ypos[ind] = y + 21 // px
 	});
 }
 
@@ -79,8 +79,6 @@ function toggleCodeRain() {
 	} else {
 		optMatrixCodeRain = true
 		clearInterval(code_rain)
-		//ctx.fillStyle = "#161a22" // static bg
-		//ctx.fillRect(0, 0, w, h)
 		document.getElementById("canv").style.display = "none"
 		return
 	}
