@@ -397,6 +397,9 @@ function toggleIndColorControlsMenu() { // show/hide individual color controls
 }
 
 function initColorArrays() { // store original cipher colors and current modifier values
+	origColors = []
+	chkboxColors = []
+	globColors = []
 	var tmp = {}
 	for (i = 0; i < cipherList.length; i++) {
 		tmp = {H:cipherList[i].H, S:cipherList[i].S, L:cipherList[i].L, A:cipherList[i].A}
@@ -496,6 +499,8 @@ function populateColorValues() { // update color controls for each individual ci
 // ====================== Enabled Cipher Table ======================
 
 function getAvailableCipherCategories() { // list categories, define default (base) ciphers
+	defaultCipherArray = [] //reinit
+	cCat = [] // reinit
 	var c = ""
 	for (i = 0; i < cipherList.length; i++) {
 		c = cipherList[i].cipherCategory

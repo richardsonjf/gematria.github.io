@@ -53,14 +53,30 @@ function dropHandler(ev) {
 		var uCiph = [] // user saved ciphers
 		uCiph = userHist[0].split(";") // table header to array (user ciphers from CSV), semicolon separator
 		
-		if (optLoadUserHistCiphers) { // enable ciphers from user CSV file
-			// disable all ciphers
-			for (i = 0; i < cipherList.length; i++) {
-				cipherList[i].enabled = false
-			}
+		// detect cipher.js, load user ciphers
+		if (uCiph[0] == "// ciphers.js") {
+			file = file.replace(/^[\s\S]+cipherList.*?\[/m, "") // multiple line regex - [\s\S]+
+			file = file.substring(0,file.length-1) // remove last bracket
+			file = file.replace(/(\t|  +|\r|\n)/g, "") // remove tabs, consequtive spaces and line breaks
+			file = file.replace(/,(?=new cipher\()/g, "") // remove commas between separate ciphers
+			file = file.replace("new cipher", "") // remove first occurrence of "new cipher"
 
-			// enable cipher if it is available
-			for (z = 0; z < cipherList.length; z++) {
+			ciph = file.split("new cipher") // split string into array
+
+			cipherList = [] // clear array with previously defined ciphers
+			for (n = 0; n < ciph.length; n++) {
+				ciph[n] = ciph[n].substring(1,ciph[n].length-1) // remove parethesis
+				cipherList.push(eval("new cipher("+ciph[n]+")")) // evaluate string as javascript code, add new cipher
+			}
+			document.getElementById("calcOptionsPanel").innerHTML = "" // clear menu panel
+			initCalc() // reinit ciphers
+			updateTables() // update tables
+			return
+		}
+
+		if (optLoadUserHistCiphers) { // enable ciphers from user CSV file
+			disableAllCiphers()
+			for (z = 0; z < cipherList.length; z++) { // enable cipher if it is available
 				if (uCiph.indexOf(cipherList[z].cipherName) > -1) {
 					cipherList[z].enabled = true
 				}
@@ -70,7 +86,8 @@ function dropHandler(ev) {
 		var uPhr = []
 		var a = -1 // i > -1 to add all phrases, i > 0 to ignore first line (table header)
 		if (uCiph[0] == "Word or Phrase") a = 0 // ignore table header if present
-		
+
+
 		for (i = userHist.length-1; i > a; i--) { // add lines in reverse order, so you don't have to read backwards
 			uPhr = userHist[i].split(";") // user phrase, load as array
 			addPhraseToHistory(uPhr[0], false) // load only phrase (first item), false flag doesn't update history

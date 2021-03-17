@@ -111,6 +111,8 @@ function listAllCiphers() { // print cipher names/index to console
 
 function exportCiphers() {
 	var out =
+		'// ciphers.js\n'+
+		'\n'+
 		'/*\n'+
 		'new cipher(\n'+
 			'\t"English Ordinal", // cipher name\n'+
