@@ -1,6 +1,8 @@
-// Press "Copy Colors" button and replace values below
-// Delete "var ciphColors = []" to use original values 
-// loadCustomCipherColors() - function that updates cipher colors
+/*
+Comment "// var ciphColors = [" (line 6) to use default values from ciphers.js
+If length of ciphColors does not match the amount of ciphers, default colors are used
+*/
+
 var ciphColors = [
     {H:125, S:49,  L:48,  A:1.00}, // English Ordinal
     {H:227, S:89,  L:69,  A:1.00}, // English Reduction

@@ -1,4 +1,5 @@
-var cipherList = []; // list of all available ciphers
+var cipherList = [] // list of all available ciphers
+var defaultCipherArray = [] // default ciphers
 
 function initCalc() { // run after page is loaded
 	getCipherCategories()
@@ -7,9 +8,11 @@ function initCalc() { // run after page is loaded
 	createCiphCategories()
 	createCalcOptionsMenu()
 	createColorControls()
-	createScreenshotControls()
-	enableBaseCiphers()
-	updateWordBreakdown() // display English Ordinal table on load
+	createExportControls()
+	for (i = 0; i < cipherList.length; i++) { // define default ciphers
+		if (cipherList[i].enabled) defaultCipherArray.push(cipherList[i].cipherName)
+	}
+	enableDefaultCiphers()
 }
 
 function listCiphers() { // print cipher names/index to console
@@ -42,7 +45,20 @@ function listCiphersDetailed() {
 }
 
 function exportCiphers() {
-	var	out = "cipherList = [\n"
+	var out =
+		'/*\n'+
+		'new cipher(\n'+
+			'\t"English Ordinal", // cipher name\n'+
+			'\t"English", // category\n'+
+			'\t120, 57, 36, 1.0, // hue, saturation, lightness, alpha (opacity)\n'+
+			'\t[97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122], // lowercase characters\n'+
+			'\t[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26], // values\n'+
+			'\ttrue, // characters with diacritic marks have the same value as regular ones, default is "true"\n'+
+			'\ttrue // enabled state, default is "false"\n'+
+		')\n'+
+		'*/\n\n'
+
+	out += "cipherList = [\n"
 	for (i = 0; i < cipherList.length; i++) {
 		
 		var cArr_ = []
@@ -65,17 +81,22 @@ function exportCiphers() {
 			'\t\t"'+cipherList[i].cipherCategory+'",\n'+
 			'\t\t'+cipherList[i].H+', '+cipherList[i].S+', '+cipherList[i].L+', '+cipherList[i].A+',\n'+
 			'\t\t'+JSON.stringify(cArr_)+',\n'+
-			'\t\t'+JSON.stringify(vArr_)+'\n'+
+			'\t\t'+JSON.stringify(vArr_)+',\n'+
+			'\t\t'+cipherList[i].diacriticsAsRegular+',\n'+
+			'\t\t'+cipherList[i].enabled+'\n'+
 			'\t),\n'
 	}
-	out = out.substring(0, out.length-2) + '\n]' // remove last comma
+	out = out.substring(0, out.length-2) + '\n]' // remove last comma and new line, close array
 	console.log(out)
+
+	out = 'data:text/js;charset=utf-8,'+encodeURIComponent(out) // format as text file
+	download("ciphers.js", out); // download file
 }
 
 // ============================== Logic =============================
 
 class cipher { // cipher constructor class
-	constructor(ciphName, ciphCategory, col_H, col_S, col_L, col_A, ciphCharacterSet, ciphValues, ciphEnabled = false) {
+	constructor(ciphName, ciphCategory, col_H, col_S, col_L, col_A, ciphCharacterSet, ciphValues, diacriticsAsRegular = true, ciphEnabled = false) {
 		this.cipherName = ciphName // cipher name
 		this.cipherCategory = ciphCategory // cipher category
 		this.H = col_H // hue
@@ -84,6 +105,7 @@ class cipher { // cipher constructor class
 		this.A = col_A // alpha
 		this.cArr = ciphCharacterSet // character array
 		this.vArr = ciphValues // value array
+		this.diacriticsAsRegular = diacriticsAsRegular // if true, characters with diactritic marks have the same value as regular ones
 		this.enabled = ciphEnabled // cipher state on/off
 		this.cp = []; this.cv = []; this.sumArr = [] // cp - character position, cv - character value, sumArr - phrase gematria value
 	}
@@ -96,17 +118,16 @@ class cipher { // cipher constructor class
 		for (i = 0; i < gemPhrase.length; i++) {
 			cur_char = gemPhrase.charCodeAt(i)
 
-			// diacritic marks
-			if (cipherList.find(o => o.cipherName.includes("RU") && o.enabled == true)) { // if Russian ciphers are enabled (otherwise "е=ё", "и=й")
-				ch_calc = String.fromCharCode(cur_char).toLowerCase().charCodeAt(0) // formatted charcode (lowercase) - for calculation
-				// console.log(gemPhrase.substring(i,i+1)+" ("+gemPhrase.substring(i,i+1).charCodeAt(0)+
-				// 	") -> "+String.fromCharCode(cur_char).toLowerCase()+" -> "+String.fromCharCode(cur_char).toLowerCase().charCodeAt(0) )
-			} else {
+			if (this.diacriticsAsRegular) { // if characters with diacritic marks are treated as regular characters
 				ch_calc = String.fromCharCode(cur_char).normalize('NFD').replace(/[\u0300-\u036f]/g, "") // remove any diacritic marks from 1 character
 				ch_calc = ch_calc.toLowerCase().charCodeAt(0) // formatted charcode (lowercase)
 				// console.log(gemPhrase.substring(i,i+1)+" ("+gemPhrase.substring(i,i+1).charCodeAt(0)+
 				// 	") -> "+String.fromCharCode(cur_char).normalize('NFD').replace(/[\u0300-\u036f]/g, "")+" ("+String.fromCharCode(cur_char).normalize('NFD').replace(/[\u0300-\u036f]/g, "").charCodeAt(0)+
 				// 	") -> "+String.fromCharCode(cur_char).normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase()+" -> "+String.fromCharCode(cur_char).normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase().charCodeAt(0) )
+			} else {
+				ch_calc = String.fromCharCode(cur_char).toLowerCase().charCodeAt(0) // formatted charcode (lowercase) - for calculation
+				// console.log(gemPhrase.substring(i,i+1)+" ("+gemPhrase.substring(i,i+1).charCodeAt(0)+
+				// 	") -> "+String.fromCharCode(cur_char).toLowerCase()+" -> "+String.fromCharCode(cur_char).toLowerCase().charCodeAt(0) )
 			}
 
 			ch_pos = this.cArr.indexOf(ch_calc)
@@ -143,7 +164,7 @@ class cipher { // cipher constructor class
 		return gemValue
 	}
 	
-	calcBreakdown(gemPhrase) {
+	calcBreakdown(gemPhrase) { // character breakdown table
 		var i, cIndex, wordSum //
 		var lastSpace = true
 		var n, nv // n - character for display, nv - charcode for calculation
@@ -156,16 +177,16 @@ class cipher { // cipher constructor class
 
 			n = gemPhrase.charCodeAt(i); // get charcode for each character in phrase
 
-			if (cipherList.find(o => o.cipherName.includes("RU") && o.enabled == true)) { // if Russian ciphers are enabled (otherwise "е=ё", "и=й")
-				nv = String.fromCharCode(n).toLowerCase().charCodeAt(0) // formatted charcode (lowercase) - for calculation
-				// console.log(gemPhrase.substring(i,i+1)+" ("+gemPhrase.substring(i,i+1).charCodeAt(0)+
-				// 	") -> "+String.fromCharCode(n).toLowerCase()+" -> "+String.fromCharCode(n).toLowerCase().charCodeAt(0) )
-			} else {
+			if (this.diacriticsAsRegular) { // if characters with diacritic marks are treated as regular characters
 				nv = String.fromCharCode(n).normalize('NFD').replace(/[\u0300-\u036f]/g, "") // remove any diacritic marks from 1 character
 				nv = nv.toLowerCase().charCodeAt(0) // formatted charcode (lowercase)
 				// console.log(gemPhrase.substring(i,i+1)+" ("+gemPhrase.substring(i,i+1).charCodeAt(0)+
 				// 	") -> "+String.fromCharCode(n).normalize('NFD').replace(/[\u0300-\u036f]/g, "")+" ("+String.fromCharCode(n).normalize('NFD').replace(/[\u0300-\u036f]/g, "").charCodeAt(0)+
 				// 	") -> "+String.fromCharCode(n).normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase()+" -> "+String.fromCharCode(n).normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase().charCodeAt(0) )
+			} else {
+				nv = String.fromCharCode(n).toLowerCase().charCodeAt(0) // formatted charcode (lowercase) - for calculation
+				// console.log(gemPhrase.substring(i,i+1)+" ("+gemPhrase.substring(i,i+1).charCodeAt(0)+
+				// 	") -> "+String.fromCharCode(n).toLowerCase()+" -> "+String.fromCharCode(n).toLowerCase().charCodeAt(0) )
 			}
 
 			if (n > 47 && n < 58) { // 0-9 digits

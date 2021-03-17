@@ -183,7 +183,7 @@ body {
 	background-color: hsl(187 100% 69% / 0.2) !important;
 }
 
-/* Phrase Breakdown, Cipher Table, Word Count */
+/* Word Breakdown, Cipher Table, Word Count */
 /* ########################################## */
 /* BreakChar, BreakChar2, breakCipher, BreakPhraseSum, BreakTable, BreakVal, BreakWordSum, ChartChar, ChartVal, CipherEnd, LetterCounts */
 /* SimpleBreak, BreakTableContainer, ChartTable */
@@ -204,7 +204,8 @@ body {
 #BreakdownDetails {
 	/*background-color: rgb(27,30,40);*/
 	padding: 0em 1em;
-	width: fit-content;
+	width: -webkit-fit-content;
+	width: -moz-fit-content;
 }
 #SimpleBreak {
 	padding-bottom: 6px;
@@ -295,6 +296,19 @@ body {
 	padding-bottom: 2px; /*5*/
 	min-width: 22px; /*12*/
 }
+
+/* Borderless style for Cipher Table */
+#ChartTable {
+	border: 1px solid hsl(0 0% 16% / 1) !important;
+}
+#ChartTable td {
+	border: none !important;
+	padding-right: 6px !important;
+	padding-left: 6px !important;
+	padding-top: 2px !important;
+	padding-bottom: 3px !important;
+}
+
 .ChartChar {
 	color: rgb(242,153,96);
 	font-size: 140%;
@@ -389,6 +403,9 @@ body {
 .intBtn:hover, .intBtn2:hover {
 	background-color: hsl(223 14% 30% / 1);
 }
+.intBtn:active, .intBtn2:active {
+	background-color: hsl(223 14% 38% / 1);
+}
 
 /* History Table */
 /* HistoryTable, (no styles) mP, ??? (wrong case) hC, hP, NO cellvalue, (no styles) tC */
@@ -427,12 +444,14 @@ body {
 	font-size: 85%;
 	padding: 5px 3px 5px 3px;
 	text-align: center;
+	font-weight: bold;
 }
 .hCV { /* vertical history table header, cipher name cell */
-	font-size: 85%;
+	font-size: 86%; /*85%*/
 	height: 180px;
 	text-align: center;
     vertical-align: bottom;
+    font-weight: bold;
 }
 .hCV2 {
 	transform: rotate(-90deg);
@@ -450,15 +469,18 @@ body {
 	/*overflow: hidden;*/
 	/*text-overflow: ellipsis;*/
 	padding: 0em 0.5em;
+    font-size: 110%;
 }
 .mP { /* history table header "Gematria" */
 	color: hsl(46 50% 44% / 1.0);
 	/*color: hsl(46 78% 44% / 1.0);*/
 	padding: 5px 3px 5px 3px;
 	min-width: 80px;
+    font-weight: bold;
+    font-size: 125%;
 }
 .gV { /* gematria value in history table */
-	font-size: 115%;
+	font-size: 125%; /*115%*/
 	font-weight: bold;
 }
 
@@ -593,7 +615,7 @@ body {
 }
 
 .optionElement {
-	margin: 1em;
+	margin: 0.4em 1em;
 	border: 1px solid #4d4d4d;
 	background-color: #1b1e28;
 	/* text on one line */

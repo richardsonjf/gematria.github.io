@@ -1,6 +1,6 @@
 var optLetterCount = true // 6 letters, 1 word
 var optSimpleResult = true // Simple Result - phrase = 67 (English Ordinal)
-var optBreakdownType = "Compact" // "Compact", "Off"
+var optBreakdownType = "Enabled" // "Enabled", "Disabled"
 var optShowCipherChart = true // cipher breakdown chart
 var breakCipher = "English Ordinal" // current cipher for breakdown
 
@@ -59,7 +59,7 @@ function updateWordBreakdown(impName = breakCipher, impBool = false) { // false 
 			o += '<div class="breakCipher"><font style="color: hsl('+aCipher.H+' '+aCipher.S+'% '+aCipher.L+'% / '+aCipher.A+')"> (' + aCipher.cipherName + ')</font></div>'
 		}
 
-		if (optBreakdownType == "Compact" && aCipher.cp.length <= 60) {
+		if (optBreakdownType == "Enabled" && aCipher.cp.length <= 60) {
 			var tdCount = 0; var wCount = 0;
 
 			o += '</div><div id="BreakTableContainer"><table class="BreakTable"'

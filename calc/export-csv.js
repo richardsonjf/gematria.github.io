@@ -93,7 +93,7 @@ function dragOverHandler(ev) {
 
 function exportHistoryCSV() {
 	if (sHistory.length == 0) {
-		alert("Can't save an empty table!")
+		alert("History table is empty!")
 		return
 	}
 	
