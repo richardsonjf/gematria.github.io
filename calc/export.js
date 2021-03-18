@@ -48,9 +48,9 @@ $(document).ready(function(){
 				c_l = cipherList[i].L;
 			}
 		}
-		//$(".LetterCounts").html('<span style="color: hsl('+c_h+' '+c_s+'% '+c_l+'% / 1.0); font-weight: 500; font-size: 200%;">Gematria</span><br><hr style="background-color: rgb(77,77,77); height: 2px; border: none;">' + $(".LetterCounts").text());
-		$(".LetterCounts").html('<span style="color: hsl('+c_h+' '+c_s+'% '+c_l+'% / 1.0); font-weight: 500; font-size: 200%;">Gematria</span><br><hr style="background-color: rgb(77,77,77); height: 2px; border: none;">');
-		$("#ChartTable").addClass("borderCipherTable"); // cipher chart with borders
+		//$(".LetterCounts").html('<span style="color: hsl('+c_h+' '+c_s+'% '+c_l+'% / 1); font-weight: 500; font-size: 200%;">Gematria</span><br><hr style="background-color: rgb(77,77,77); height: 2px; border: none;">' + $(".LetterCounts").text());
+		$(".LetterCounts").html('<span style="color: hsl('+c_h+' '+c_s+'% '+c_l+'% / 1); font-weight: 500; font-size: 200%;">Gematria</span><br><hr style="background-color: rgb(77,77,77); height: 2px; border: none;">');
+		// $("#ChartTable").addClass("borderCipherTable"); // cipher chart with borders
 		openImageWindow("#BreakdownDetails", 1.5); // scale 1.5x
 		//$(".LetterCounts").text(o); // restore original contents
 	});
@@ -117,7 +117,7 @@ function exportCiphers() {
 		'new cipher(\n'+
 			'\t"English Ordinal", // cipher name\n'+
 			'\t"English", // category\n'+
-			'\t120, 57, 36, 1.0, // hue, saturation, lightness, alpha (opacity)\n'+
+			'\t120, 57, 36, // hue, saturation, lightness\n'+
 			'\t[97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122], // lowercase characters\n'+
 			'\t[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26], // values\n'+
 			'\ttrue, // characters with diacritic marks have the same value as regular ones, default is "true"\n'+
@@ -146,7 +146,7 @@ function exportCiphers() {
 			'\tnew cipher(\n'+
 			'\t\t"'+cipherList[i].cipherName+'",\n'+
 			'\t\t"'+cipherList[i].cipherCategory+'",\n'+
-			'\t\t'+cipherList[i].H+', '+cipherList[i].S+', '+cipherList[i].L+', '+cipherList[i].A+',\n'+
+			'\t\t'+cipherList[i].H+', '+cipherList[i].S+', '+cipherList[i].L+',\n'+
 			'\t\t'+JSON.stringify(cArr_)+',\n'+
 			'\t\t'+JSON.stringify(vArr_)+',\n'+
 			'\t\t'+cipherList[i].diacriticsAsRegular+',\n'+

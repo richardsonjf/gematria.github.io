@@ -58,7 +58,7 @@ function updateWordBreakdown(impName = breakCipher, impBool = false) { // false 
 		if (optSimpleResult == true) {
 			o += '<div id="SimpleBreak">'
 			o += '<div class="breakPhrase">' + sVal() + ' = </div><div class="breakSum">' + aCipher.sumArr.reduce(getSum) + '</div>' // add all values in array
-			o += '<div class="breakCipher"><font style="color: hsl('+aCipher.H+' '+aCipher.S+'% '+aCipher.L+'% / '+aCipher.A+')"> (' + aCipher.cipherName + ')</font></div>'
+			o += '<div class="breakCipher"><font style="color: hsl('+aCipher.H+' '+aCipher.S+'% '+aCipher.L+'% / 1)"> (' + aCipher.cipherName + ')</font></div>'
 		}
 
 		if (optBreakdownType == "Enabled" && aCipher.cp.length <= 60) {
@@ -74,9 +74,9 @@ function updateWordBreakdown(impName = breakCipher, impBool = false) { // false 
 
 				if (aCipher.cp[x] !== " ") {
 					if (String(aCipher.cp[x]).substring(0, 3) == "num") {
-						o += '<td class="BreakChar" style="color: hsl('+aCipher.H+' '+aCipher.S+'% '+aCipher.L+'% / '+aCipher.A+')">' + aCipher.cp[x].substring(3, aCipher.cp[x].length) + '</td>'
+						o += '<td class="BreakChar" style="color: hsl('+aCipher.H+' '+aCipher.S+'% '+aCipher.L+'% / 1)">' + aCipher.cp[x].substring(3, aCipher.cp[x].length) + '</td>'
 					} else {
-						o += '<td class="BreakChar" style="color: hsl('+aCipher.H+' '+aCipher.S+'% '+aCipher.L+'% / '+aCipher.A+')">' + String.fromCharCode(aCipher.cp[x]) + '</td>'
+						o += '<td class="BreakChar" style="color: hsl('+aCipher.H+' '+aCipher.S+'% '+aCipher.L+'% / 1)">' + String.fromCharCode(aCipher.cp[x]) + '</td>'
 					}
 				} else {
 					o += '<td class="BreakWordSum" rowspan="2">' + aCipher.sumArr[wCount] + '</td>'
@@ -84,7 +84,7 @@ function updateWordBreakdown(impName = breakCipher, impBool = false) { // false 
 				}
 				tdCount++
 			}
-			o += '<td class="BreakPhraseSum" rowspan="2"><font style="color: hsl('+aCipher.H+' '+aCipher.S+'% '+aCipher.L+'% / '+aCipher.A+')">' + aCipher.sumArr.reduce(getSum) + '</font></td>'
+			o += '<td class="BreakPhraseSum" rowspan="2"><font style="color: hsl('+aCipher.H+' '+aCipher.S+'% '+aCipher.L+'% / 1)">' + aCipher.sumArr.reduce(getSum) + '</font></td>'
 			o += '</tr><tr>'
 			tdCount++
 			for (z = 0; z < x; z++) {
@@ -92,7 +92,7 @@ function updateWordBreakdown(impName = breakCipher, impBool = false) { // false 
 					o += '<td class="BreakVal">' + aCipher.cv[z] + '</td>'
 				}
 			}
-			o += '</tr><tr><td colspan=' + tdCount + ' class="CipherEnd"><font style="color: hsl('+aCipher.H+' '+aCipher.S+'% '+aCipher.L+'% / '+aCipher.A+')">' + aCipher.cipherName + '</font></td></tr></table></div>'
+			o += '</tr><tr><td colspan=' + tdCount + ' class="CipherEnd"><font style="color: hsl('+aCipher.H+' '+aCipher.S+'% '+aCipher.L+'% / 1)">' + aCipher.cipherName + '</font></td></tr></table></div>'
 		}
 	} else {
 		o = ""
@@ -118,7 +118,7 @@ function updateCipherChart(impCipher) {
 	o += '<tbody><tr>'
 
 	o += '<td colspan="' + impCipher.cArr.length + '">'
-	o += '<font style="font-size: 150%; font-weight: 500; color: hsl('+impCipher.H+' '+impCipher.S+'% '+impCipher.L+'% / '+impCipher.A+')">' + impCipher.cipherName + '</font>'
+	o += '<font style="font-size: 150%; font-weight: 500; color: hsl('+impCipher.H+' '+impCipher.S+'% '+impCipher.L+'% / 1)">' + impCipher.cipherName + '</font>'
 	o += '</td></tr><tr>'
 
 	var halfL = impCipher.cArr.length / 2
@@ -130,9 +130,9 @@ function updateCipherChart(impCipher) {
 			}
 			o += '</tr><tr>'
 		}
-		o += '<td class="ChartChar" font style="color: hsl('+impCipher.H+' '+impCipher.S+'% '+impCipher.L+'% / '+impCipher.A+')">' + String.fromCharCode(impCipher.cArr[x]) + '</td>'
+		o += '<td class="ChartChar" font style="color: hsl('+impCipher.H+' '+impCipher.S+'% '+impCipher.L+'% / 1)">' + String.fromCharCode(impCipher.cArr[x]) + '</td>'
 	}
-	if (impCipher.cArr.length % 2 == 1) { o += '<td class="ChartChar" font style="color: hsl('+impCipher.H+' '+impCipher.S+'% '+impCipher.L+'% / '+impCipher.A+')"></td>' } // empty character cell to make even rows
+	if (impCipher.cArr.length % 2 == 1) { o += '<td class="ChartChar" font style="color: hsl('+impCipher.H+' '+impCipher.S+'% '+impCipher.L+'% / 1)"></td>' } // empty character cell to make even rows
 	o += '</tr><tr>'
 	for (y; y < x; y++) {
 		o += '<td class="ChartVal">' + impCipher.vArr[y] + '</td>' // 4th row (values)

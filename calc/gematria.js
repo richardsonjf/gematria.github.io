@@ -1,13 +1,12 @@
 // ============================= Logic ==============================
 
 class cipher { // cipher constructor class
-	constructor(ciphName, ciphCategory, col_H, col_S, col_L, col_A, ciphCharacterSet, ciphValues, diacriticsAsRegular = true, ciphEnabled = false) {
+	constructor(ciphName, ciphCategory, col_H, col_S, col_L, ciphCharacterSet, ciphValues, diacriticsAsRegular = true, ciphEnabled = false) {
 		this.cipherName = ciphName // cipher name
 		this.cipherCategory = ciphCategory // cipher category
 		this.H = col_H // hue
 		this.S = col_S // saturation
 		this.L = col_L // lightness
-		this.A = col_A // alpha
 		this.cArr = ciphCharacterSet // character array
 		this.vArr = ciphValues // value array
 		this.diacriticsAsRegular = diacriticsAsRegular // if true, characters with diactritic marks have the same value as regular ones

@@ -1,9 +1,11 @@
 <!DOCTYPE html>
+<title>Gematria Calculator</title>
+<meta charset="utf-8"/>
 <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
 
 <script src="lib/jquery.min.js"></script>
 <script src="lib/html2canvas.min.js"></script>
-<!-- use v1.0.0-alpha.12, otherwise remove scrollbar and scroll to the very top of page to avoid white stripes -->
+<!-- html2canvas v1.0.0-alpha.12 -->
 
 <script src="calc/calc.js"></script>
 <script src="calc/gematria.js"></script>
@@ -17,15 +19,14 @@
 <link rel="stylesheet" type="text/css" href="calc/styles.css">
 
 <script>
-// 250 ms after page finishes loading
 $(window).load(function(){
-	$("#loader").delay(250).fadeOut("fast");
+	$("#loader").delay(287).fadeOut("fast");
 });
 </script>
 
 <style>
 #loader{
-	z-index:999999;
+	z-index:157;
 	display:block;
 	position:fixed;
 	top:0;
@@ -33,14 +34,15 @@ $(window).load(function(){
 	width:100%;
 	height:100%;
 	background:rgb(22,26,34);
-}
 </style>
 
 <body onload="initCalc()">
-<!-- Use "onload" otherwise Build_Ciphers() fails - "Cannot access 'cipher' before initialization" -->
 
 <div id="loader"></div>
 <canvas id="canv"></canvas>
+
+<!-- preload font -->
+<span style="font-family: 'Roboto Mono';"></span>
 
 <center>
 
@@ -49,10 +51,10 @@ $(window).load(function(){
 
 	<div id="inputArea">
 	  <input id="phraseBox" autofocus type="text" autocomplete="off" oninput="updateEnabledCipherTable(); updateWordBreakdown(breakCipher);" onkeydown="phraseBoxKeypress(event.keyCode)" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)" style="width: 500px; min-width: 500px; font-size: 125%"></input>
-	  <right><input id="highlightBox" type="text" autocomplete="off" style="width: 200px; min-width: 200px; font-size: 125%"></input><span id="clearFilterButton"></span></right>
+	  <right><input id="highlightBox" type="text" autocomplete="off" style="width: 201px; min-width: 201px; font-size: 125%"></input><span id="clearFilterButton"></span></right>
 	</div>
 
-	<div id="resultArea"></div>
+	<div id="enabledCiphTable"></div>
 
 	<div id="BreakdownDetails">
 		<div id="BreakdownSpot"></div>
