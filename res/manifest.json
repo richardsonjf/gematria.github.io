@@ -40,7 +40,7 @@
       "density": 4.0
     }
   ],
-  "start_url": "index.html",
-  "display": "browser",
+  "start_url": "/gematria.github.io/index.html",
+  "display": "fullscreen",
   "orientation": "landscape"
 }
