@@ -67,6 +67,15 @@ body {
 	background: rgb(22,26,34);
 }
 
+#logoArea {
+	padding: 1.5em 0em 1em 0em;
+	display: flex;
+	justify-content: center;
+}
+#calcLogo {
+	height: 37px;
+}
+
 #indColorCtrlMenu {
 	/* width: 70%; */
 	/*font-size: 85%;*/
@@ -578,7 +587,7 @@ body {
 	/*display: flex;
 	justify-content: center;*/
 	margin-top: 0.5em;
-	margin-bottom: 1em;
+	margin-bottom: 2.5em;
 }
 
 #calcOptionsPanel {

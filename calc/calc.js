@@ -32,14 +32,12 @@ var optFiltSameCipherMatch = false; // filter shows only phrases that match in t
 var optFiltCrossCipherMatch = true; // filter shows only ciphers that have matching values
 
 function initCalc() { // run after page has finished loading
-	getAvailableCipherCategories()
-	initColorArrays()
+	initCiphers()
 	createCiphersMenu()
 	createOptionsMenu()
 	createFeaturesMenu()
 	createExportMenu()
 	createAboutMenu()
-	// checkMenuBlurSupport()
 	enableDefaultCiphers()
 }
 
@@ -75,11 +73,12 @@ function createAboutMenu() { // create menu with all cipher catergories
 
 	o += '<div class="dropdown">'
 	o += '<button class="dropbtn">About</button>'
-	o += '<div class="dropdown-content">'
+	o += '<div class="dropdown-content" style="padding-bottom: 0em;">'
 
 	o += '<input id="toggleCatBtn" class="intBtn" type="button" value="GitHub Repository" onclick="gotoGitHubRepo()">'
 	o += '<div style="margin: 0.5em;"></div>'
 	o += '<input id="toggleCatBtn" class="intBtn" type="button" value="Shortcuts" onclick="">'
+	o += '<div style="text-align: center; font-size: 50%; color: hsl(222 21% 20% / 1);; margin-top: 0.35em; margin-bottom: 0.4em;">Gematro - Spear S.</div>'
 
 	o += '</div></div>'
 
@@ -528,20 +527,18 @@ function populateColorValues() { // update color controls for each individual ci
 
 // ====================== Enabled Cipher Table ======================
 
-function getAvailableCipherCategories() { // list categories, define default (base) ciphers
-	defaultCipherArray = [] //reinit
-	cCat = [] // reinit
+function initCiphers() { // list categories, define default (base) ciphers
 	var c = ""
 	for (i = 0; i < cipherList.length; i++) {
 		c = cipherList[i].cipherCategory
-		if (cCat.indexOf(c) == -1) cCat.push(c)
+		if (cCat.indexOf(c) == -1) cCat.push(c) // list categories
 		if (cipherList[i].enabled) defaultCipherArray.push(cipherList[i].cipherName) // default ciphers
 	}
+	initColorArrays()
 }
 
 function enableDefaultCiphers() {
 	disableAllCiphers()
-	//var ciphArr = ["English Ordinal", "Reverse Ordinal", "English Reduction", "Reverse Reduction"]
 	var ciphArr = defaultCipherArray
 	for (n = 0; n < cipherList.length; n++) {
 		if (ciphArr.indexOf(cipherList[n].cipherName) > -1) {

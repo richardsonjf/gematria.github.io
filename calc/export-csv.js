@@ -55,21 +55,16 @@ function dropHandler(ev) {
 		
 		// detect cipher.js, load user ciphers
 		if (uCiph[0] == "// ciphers.js") {
-			file = file.replace(/^[\s\S]+cipherList.*?\[/m, "") // multiple line regex - [\s\S]+
-			file = file.substring(0,file.length-1) // remove last bracket
-			file = file.replace(/(\t|  +|\r|\n)/g, "") // remove tabs, consequtive spaces and line breaks
-			file = file.replace(/,(?=new cipher\()/g, "") // remove commas between separate ciphers
-			file = file.replace("new cipher", "") // remove first occurrence of "new cipher"
+			var ciph = file.match(/(?<=cipherList = \[)[\s\S]+/m, "") // match after "cipherList = [" till end of file, multiple line regex - [\s\S]+
+			file = ciph[0].replace(/(\t|  +|\r|\n)/g, "").slice(10,-1) // remove tabs, consequtive spaces, line breaks - "new cipher" at start, last bracket
+			ciph = file.split(",new cipher") // split string into array
 
-			ciph = file.split("new cipher") // split string into array
-
-			cipherList = [] // clear array with previously defined ciphers
+			cipherList = []; cCat = []; defaultCipherArray = [] // clear arrays with previously defined ciphers, categories, default ciphers
 			for (n = 0; n < ciph.length; n++) {
-				ciph[n] = ciph[n].substring(1,ciph[n].length-1) // remove parethesis
-				cipherList.push(eval("new cipher("+ciph[n]+")")) // evaluate string as javascript code, add new cipher
+				cipherList.push(eval("new cipher("+ciph[n].slice(1,-1)+")")) // remove parethesis, evaluate string as javascript code
 			}
 			document.getElementById("calcOptionsPanel").innerHTML = "" // clear menu panel
-			initCalc() // reinit ciphers
+			initCalc() // reinit
 			updateTables() // update tables
 			return
 		}
