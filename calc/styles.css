@@ -192,7 +192,7 @@ body {
 .ciphCheckboxLabel {
 	font-size: 80%;
 	font-weight: 500;
-	padding: 0em 0.25em 0em 0.1em;
+	padding: 0em 0.4em 0em 0.1em;
 	white-space: nowrap;
 }
 
@@ -459,11 +459,12 @@ body {
 }
 .hC { /* history table header, cipher name cell */
 	min-width: 80px;
-	max-width: 85px;
+	max-width: 80px;
 	font-size: 85%;
 	padding: 5px 3px 5px 3px;
 	text-align: center;
 	font-weight: 500;
+	word-break: break-word; /* table_performance*/
 }
 .hCV { /* vertical history table header, cipher name cell */
 	font-size: 86%; /*85%*/
@@ -484,7 +485,7 @@ body {
 	text-align: right;
 	/*background: linear-gradient(0deg, hsl(226 19% 30% / 1), transparent);*/
 	/* text on one line */
-	white-space: nowrap;
+	white-space: nowrap; /* table_performance*/
 	/*overflow: hidden;*/
 	/*text-overflow: ellipsis;*/
 	padding: 0em 0.5em;

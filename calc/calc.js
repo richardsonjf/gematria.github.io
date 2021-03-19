@@ -36,7 +36,7 @@ function initCalc() { // run after page has finished loading
 	initColorArrays()
 	createCiphersMenu()
 	createOptionsMenu()
-	createColorMenu()
+	createFeaturesMenu()
 	createExportMenu()
 	createAboutMenu()
 	// checkMenuBlurSupport()
@@ -96,7 +96,7 @@ function createOptionsMenu() {
 
 	var o = document.getElementById("calcOptionsPanel").innerHTML
 
-	o += '<div class="dropdown">' // Options drop down hover menu
+	o += '<div class="dropdown">'
 	o += '<button class="dropbtn">Options</button>'
 	o += '<div class="dropdown-content-opt">'
 
@@ -321,14 +321,17 @@ function conf_WB() {
 
 // ========================= Color Functions ========================
 
-function createColorMenu() {
+function createFeaturesMenu() {
 	var o = document.getElementById("calcOptionsPanel").innerHTML
 
 	o += '<div class="dropdown">'
-	o += '<button class="dropbtn">Color</button>'
+	o += '<button class="dropbtn">Features</button>'
 	o += '<div class="dropdown-content">'
 
 	o += '<input id="toggleCatBtn" class="intBtn" type="button" value="Color Controls" onclick="toggleIndColorControlsMenu()">'
+	o += '<div style="margin: 0.5em;"></div>'
+	o += '<input id="toggleCatBtn" class="intBtn" type="button" value="Edit Ciphers" onclick="">'
+
 	o += '</div></div>'
 	document.getElementById("calcOptionsPanel").innerHTML = o
 }
@@ -357,6 +360,7 @@ function displayIndColorControls() { // display control menu to adjust each ciph
 			o += '<td><input type="number" step="2" min="-100" max="100" value="0" class="col_slider" id="sliderSaturation'+i+'" oninput="changeCipherColors(&quot;sliderSaturation'+i+'&quot;, &quot;Saturation&quot;, '+i+')"></td>'
 			o += '<td><input type="number" step="2" min="-100" max="100" value="0" class="col_slider" id="sliderLightness'+i+'" oninput="changeCipherColors(&quot;sliderLightness'+i+'&quot;, &quot;Lightness&quot;, '+i+')"></td>'
 			o += '<td><input type="text" value="" class="cipher_col_value" id="cipherHSL'+i+'"></td>'
+			o += '<td style="min-width: 16px;"></td>'
 			ciph_in_row++
 		}
 		if (ciph_in_row == cipherMenuColumns) { // check if row needs to be closed
@@ -796,7 +800,7 @@ function addPhraseToHistory(phr, upd) { // add new phrase to search history
 
 function updateHistoryTable(hltBoolArr) {
 	var ms, i, x, y, z, curCiph, gemVal, maxMatch
-	var alpha = 1.0 // opacity
+	var alpha; // opacity
 	var ciphCount = 0 // count enabled ciphers (for hltBoolArr)
 	histTable = document.getElementById("HistoryTableArea")
 	
@@ -839,6 +843,7 @@ function updateHistoryTable(hltBoolArr) {
 
 		for (y = 0; y < cipherList.length; y++) {
 			if (cipherList[y].enabled) {
+				alpha = 1.0 // reset
 				curCiph = cipherList[y]
 				gemVal = curCiph.calcGematria(sHistory[x]) // value only
 				
@@ -851,14 +856,12 @@ function updateHistoryTable(hltBoolArr) {
 					// if optWeightedAutoHlt doesn't populate freq[], hltBoolArr was passed and value inside hltBoolArr is not active
 					//freq.length == 0 && 
 					if ( typeof hltBoolArr !== 'undefined' && hltBoolArr[x][ciphCount] == false ) {
-						alpha *= 0.2
-						col = 'hsl('+curCiph.H+' '+curCiph.S+'% '+curCiph.L+'% / '+alpha+')'
+						col = 'hsl('+curCiph.H+' '+curCiph.S+'% '+curCiph.L+'% / '+(alpha*0.2)+')'
 						//col_bg = 'hsl('+curCiph.H+' '+curCiph.S+'% '+curCiph.L+'% / '+alpha/17+')' // background gradient color
 					// if cross cipher match and doesn't include number or - freq[] is empty, hltBoolArr was not passed and value is not present in highlight box
 					// freq.length == 0 && 
 					} else if ( (optFiltCrossCipherMatch && !highlt_num.includes(gemVal)) || (freq.length == 0 && typeof hltBoolArr == 'undefined' && !highlt_num.includes(gemVal)) ) {
-						alpha *= 0.2
-						col = 'hsl('+curCiph.H+' '+curCiph.S+'% '+curCiph.L+'% / '+alpha+')'
+						col = 'hsl('+curCiph.H+' '+curCiph.S+'% '+curCiph.L+'% / '+(alpha*0.2)+')'
 						//col_bg = 'hsl('+curCiph.H+' '+curCiph.S+'% '+curCiph.L+'% / '+alpha/17+')' // background gradient color
 					// if cross cipher match and value is not present in highlight box
 					// } else if ( optFiltCrossCipherMatch && !highlt_num.includes(gemVal) ) {

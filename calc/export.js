@@ -15,7 +15,9 @@ function createExportMenu() {
 	o += '<input id="btn-print-word-break-png" class="intBtn" type="button" value="Print Word Breakdown" />' // print word breakdown table
 	o += '<div style="margin: 0.5em;"></div>'
 	o += '<input id="btn-print-breakdown-details-png" class="intBtn" type="button" value="Print Gematria Card" />' // print detailed breakdown
-	o += '<div style="margin: 0.5em;"></div>'
+	
+	o += '<hr style="background-color: rgb(77,77,77); height: 1px; border: none; margin: 0.75em;">'
+
 	o += '<input id="btn-export-history-png" class="intBtn" type="button" value="Export History (CSV)" />' // export history as CSV file
 	o += '<div style="margin: 0.5em;"></div>'
 	o += '<input id="btn-export-ciphers" class="intBtn" type="button" value="Export Ciphers" />' // export all available ciphers
@@ -50,7 +52,7 @@ $(document).ready(function(){
 		}
 		//$(".LetterCounts").html('<span style="color: hsl('+c_h+' '+c_s+'% '+c_l+'% / 1); font-weight: 500; font-size: 200%;">Gematria</span><br><hr style="background-color: rgb(77,77,77); height: 2px; border: none;">' + $(".LetterCounts").text());
 		$(".LetterCounts").html('<span style="color: hsl('+c_h+' '+c_s+'% '+c_l+'% / 1); font-weight: 500; font-size: 200%;">Gematria</span><br><hr style="background-color: rgb(77,77,77); height: 2px; border: none;">');
-		// $("#ChartTable").addClass("borderCipherTable"); // cipher chart with borders
+		$("#ChartTable").addClass("borderCipherTable"); // cipher chart with borders
 		openImageWindow("#BreakdownDetails", 1.5); // scale 1.5x
 		//$(".LetterCounts").text(o); // restore original contents
 	});
