@@ -22,7 +22,7 @@ function HeadLink(impCipher) { // change breakdown tables when mouse over/click
 	return o
 }
 
-function updateWordBreakdown(impName = breakCipher, impBool = false) { // false - preview temporary (hover), true - lock breakdown to a specific cipher
+function updateWordBreakdown(impName = breakCipher, impBool = false, chartUpd = true) { // false - preview temporary (hover), true - lock breakdown to a specific cipher
 	var x, aCipher, cSpot
 	var o, acw, acl
 
@@ -38,8 +38,8 @@ function updateWordBreakdown(impName = breakCipher, impBool = false) { // false 
 	for (x = 0; x < cipherList.length; x++) {
 		if (cipherList[x].cipherName == impName) {
 			cSpot = x
-			updateCipherChart(cipherList[x])
-			break;
+			if (chartUpd) updateCipherChart(cipherList[x])
+			break
 		}
 	}
 	aCipher = cipherList[cSpot]
