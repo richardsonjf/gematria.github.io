@@ -1,4 +1,4 @@
-# Gematria Calculator
+# Gematro
 ---
 
 ### List of features:
@@ -48,6 +48,9 @@
 - Copy/save word breakdown chart as an image
 - Export history table as a CSV file (semicolon as delimiter), can be loaded back into the calculator or Excel
 - Added "Compact" word breakdown option from test version by Gematrinator
+- Number properties (hold "Ctrl" and hover mouse over values inside enabled ciphers table)
+- Color controls for each cipher
+- Custom ciphers (export/import)
 
 ### Ciphers:
 - Added "Empty" button to disable all active ciphers

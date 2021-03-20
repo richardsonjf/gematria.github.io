@@ -138,9 +138,16 @@ $(document).ready(function(){
 	$("body").on("click", ".hP", function (e) {
 		if(shiftIsPressed) { // Shift + Left Click - remove phrase from history table
 			var val = $(this).html(); // get gematria value from element
+			if (sHistory.length == 1) {
+				sHistory = [] // reinitialize array if there is only one entry
+				tArea = document.getElementById("HistoryTableArea")
+				tArea.innerHTML = "" // clear table
+				updateTables()
+				return
+			}
 			sHistory.splice(sHistory.indexOf(val),1)
 			updateTables()
-		} else { // Left Click - select phrase and load into phrase box
+		} else if (ctrlIsPressed) { // Ctrl + Left Click - select phrase and load into phrase box
 			console.log($(this).html()); // inner html of "this"
 			var val = $(this).html(); // get gematria value from element
 			document.getElementById("phraseBox").value = val; // insert phrase into search box

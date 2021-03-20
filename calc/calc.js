@@ -23,7 +23,7 @@ var optTinyHistoryTable = false // tiny mode - hide cipher names, no break each 
 var optCompactHistoryTable = false // compact mode - vertical cipher names
 var optLoadUserHistCiphers = true // load ciphers when CSV file is imported
 
-var optNumCalcMethod = "Reduced" // "Reduced", "Full", "Off" or anything - default option to calculate 19 as 1+9
+var optNumCalcMethod = "Full" // "Reduced", "Full", "Off" or anything - default option to calculate 19 as 1+9
 var optLetterWordCount = true // show word/letter count
 
 // only one active, replace with a dropdown "Off", "Cross cipher match", "Same cipher match"
@@ -75,10 +75,15 @@ function createAboutMenu() { // create menu with all cipher catergories
 	o += '<button class="dropbtn">About</button>'
 	o += '<div class="dropdown-content" style="padding-bottom: 0em;">'
 
+	o += '<center>'
+	o += '<div style="display: flex; justify-content: center;"><img src="res/logo.svg" style="height: 16px"></div>'
+	o += '<div style="display: flex; justify-content: center;"><span style="font-size: 70%; color: hsl(222 0% 50% / 1);">by ravic norsov</span></div>'
+	o += '</center>'
+	o += '<div style="margin: 0.5em;"></div>'
 	o += '<input id="toggleCatBtn" class="intBtn" type="button" value="GitHub Repository" onclick="gotoGitHubRepo()">'
 	o += '<div style="margin: 0.5em;"></div>'
 	o += '<input id="toggleCatBtn" class="intBtn" type="button" value="Shortcuts" onclick="">'
-	o += '<div style="text-align: center; font-size: 50%; color: hsl(222 21% 20% / 1);; margin-top: 0.35em; margin-bottom: 0.4em;">Gematro - Spear S.</div>'
+	o += '<div style="text-align: center; font-size: 50%; color: hsl(222 21% 15% / 1); margin-top: 0.35em; margin-bottom: 0.4em; cursor: default;">Gematro - Spear S.</div>'
 
 	o += '</div></div>'
 
@@ -649,6 +654,7 @@ function updateEnabledCipherTable() { // draws a table with phrase gematria for 
 	//var n_of_rows = 0 // number of rows inside cipher table
 	var last_row_elements = 0 // number of ciphers in the last row
 	var ciph_in_row = 0 // count active ciphers in row
+	var cur_col = "" // current cipher color
 	
 	var o = '<table class="phraseGemContainer"><tbody>'
 	
@@ -664,15 +670,19 @@ function updateEnabledCipherTable() { // draws a table with phrase gematria for 
 				new_row_opened = true
 			}
 			if (ciph_in_row < result_columns) { // until number of ciphers in row equals number of colums
+				cur_col = 'color: hsl('+cipherList[i].H+' '+cipherList[i].S+'% '+cipherList[i].L+'% / 1);'
 				if (odd_col) { // odd column, "cipher name - value"
-					o += '<td class="phraseGemCiphName" style="color: hsl('+cipherList[i].H+' '+cipherList[i].S+'% '+cipherList[i].L+'% / 1);">'+HeadLink(cipherList[i])+'</td>'
-					o += '<td class="phraseGemValueOdd" style="color: hsl('+cipherList[i].H+' '+cipherList[i].S+'% '+cipherList[i].L+'% / 1);">'+cipherList[i].calcGematria(phr)+'</td>'
+					o += '<td class="phraseGemCiphName" style="'+cur_col+'">'+HeadLink(cipherList[i])+'</td>'
+					// o += '<td class="phraseGemValueOdd" style="'+cur_col+'">'+cipherList[i].calcGematria(phr)+'</td>'
+					o += '<td class="phraseGemValueOdd" style="'+cur_col+'"><span class="numProp">'+cipherList[i].calcGematria(phr)+'<span></td>'
+					// o += '<span class="histValTooltipTxt"><span style="'+cur_col+'">'+cipherList[i].cipherName+'</span><br><br>'+sVal()+'</span>'
 					ciph_in_row++
 					odd_col = false
 					//console.log(cipherList[i].cipherName+": odd")
 				} else if (!odd_col) { // even column, "value - cipher name"
-					o += '<td class="phraseGemValueEven" style="color: hsl('+cipherList[i].H+' '+cipherList[i].S+'% '+cipherList[i].L+'% / 1);">'+cipherList[i].calcGematria(phr)+'</td>'
-					o += '<td class="phraseGemCiphName" style="color: hsl('+cipherList[i].H+' '+cipherList[i].S+'% '+cipherList[i].L+'% / 1);">'+HeadLink(cipherList[i])+'</td>'
+					// o += '<td class="phraseGemValueEven" style="'+cur_col+'">'+cipherList[i].calcGematria(phr)+'</td>'
+					o += '<td class="phraseGemValueEven" style="'+cur_col+'"><span class="numProp">'+cipherList[i].calcGematria(phr)+'<span></td>'
+					o += '<td class="phraseGemCiphName" style="'+cur_col+'">'+HeadLink(cipherList[i])+'</td>'
 					ciph_in_row++
 					odd_col = true
 					//console.log(cipherList[i].cipherName+": even")
