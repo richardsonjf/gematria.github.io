@@ -91,6 +91,10 @@ body {
 
 #inputArea {
 	padding: 0.5em 0em 0em 0em;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 .ciphToggleContainer {
@@ -155,21 +159,17 @@ body {
 	background-color: rgb(36,39,46);
 }
 
-.phraseGemValueOdd {
+.phraseGemValueOdd, .phraseGemValueEven {
     /* display: table-cell; */
 	/* vertical-align: middle; */
     /*padding: 0em 0.4em 0em 0.4em;*/
     font-size: 175%;
 	text-align: center;
 	min-width: 93px;
-}
-.phraseGemValueEven {
-    /* display: table-cell; */
-	/* vertical-align: middle; */
-    /*padding: 0em 0.4em 0em 0.4em;*/
-    font-size: 175%;
-	text-align: center;
-	min-width: 93px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 .phraseGemCiphName {
@@ -574,6 +574,10 @@ body {
 #calcOptionsPanel {
 	/*font-size: 100%;*/
 	margin: 0.6em 0em 0em 0em;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 /* Options Menu */
