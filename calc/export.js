@@ -71,8 +71,8 @@ function openImageWindow(element, sRatio = window.devicePixelRatio) { // sRatio 
 	if ( $(element).length ) { // if specified element exists
 		// if browser zoom level is more than passed value, use current zoom level
 		if (typeof sRatio !== 'undefined' && sRatio < window.devicePixelRatio) { sRatio = window.devicePixelRatio}
-		html2canvas($(element)[0], {allowTaint: true, backgroundColor: "rgba(22,26,34,1.0)", width: $(element).outerWidth(), height: $(element).outerHeight(), scale: sRatio} ).then((canvas) => { // e.g. html2canvas($("#ChartTable")[0]).then ...
-			//allowTaint: true, backgroundColor: "rgba(27,30,40,1.0)" - render white bg as transparent
+		html2canvas($(element)[0], {allowTaint: true, backgroundColor: "rgba(31,37,48,1.0)", width: $(element).outerWidth(), height: $(element).outerHeight(), scale: sRatio} ).then((canvas) => { // e.g. html2canvas($("#ChartTable")[0]).then ...
+			//allowTaint: true, backgroundColor: "rgba(22,26,34,1.0)" - render white bg as transparent
 			//width: $(element).width(), height: $(element).height() - get proper element dimensions
 			//console.log("done ... ");
 			//$("#previewImage").append(canvas);

@@ -6,7 +6,7 @@ var optBreakdownType = "Enabled" // "Enabled", "Disabled"
 var optShowCipherChart = true // cipher breakdown chart
 var breakCipher = "English Ordinal" // current cipher for breakdown
 
-var bgCol = "rgb(18,21,28)" // breakdown table background color
+var bgCol = "rgb(26,30,40)" // breakdown table background color
 
 function getSum(total, num) { // used to .reduce() array, adds all values
     return total + num;
