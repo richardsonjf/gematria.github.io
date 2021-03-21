@@ -11,10 +11,17 @@ var starNums = populateStarNumbers(10000000)
 $(document).ready(function() {
 
 	var showTooltip = function(event) {
-		if (ctrlIsPressed || navigator.maxTouchPoints > 1) { // support for mobile devices
+		// if (ctrlIsPressed || navigator.maxTouchPoints > 1) { // support for mobile devices
+		if (ctrlIsPressed || navigator.maxTouchPoints > 1) {
 			$('div.numPropTooltip').remove(); // old tooltip
 			val = $(this).text()
 			$('<div class="numPropTooltip">'+listNumberProperties(val)+'</div>').appendTo('body');
+			changeTooltipPosition(event);
+		}
+		if (shiftIsPressed) { // additional properties
+			$('div.numPropTooltip').remove(); // old tooltip
+			val = $(this).text()
+			$('<div class="numPropTooltip" style="max-width: unset;">'+listNumberPropertiesAlt(val)+'</div>').appendTo('body');
 			changeTooltipPosition(event);
 		}
 	};
@@ -33,6 +40,23 @@ $(document).ready(function() {
 	$("body").on("mousemove", ".numProp", changeTooltipPosition);
 	$("body").on("mouseleave", ".numProp", hideTooltip);
 
+	var showTooltipClick = function(event) {
+		$('div.numPropTooltip').remove(); // old tooltip
+		val = $(this).text()
+		$('<div class="numPropTooltip">'+listNumberProperties(val)+'</div>').appendTo('body');
+		changeTooltipPosition(event);
+	}
+	var showTooltipClickAlt = function(event) {
+		$('div.numPropTooltip').remove(); // old tooltip
+		val = $(this).text()
+		$('<div class="numPropTooltip" style="max-width: unset;">'+listNumberPropertiesAlt(val)+'</div>').appendTo('body');
+		changeTooltipPosition(event);
+		return false; // no context menu
+	};
+
+	$("body").on("click", ".numProp", showTooltipClick);
+	$("body").on("contextmenu", ".numProp", showTooltipClickAlt);
+
 });
 
 function listNumberProperties(val) {
@@ -40,15 +64,20 @@ function listNumberProperties(val) {
 	var pf = getNumFactorization(val) // prime factorization
 
 	var o = '<table class="numPropTable"><tbody>'
+
 	o += '<tr><td class="numPropLabel">Prime</td><tr>'
 	o += '<tr><td>'+getNumProp(val, primeNums)+'</td></tr>'
-	// o += '<tr><td><span style="margin: 0.25em;"></span></td></tr>'
-	o += '<tr><td class="numPropLabel"">Fibonacci</td></tr>'
+	o += '<tr><td class="numPropLabel">Fibonacci</td></tr>'
 	o += '<tr><td>'+getNumProp(val, fibonacciNums)+'</td></tr>'
 	o += '<tr><td class="numPropLabel">Triangular</td></tr>'
 	o += '<tr><td>'+getNumProp(val, triangularNums)+'</td></tr>'
 	o += '<tr><td class="numPropLabel">Star</td></tr>'
 	o += '<tr><td>'+getNumProp(val, starNums)+'</td></tr>'
+
+	o += '<tr><td><hr class="numPropSeparator"></td></tr>'
+
+	o += '<tr><td class="numPropLabel">Numerology</td></tr>'
+	o += '<tr><td>'+val+' &#10148; '+reduceNumber(val)+'</td></tr>'
 
 	o += '<tr><td><hr class="numPropSeparator"></td></tr>'
 
@@ -63,30 +92,47 @@ function listNumberProperties(val) {
 	for (n = 2; n < dv.length; n++) {
 	 	o += ', '+dv[n]
 	}
-	o += ' - &#931; '+dv[0]+' ('+(dv.length-1)+')</td></tr>'
+	o += '</tr><td><b>'+'&#931;'+'</b>'+' '+dv[0]+' ('+(dv.length-1)+')</td></tr>'
 
-	o += '<tr><td><hr class="numPropSeparator"></td></tr>'
+	o += '</tbody></table>'
 
-	// o += '<tr><td>&nbsp;base3 = '+numBaseXtoY(val, 10, 3)+'</td></tr>'
-	// o += '<tr><td>base16 = '+numBaseXtoY(val, 10, 16)+'</td></tr>'
-	o += '<tr><td>'+numBaseXtoY(val, 10, 60, ":")+' (base60)</td></tr>'
+	return o
+}
+
+function listNumberPropertiesAlt(val) {
+
+	var o = '<table class="numPropTable"><tbody>'
+	// Roman Numerals <->
+
+	o += '<tr><td colspan=2 class="numPropLabel">Number Bases</td><tr>'
+	o += '<tr><td><span class="numPropBaseLabel">base2</span></td><td class="numPropBaseValue"><span class="numPropValPad">'+numBaseXtoY(val, 10, 2)+'</span></td></tr>'
+	// o += '<tr><td><span class="numPropBaseLabel">base3</span></td><td class="numPropBaseValue"><span class="numPropValPad">'+numBaseXtoY(val, 10, 3)+'</span></td></tr>'
+	o += '<tr><td><span class="numPropBaseLabel">base8</span></td><td class="numPropBaseValue"><span class="numPropValPad">'+numBaseXtoY(val, 10, 8)+'</span></td></tr>'
+	o += '<tr><td><span class="numPropBaseLabel">base16</span></td><td class="numPropBaseValue"><span class="numPropValPad">'+numBaseXtoY(val, 10, 16)+'</span></td></tr>'
+	o += '<tr><td><span class="numPropBaseLabel">base60</span></td><td class="numPropBaseValue"><span class="numPropValPad">'+numBaseXtoY(val, 10, 60, ":")+'</span></td></tr>'
+	// o += '<tr><td><span class="numPropBaseLabel">base7 (+1)</span></td><td class="numPropBaseValue"><span class="numPropValPad">'+incEachDigit(numBaseXtoY(val, 10, 7), 1, "-")+'</span></td></tr>'
+
+	o += '<tr><td colspan=2><hr class="numPropSeparator"></td></tr>'
+
+	o += '<tr><td colspan=2 class="numPropLabel">Roman Numerals</td></tr>'
+	o += '<tr><td colspan=2>'+getRomanNumerals(val)+'</td></tr>'
+
 	o += '</tbody></table>'
 
 	return o
 }
 
 function getNumProp(val, searchArr) {
-	var out = ""; var pos = 0; var cur = ""; var prev = "n/a - "; var next = " - n/a"
+	var out = ""; var cur = ""; var prev = "n/a - "; var next = " - n/a"
 	var ind = searchArr.indexOf(parseInt(val)) // integer value
 
 	if (ind > -1) {
-		pos = ind+1
-		cur = '<span class="numPropBoldValue">'+searchArr[ind]+' ('+pos+')</span>' // find current value in array, display position
+		cur = '<span class="numPropBoldValue">'+searchArr[ind]+' ('+(ind+1)+')</span>' // find current value in array, display position
 	} else {
 		cur = '<span class="numPropBoldValue">n/a</span>'
 	}
 
-	if (ind !== -1 && ind !== 0) { // use previous item in array if index is valid
+	if (ind > 0) { // use previous item in array if index is valid
 		prev = searchArr[ind-1]+' ('+ind+') - '
 	} else if (ind !== 0) { // can't be first element
 		for (i = 0; i < searchArr.length; i++) { // find number below "val" in array
@@ -98,13 +144,11 @@ function getNumProp(val, searchArr) {
 	}
 
 	if (ind !== -1 && searchArr[ind+1] !== undefined) {
-		pos = ind+2
-		next = ' - '+searchArr[ind+1]+' ('+pos+')' // use next item in array if match was found
+		next = ' - '+searchArr[ind+1]+' ('+(ind+2)+')' // use next item in array if match was found
 	} else {
 		for (i = 0; i < searchArr.length; i++) { // find number above "val" in array
 			if (searchArr[i] > val) {
-				pos = i+1
-				next = ' - '+searchArr[i]+' ('+pos+')'
+				next = ' - '+searchArr[i]+' ('+(i+1)+')'
 				break // end loop
 			}
 		}
@@ -145,7 +189,7 @@ function populateStarNumbers(n) { // inclusive - 1,13,37,73
 }
 
 function getNumDivisors(val) { // first element is sum of all divisors
-	if (val == 0) return ["n/a","n/a"]
+	if (val == 0 || val >= 10000000) return ["n/a","n/a"]
 	var arr = [1]; var sum = 1
 	for (i = 2; i <= val; i++) {
 		if (val%i == 0) { arr.push(i); sum += i; } // if remainder is zero
@@ -155,7 +199,7 @@ function getNumDivisors(val) { // first element is sum of all divisors
 }
 
 function getNumFactorization(val) {
-	if (val < 2) return ["n/a"]
+	if (val < 2 || val >= 10000000) return ["n/a"]
 	var arr = []; var p = 0
 	for (i = 0; i < primeNums.length; i++) {
 		p = primeNums[i] // prime
@@ -165,7 +209,7 @@ function getNumFactorization(val) {
 				val /= p // continue division
 			}
 		} else {
-			break // end loop
+			break
 		}
 	}
 	return arr
@@ -253,4 +297,44 @@ function numBaseXtoY (num, x, y, separator = "") { // convert number from one ba
 	}
 	if (separator !== "") out = out.slice(0,-1) // remove last separator if separators were used
 	return out
+}
+
+function reduceNumber(num) { // digital root of a number
+	num = parseInt(num), 10
+	var droot = num; var d = 0
+	while (num > 9 && num !== 11 && num !== 22 && num !== 33) { // not single digit and not a master number
+		droot = 0 // reset droot
+		for (i = 0; i < String(num).length; i++) {
+			d = Number(String(num).slice(i, i+1))
+			droot += d // add all digits one by one
+		}
+		num = droot
+	}
+	return droot
+}
+
+function getRomanNumerals(num) {
+	if (num == 0 || num >= 10000) return "n/a"
+	var roman = [[1000, 'M'],[900, 'CM'],[500, 'D'],
+		[400, 'CD'],[100, 'C'],[90, 'XC'],
+		[50, 'L'],[40, 'XL'],[10, 'X'],
+		[9, 'IX'],[5, 'V'],[4, 'IV'],[1, 'I']]
+	var res = ""
+	for (i = 0; i < roman.length; i++) {
+		while ( num >= roman[i][0] ) {
+			res += roman[i][1] // append character
+			num -= roman[i][0] // subtract found value
+		}
+	}
+	return res;
+}
+
+function incEachDigit(num, inc, separator = "") {
+	num = num.toString()
+	var res = ""
+	for (i = 0; i < num.length; i++) { // increment each digit
+		res += (parseInt(num.substring(i,i+1)) + inc).toString() + separator
+	}
+	if (separator !== "") res = res.slice(0,-1) // remove last separator if present
+	return res
 }

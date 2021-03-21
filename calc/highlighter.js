@@ -106,7 +106,7 @@ $(document).ready(function(){
 		//console.log($(this).find(".gV").html()); // inner html of .gV found in "this"
 		var val = $(this).find(".gV").html(); // get gematria value from element
 		if(ctrlIsPressed) { // Ctrl + Left Click
-			tdToggleHighlight(parseInt(val.trim())); // remove spaces, parse as integer and add (remove) to highlight box
+			tdToggleHighlight(parseInt(val.trim(), 10)); // remove spaces, parse as integer and add (remove) to highlight box
 		} else { // Left Click only
 			$( "table.HistoryTable td.tC > span:contains('"+val+"')" ).toggleClass('highlightValueBlink'); // add blinking effect
 		}

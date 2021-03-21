@@ -73,17 +73,16 @@ function createAboutMenu() { // create menu with all cipher catergories
 
 	o += '<div class="dropdown">'
 	o += '<button class="dropbtn">About</button>'
-	o += '<div class="dropdown-content" style="padding-bottom: 0em;">'
+	o += '<div class="dropdown-content">'
 
 	o += '<center>'
 	o += '<div style="display: flex; justify-content: center;"><img src="res/logo.svg" style="height: 16px"></div>'
-	o += '<div style="display: flex; justify-content: center;"><span style="font-size: 70%; color: hsl(222 0% 50% / 1);">by ravic norsov</span></div>'
+	o += '<div style="display: flex; justify-content: center;"><span style="font-size: 70%; color: hsl(222 0% 50% / 1);">by ravic norsou</span></div>'
 	o += '</center>'
 	o += '<div style="margin: 0.5em;"></div>'
 	o += '<input id="toggleCatBtn" class="intBtn" type="button" value="GitHub Repository" onclick="gotoGitHubRepo()">'
 	o += '<div style="margin: 0.5em;"></div>'
 	o += '<input id="toggleCatBtn" class="intBtn" type="button" value="Shortcuts" onclick="">'
-	o += '<div style="text-align: center; font-size: 50%; color: hsl(222 21% 15% / 1); margin-top: 0.35em; margin-bottom: 0.4em; cursor: default;">Gematro - Spear S.</div>'
 
 	o += '</div></div>'
 
