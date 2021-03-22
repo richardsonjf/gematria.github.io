@@ -79,7 +79,7 @@ function createAboutMenu() { // create menu with all cipher catergories
 	o += '<div class="dropdown-content">'
 
 	o += '<center>'
-	o += '<div style="display: flex; justify-content: center;"><img src="res/logo.svg" style="height: 16px"></div>'
+	o += '<div style="display: flex; justify-content: center;"><img src="res/logo.svg" style="height: 10px"></div>'
 	o += '<div style="display: flex; justify-content: center;"><span style="font-size: 70%; color: rgb(186,186,186);">by ravic norsou</span></div>'
 	o += '</center>'
 	o += '<div style="margin: 0.5em;"></div>'
@@ -329,9 +329,9 @@ function displayIndColorControls() { // display control menu to adjust each ciph
 			if (cipherList[i].enabled) {chk = " checked";} else {chk = ""} // checkbox state
 			o += '<td><input type="checkbox" class="ciphCheckbox" id="cipher_chkbox'+i+'" name="cipher_chkbox_name'+i+'" value="" onclick="toggleCipher('+i+')"'+chk+'></td>'
 			o += '<td><label class="ciphCheckboxLabel" for="cipher_chkbox_name'+i+'">'+cipherList[i].cipherName+'</label></td>'
-			o += '<td><input type="number" step="5" min="-360" max="360" value="0" class="col_slider" id="sliderHue'+i+'" oninput="changeCipherColors(&quot;sliderHue'+i+'&quot;, &quot;Hue&quot;, '+i+')"></td>'
-			o += '<td><input type="number" step="2" min="-100" max="100" value="0" class="col_slider" id="sliderSaturation'+i+'" oninput="changeCipherColors(&quot;sliderSaturation'+i+'&quot;, &quot;Saturation&quot;, '+i+')"></td>'
-			o += '<td><input type="number" step="2" min="-100" max="100" value="0" class="col_slider" id="sliderLightness'+i+'" oninput="changeCipherColors(&quot;sliderLightness'+i+'&quot;, &quot;Lightness&quot;, '+i+')"></td>'
+			o += '<td><input type="number" step="2" min="-360" max="360" value="0" class="col_slider" id="sliderHue'+i+'" oninput="changeCipherColors(&quot;sliderHue'+i+'&quot;, &quot;Hue&quot;, '+i+')"></td>'
+			o += '<td><input type="number" step="1" min="-100" max="100" value="0" class="col_slider" id="sliderSaturation'+i+'" oninput="changeCipherColors(&quot;sliderSaturation'+i+'&quot;, &quot;Saturation&quot;, '+i+')"></td>'
+			o += '<td><input type="number" step="1" min="-100" max="100" value="0" class="col_slider" id="sliderLightness'+i+'" oninput="changeCipherColors(&quot;sliderLightness'+i+'&quot;, &quot;Lightness&quot;, '+i+')"></td>'
 			o += '<td><input type="text" value="" class="cipher_col_value" id="cipherHSL'+i+'"></td>'
 			o += '<td style="min-width: 16px;"></td>'
 			ciph_in_row++
@@ -349,11 +349,11 @@ function displayIndColorControls() { // display control menu to adjust each ciph
 	o += '<table>'
 	o += '<tr style="line-height: 1em;"><td style="font-size: 90%; font-weight: 500; color: rgb(186,186,186); text-align: center;">Global Colors: </td>'
 	o += '<td style="font-size: 80%; font-weight: 500; text-align: right;">Hue</td>'
-	o += '<td><input type="number" step="5" min="-360" max="360" value="'+globColors.H+'" class="col_slider" id="globalSliderHue" oninput="changeCipherColors(&quot;globalSliderHue&quot;, &quot;Hue&quot;)"></td>'
+	o += '<td><input type="number" step="2" min="-360" max="360" value="'+globColors.H+'" class="col_slider" id="globalSliderHue" oninput="changeCipherColors(&quot;globalSliderHue&quot;, &quot;Hue&quot;)"></td>'
 	o += '<td style="font-size: 80%; font-weight: 500; text-align: right;">Saturation</td>'
-	o += '<td><input type="number" step="2" min="-100" max="100" value="'+globColors.S+'" class="col_slider" id="globalSliderSaturation" oninput="changeCipherColors(&quot;globalSliderSaturation&quot;, &quot;Saturation&quot;)"></td>'
+	o += '<td><input type="number" step="1" min="-100" max="100" value="'+globColors.S+'" class="col_slider" id="globalSliderSaturation" oninput="changeCipherColors(&quot;globalSliderSaturation&quot;, &quot;Saturation&quot;)"></td>'
 	o += '<td style="font-size: 80%; font-weight: 500; text-align: right;">Lightness</td>'
-	o += '<td><input type="number" step="2" min="-100" max="100" value="'+globColors.L+'" class="col_slider" id="globalSliderLightness" oninput="changeCipherColors(&quot;globalSliderLightness&quot;, &quot;Lightness&quot;)"></td>'
+	o += '<td><input type="number" step="1" min="-100" max="100" value="'+globColors.L+'" class="col_slider" id="globalSliderLightness" oninput="changeCipherColors(&quot;globalSliderLightness&quot;, &quot;Lightness&quot;)"></td>'
 	o += '<td rowspan=2></td>'
 	o += '<td rowspan=2><input id="resetColorsButton" class="intBtn" type="button" value="Reset Colors" style="margin: 0em 0.5em;" onclick="resetColorControls()"></td>'
 	

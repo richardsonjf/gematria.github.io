@@ -2,7 +2,7 @@
 
 var primeNums = [] // list of primes
 populatePrimeNumbers(10000000) // 10 million is ~4.98MB, ~300ms
-var triangularNums = populateTriangularNumbers(10000000) // 10 million is ~33KB, ~10ms
+var triangularNums = populateTriangularNumbers(10000000)
 var fibonacciNums = populateFibonacciNumbers(10000000)
 var starNums = populateStarNumbers(10000000)
 
