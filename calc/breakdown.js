@@ -27,7 +27,6 @@ function updateWordBreakdown(impName = breakCipher, impBool = false, chartUpd = 
 	var o, acw, acl
 
 	updateEnabledCipherCount()
-	console.log(breakCipher)
 
 	if (impBool == true) breakCipher = impName // lock to a specific cipher
 	if (enabledCiphCount == 0 || breakCipher == "" && impName == "") {

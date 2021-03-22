@@ -513,7 +513,7 @@ function updateHistoryTableAutoHlt() {
 		for (q = 0; q < cols_arr.length; q++) { // for each enabled cipher (column), using "i" created some impossible infinte loop bug
 			col_matches = []
 			col_matches = countMatches(cols_arr[q]) // find matches within the same cipher
-			console.log(col_matches)
+			// console.log(col_matches)
 			for (n = 0; n < col_matches.length; n++) { // for each value in match array
 				if (col_matches[n][1] > 1) { // if 2 or more matches are available
 					if (avail_match.indexOf(col_matches[n][0]) == -1) avail_match.push(col_matches[n][0]) // add new value to list of valid matches

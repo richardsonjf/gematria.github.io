@@ -23,7 +23,7 @@ var optTinyHistoryTable = false // tiny mode - hide cipher names, no break each 
 var optCompactHistoryTable = false // compact mode - vertical cipher names
 var optLoadUserHistCiphers = true // load ciphers when CSV file is imported
 
-var optHideNotMatching = false // set opacity of non matching values to zero
+var optShowOnlyMatching = false // set opacity of nonmatching values to zero
 
 var optNumCalcMethod = "Full" // "Reduced", "Full", "Off" or anything - default option to calculate 19 as 1+9
 var optLetterWordCount = true // show word/letter count
@@ -110,11 +110,11 @@ function createOptionsMenu() {
 	o += create_PL() // Phrase Limit (End)
 
 	// get checkbox states
-	var CCMstate, SCMstate, HNMstate, CHTstate, THTstate, LWCstate, SRstate, WBstate, SCCstate, LUHCstate, MCRstate = ""
+	var CCMstate, SCMstate, SOMstate, CHTstate, THTstate, LWCstate, SRstate, WBstate, SCCstate, LUHCstate, MCRstate = ""
 
 	if (optFiltCrossCipherMatch) CCMstate = "checked" // Cross Cipher Match
 	if (optFiltSameCipherMatch) SCMstate = "checked" // Same Cipher Match
-	if (optHideNotMatching) HNMstate = "checked" // Hide Not Matching
+	if (optShowOnlyMatching) SOMstate = "checked" // Show Only Matching
 
 	if (optCompactHistoryTable) CHTstate = "checked" // Compact History
 	if (optTinyHistoryTable) THTstate = "checked" // Tiny History
@@ -129,7 +129,7 @@ function createOptionsMenu() {
 
 	o += '<div class="optionElement"><input type="checkbox" id="chkbox_CCM" value="" onclick="conf_CCM()" '+CCMstate+'><span class="optionElementLabel">Cross Cipher Match</span></div>'
 	o += '<div class="optionElement"><input type="checkbox" id="chkbox_SCM" value="" onclick="conf_SCM()" '+SCMstate+'><span class="optionElementLabel">Same Cipher Match</span></div>'
-	o += '<div class="optionElement"><input type="checkbox" id="chkbox_HNM" value="" onclick="conf_HNM()" '+HNMstate+'><span class="optionElementLabel">Hide Not Matching</span></div>'
+	o += '<div class="optionElement"><input type="checkbox" id="chkbox_SOM" value="" onclick="conf_SOM()" '+SOMstate+'><span class="optionElementLabel">Show Only Matching</span></div>'
 	o += '<div style="margin: 1em"></div>'
 	o += '<div class="optionElement"><input type="checkbox" id="chkbox_CH" value="" onclick="conf_CH()" '+CHTstate+'><span class="optionElementLabel">Compact History</span></div>'
 	o += '<div class="optionElement"><input type="checkbox" id="chkbox_TH" value="" onclick="conf_TH()" '+THTstate+'><span class="optionElementLabel">Tiny History</span></div>'
@@ -150,7 +150,7 @@ function createOptionsMenu() {
 	// set checkbox states
 	if (optFiltCrossCipherMatch) document.getElementById("chkbox_CCM").checked = true // Cross Cipher Match
 	if (optFiltSameCipherMatch) document.getElementById("chkbox_SCM").checked = true // Same Cipher Match
-	if (optHideNotMatching) document.getElementById("chkbox_HNM").checked = true // Hide Not Matching
+	if (optShowOnlyMatching) document.getElementById("chkbox_SOM").checked = true // Show Only Matching
 
 	if (optCompactHistoryTable) document.getElementById("chkbox_CH").checked = true // Compact History
 	if (optTinyHistoryTable) document.getElementById("chkbox_TH").checked = true // Tiny History
@@ -190,9 +190,9 @@ function conf_SCM() { // Same Cipher Match
 	}
 }
 
-function conf_HNM() { // Hide Not Matching
-	optHideNotMatching = !optHideNotMatching
-	if (optHideNotMatching) { alphaHlt = 0; } else { alphaHlt = 0.2; } 
+function conf_SOM() { // Show Only Matching
+	optShowOnlyMatching = !optShowOnlyMatching
+	if (optShowOnlyMatching) { alphaHlt = 0; } else { alphaHlt = 0.2; } 
 	updateTables()
 }
 
@@ -203,7 +203,6 @@ function conf_CH() { // Compact History
 		if (chkbox_TH != null) chkbox_TH.checked = false
 	}
 	updateTables()
-	console.log(optCompactHistoryTable)
 }
 
 function conf_TH() { // Tiny History
@@ -213,7 +212,6 @@ function conf_TH() { // Tiny History
 		if (chkbox_CH != null) chkbox_CH.checked = false
 	}
 	updateTables()
-	console.log(optTinyHistoryTable)
 }
 
 function conf_LWC() { // Letter/Word Count
@@ -246,7 +244,6 @@ function conf_CC() { // Cipher Chart
 
 function conf_LUC() { // Load User Ciphers (CSV)
 	optLoadUserHistCiphers = !optLoadUserHistCiphers
-	console.log(optLoadUserHistCiphers)
 }
 
 function conf_MCR() { // Matrix Code Rain
