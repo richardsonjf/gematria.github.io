@@ -8,7 +8,7 @@ var shiftIsPressed = false; // allow Shift modifier key
 // used inside highlighter.js
 var avail_match = []; // all matches found with auto highligher
 var avail_match_freq = []; // frequency of matches found with auto highligher
-var freq = []; // frequency of matches found with auto highlighter
+var freq = []; // frequency of matches found with auto highlighter (combined)
 
 $(document).ready(function(){
 	
@@ -44,19 +44,28 @@ $(document).ready(function(){
 			if(ctrlIsPressed) { // Ctrl + Delete
 				removeActiveFilter(); // clear filter
 			} else { // Left Click only
-				freq = []; // reset previously found matches, weighted auto highlighter
+				freq = []; // reset previously found matches statistics
 				document.getElementById("highlightBox").value = "";
+				updateHistoryTable();
 			}
+			return
 		}
 		if ( event.which == 13 ) { // "Enter" - show only phrases that match
-			if (document.getElementById("highlightBox").value !== "") RemoveNotMatchingPhrases(); // no action if empty
+			if (document.getElementById("highlightBox").value !== "") removeNotMatchingPhrases(); // no action if empty
 			return // don't update history as function is different
 		}
 		if ( event.which == 45 ) { // "Insert" - auto highlighter, find all available matches
 			updateHistoryTableAutoHlt();
 			return // don't update history
 		}
-		updateHistoryTable();
+		if (optFiltCrossCipherMatch) {
+			updateHistoryTable();
+			return;
+		}
+		if (optFiltSameCipherMatch) {
+			updateHistoryTableSameCiphMatch();
+			return // uses boolean array for highlighting
+		}
     });
 	
 	$("body").on("click", ".hC", function () { // Cipher Name in history table (normal mode)
@@ -159,13 +168,11 @@ $(document).ready(function(){
 	
 });
 
-function RemoveNotMatchingPhrases() {
+function removeNotMatchingPhrases() {
 	// highlight box values to array
 	highlt = document.getElementById("highlightBox").value.replace(/ +/g," ") // get value, remove double spaces
 	highlt_num = highlt.split(" ") // create array from string, space as delimiter
-	highlt_num = highlt_num.map(function (x) { // parse string array as integer array to exclude quotes
-		return parseInt(x, 10); 
-	});
+	highlt_num = highlt_num.map(function (x) { return parseInt(x, 10); }) // parse string array as integer array to exclude quotes
 	
 	// create a copy of history, since matching is destructive
 	if (userHistory.length == 0) userHistory = [...sHistory] // don't make new copies until filter is reset
@@ -173,7 +180,8 @@ function RemoveNotMatchingPhrases() {
 	var phr_values = []
 	var match = false
 	var x = 0
-	// for (x = 0; x < sHistory.length; x++) { // for each phrase in history
+
+	// remove not matching phrases first
 	while (x < sHistory.length) { // for each phrase in history
 	
 		phr_values = [] // reinit
@@ -264,10 +272,7 @@ function RemoveNotMatchingPhrases() {
 		
 		// make a copy of user's choice of ciphers
 		if (userOpenCiphers.length == 0) { // don't make new copies until filter is reset
-			//userOpenCiphers = [...openCiphers]
-			// tmp
 			for (i = 0; i < cipherList.length; i++) {
-				//tmp = Object.assign({}, cipherList[i]);
 				userOpenCiphers.push(cipherList[i].enabled); // save state for each cipher
 			}
 		}
@@ -305,9 +310,6 @@ function RemoveNotMatchingPhrases() {
 				
 				if (cipher_has_no_matches) { // remove current cipher if no phrases match with same value
 					valueToRemove = cipherList[i].cipherName
-					//openCiphers = openCiphers.filter(function(item) { // list of active ciphers
-					//	return item !== valueToRemove // remove current cipher
-					//})
 					for (n = 0; n < cipherList.length; n++) {
 						if (cipherList[n].cipherName == valueToRemove) {
 							cipherList[n].enabled = false // disable cipher
@@ -321,16 +323,16 @@ function RemoveNotMatchingPhrases() {
 			}
 		}
 		
-		var MatchingPhrases = []
+		var matchingPhrases = []
 		for (m = 0; m < phrase_match.length; m++) { // for each phrase checked
-			if (phrase_match[m] == true) { // if matching
-				MatchingPhrases.unshift(sHistory[m]) // insert in the beginning of array
+			if (phrase_match[m] == true) { // add if matching
+				matchingPhrases.push(sHistory[m])
 			}
 		}
 		
-		sHistory = MatchingPhrases // switch sHistory to set of phrases that match
-		console.log("sHistory:")
-		console.log(sHistory)
+		sHistory = matchingPhrases // switch sHistory to set of phrases that match
+		// console.log("sHistory:")
+		// console.log(sHistory)
 
 		// columns of cipher values
 		v_grid_col = [] // 2D array, columns of gematria values for enabled ciphers for all matching phrases
@@ -344,8 +346,8 @@ function RemoveNotMatchingPhrases() {
 				v_grid_col.push(tmp_arr) // add row with all values for current phrase
 			}
 		}
-		console.log("v_grid_col:")
-		console.log(v_grid_col)
+		// console.log("v_grid_col:")
+		// console.log(v_grid_col)
 
 		updateEnabledCipherCount() // get number of enabled ciphers
 
@@ -359,7 +361,7 @@ function RemoveNotMatchingPhrases() {
 		// n - cipher, m/z - phrase
 		for (n = 0; n < v_grid_col.length; n++) { // for each column (cipher)
 			for (m = 0; m < v_grid_col[n].length; m++) { // for each value in column (phrase)
-				if (highlt_num.indexOf(v_grid_col[n][m] > -1)) { // if value is in highlight box
+				if (highlt_num.indexOf(v_grid_col[n][m]) > -1) { // if value is in highlight box
 					for (z = m+1; z < v_grid_col[n].length; z++) { // compare vs other values in same column
 						if (v_grid_col[n][m] == v_grid_col[n][z]) { // if value matches another value
 							hltBoolArr[m][n] = true // mark both as values to be highlighted
@@ -369,8 +371,8 @@ function RemoveNotMatchingPhrases() {
 				}
 			}
 		}
-		console.log("hltBoolArr:")
-		console.log(hltBoolArr)
+		// console.log("hltBoolArr:")
+		// console.log(hltBoolArr)
 
 		updateEnabledCipherTable() // update ciphers
 	}
@@ -379,30 +381,75 @@ function RemoveNotMatchingPhrases() {
 	$("#clearFilterButton").html(o) // clear active filter button
 	
 	if (optFiltSameCipherMatch) {
-		updateHistoryTable(hltBoolArr) // rebuild table, same cipher match
+		updateHistoryTable(hltBoolArr) // rebuild table, pass boolean array for highlighting
 	} else if (optFiltCrossCipherMatch) {
 		updateHistoryTable()
 	}
 }
 
+function updateHistoryTableSameCiphMatch() {
+
+	highlt = document.getElementById("highlightBox").value.replace(/ +/g," ") // get value of Highlight textbox, remove double spaces
+
+	highlt_num = highlt.split(" "); // create array, space delimited numbers
+	highlt_num = highlt_num.map(function (e) { return parseInt(e, 10); }) // parse string array as integer array to exclude quotes
+	// console.log("highlt_num:")
+	// console.log(highlt_num)
+
+	// columns of cipher values
+	v_grid_col = [] // 2D array, columns of gematria values for enabled ciphers for all matching phrases
+	tmp_arr = [] // all gematria values for one phrase
+	for (n = 0; n < cipherList.length; n++) { // for each enabled cipher
+		if (cipherList[n].enabled) {
+			tmp_arr = [] // reset
+			for (z = 0; z < sHistory.length; z++) { // for each phrase
+				tmp_arr.push(cipherList[n].calcGematria(sHistory[z])) // add each gematria value for that phrase
+			}
+			v_grid_col.push(tmp_arr) // add row with all values for current phrase
+		}
+	}
+	// console.log("v_grid_col:")
+	// console.log(v_grid_col)
+
+	hltBoolArr = [] // highlight boolean array [phrase][cipher]
+	tmpArr = []
+	for (n = 0; n < sHistory.length; n++) { // for each phrase
+		tmpArr = new Array(enabledCiphCount).fill(false) // for each cipher
+		hltBoolArr.push(tmpArr) // add to array
+	}
+
+	// n - cipher, m/z - phrase
+	for (n = 0; n < v_grid_col.length; n++) { // for each column (cipher)
+		for (m = 0; m < v_grid_col[n].length; m++) { // for each value in column (phrase)
+			if (highlt_num.indexOf(v_grid_col[n][m]) > -1) { // if value is in highlight box
+				for (z = m+1; z < v_grid_col[n].length; z++) { // compare vs other values in same column
+					// if value matches another value in the same column and is present in highlight box
+					if (v_grid_col[n][m] == v_grid_col[n][z]) { 
+						hltBoolArr[m][n] = true // mark both as values to be highlighted
+						hltBoolArr[z][n] = true // [phrase][cipher]
+					}
+				}
+			}
+		}
+	}
+	// console.log("hltBoolArr:")
+	// console.log(hltBoolArr)
+
+	updateHistoryTable(hltBoolArr) // rebuild table, same cipher match
+}
+
 function removeActiveFilter() {
 	$("#clearFilterButton").html("") // remove clear button
 	$("#highlightBox").val("") // clear highlightBox box
-	
-	//openCiphers = [...userOpenCiphers] // restore user ciphers
-	// cipherList[0].calcGematria("LOL") - is not a function after making a copy
-	//var tmp
+
 	for (i = 0; i < userOpenCiphers.length; i++) {
-		//tmp = Object.assign({}, userOpenCiphers[i]);
 		cipherList[i].enabled = userOpenCiphers[i];
 	}
 	
 	sHistory = [...userHistory] // restore user history table
+	userHistory = [] // clear snapshot of user history
+	userOpenCiphers = [] // clear snapshot of user ciphers
 	
-	userHistory = [] // clear saved user history
-	userOpenCiphers = [] // clear saved user ciphers
-	
-	//Open_Ciphers()
 	updateEnabledCipherTable() // update ciphers
 	updateHistoryTable() // update history
 }
@@ -444,7 +491,6 @@ function updateHistoryTableAutoHlt() {
 	
 	if (sHistory.length == 0) {return}
 	
-	// it should change behavior of table creation, like highlight cell only at X,Y, so updateHistoryTable should have a new routine. Weighted Autohighlighter should be disabled for this option
 	if (optFiltSameCipherMatch) { // phrases that have the same value in the same cipher
 	
 		var cols_arr = [] // array of arrays, each array (COLUMN) has gematria values for a each phrase in one cipher
@@ -460,8 +506,8 @@ function updateHistoryTableAutoHlt() {
 			cipher_values = [] // reinit	
 			}
 		}
-		console.log(cols_arr)
-		//return
+		// console.log("cols_arr:")
+		// console.log(cols_arr)
 		
 		var col_matches = [] // frequency of values within one cipher for all phrases
 		for (q = 0; q < cols_arr.length; q++) { // for each enabled cipher (column), using "i" created some impossible infinte loop bug
@@ -474,7 +520,8 @@ function updateHistoryTableAutoHlt() {
 				}
 			}
 		}
-		console.log(avail_match)
+		// console.log("avail_match:")
+		// console.log(avail_match)
 		
 		avail_match.sort(function(a, b) { // sort ascending order
 			return a - b; //  b - a, for descending sort
@@ -488,10 +535,11 @@ function updateHistoryTableAutoHlt() {
 		substr = str.substring(1, str.length - 1) // remove brackets
 	    
 		document.getElementById("highlightBox").value = substr // populate highlight box
-		updateHistoryTable() // update table
+
+		updateHistoryTableSameCiphMatch() // update table
 		
-		// freq is meaningless for same cipher/same value (weighted auto highlighter is not compatible with it)
-		//freq = [] // frequency of matches found with auto highlighter (var declared in ijavaNGG.js)
+		//freq = [] // frequency of matches found with auto highlighter
+		// freq needs different logic for same cipher match
 		return
 
 	}

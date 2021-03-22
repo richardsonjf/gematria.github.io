@@ -21,7 +21,6 @@
     src: url("../font/roboto-mono-400.woff2") format('woff2');
 }
 
-
 /* ---------------- text selection ---------------- */
 ::selection {
   color: rgb(23,23,23);
@@ -107,7 +106,7 @@ body {
 	width: 55px;
 	font-size: 80%;
 	color: rgb(234,234,234);
-	background-color: rgb(23,23,23);
+	background-color: rgb(39,43,57);
 	border: 2px solid rgb(105,105,105);
 	box-sizing: border-box;
 	/*font-family: "Montserrat", "Arial", sans-serif;*/
@@ -119,7 +118,7 @@ body {
 	width: 85px;
 	font-size: 80%;
 	color: rgb(234,234,234);
-	background-color: rgb(23,23,23);
+	background-color: rgb(39,43,57);
 	border: 2px solid rgb(105,105,105);
 	/*font-family: "Montserrat", "Arial", sans-serif;*/
 	font-family: "Roboto Mono", monospace;
@@ -587,8 +586,9 @@ body {
 	display: inline-block;
 	color: rgb(209,209,209);
 	padding: 0.5em 0.75em 0.5em 0.75em;
-	border: 1px solid rgb(105,105,105);
-	background-color: rgb(39,43,57);
+	border: 1px solid rgb(105,105,105);  
+	/*background-color: rgb(39,43,57);*/
+	background-color: rgb(43,48,64);
 	width: 100%;
 	font-size: 100%;
 	font-family: "Montserrat", "Arial", sans-serif;
@@ -600,8 +600,9 @@ body {
 	/*width: 150px;*/
 	padding: 0.2em 0.75em;
 	margin: 0.1em 0em;
-	border: 1px solid rgb(105,105,105);
-	background-color: rgb(39,43,57);
+	border: 1px solid rgb(105,105,105);	  
+	/*background-color: rgb(39,43,57);*/
+	background-color: rgb(43,48,64);
 	width: 100%;
 	font-size: 100%;
 	font-family: "Montserrat", "Arial", sans-serif;
@@ -626,25 +627,27 @@ body {
 	outline: none;
 }
 
-#WBBox, #PhrLimitBox, #numCalcBox {
+#PhrLimitBox, #numCalcBox {
 	width: 100%;
-	background-color: rgb(23,23,23);
+	/*background-color: rgb(39,43,57);*/
+	background-color: rgb(43,48,64);
 	border: none;
 	border-top: 1px solid rgb(105,105,105);
 	color: rgb(234,234,234);
 	font-family: "Montserrat", "Arial", sans-serif;
+	font-size: 85%;
 	outline: none;
 }
 
-.optionElement:hover { 
+/*.optionElement:hover { 
 	background-color: rgb(65,70,83);
 	cursor:pointer;
-}
+}*/
 
 .optionElement {
 	margin: 0.4em 1em;
-	border: 1px solid rgb(105,105,105);
-	background-color: rgb(39,43,57);
+	/*border: 1px solid rgb(105,105,105);*/
+	/*background-color: rgb(39,43,57);*/
 	/* text on one line */
 	white-space: nowrap;
 }
@@ -658,7 +661,7 @@ body {
 
 .optionElementLabel {
 	margin-left: 0.2em;
-	margin-right: 1em;
+	margin-right: 0.4em; /*1em*/
 }
 
 .dropdown {
@@ -669,20 +672,13 @@ body {
 .dropdown-content, .dropdown-content-opt {
 	display: none;
 	position: absolute;
-	background-color: rgb(43,50,65);
-	/*background-color: hsl(222 21% 15% / 0.5);*/
-	/*backdrop-filter: blur(5px);*/
-	/*-webkit-backdrop-filter: blur(5px);*/
-	border: 1px solid rgb(105,105,105);
+	/*background-color: rgb(43,50,65);*/
+	background-color: rgb(49,56,73);
+	/*border: 1px solid rgb(105,105,105);*/
 	z-index: 100;
 	padding: 1em;
 	text-align: left;
 }
-
-/*.noBlurSupport {
-	background-color: hsl(222 21% 15% / 1); !important;
-}*/
-
 .dropdown-content-opt {
 	padding: 0.5em;
 }

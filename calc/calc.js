@@ -26,8 +26,7 @@ var optLoadUserHistCiphers = true // load ciphers when CSV file is imported
 var optNumCalcMethod = "Full" // "Reduced", "Full", "Off" or anything - default option to calculate 19 as 1+9
 var optLetterWordCount = true // show word/letter count
 
-// only one active, replace with a dropdown "Off", "Cross cipher match", "Same cipher match"
-var optWeightedAutoHlt = false // color grade matches found with auto highlighter (most frequest is the brightest)
+// only one can be active
 var optFiltSameCipherMatch = false; // filter shows only phrases that match in the same cipher
 var optFiltCrossCipherMatch = true; // filter shows only ciphers that have matching values
 
@@ -56,6 +55,7 @@ function createCiphersMenu() { // create menu with all cipher catergories
 
 	// o += '<div style="margin: 0.6em;"></div>'
 	o += '<hr style="background-color: rgb(77,77,77); height: 1px; border: none; margin: 0.75em;">'
+
 	// o += '<center><span style="font-size: 80%; color: rgb(222,222,222); "> Categories: </span></center>'
 	// o += '<div style="margin: 0.2em;"></div>'
 	for (i = 0; i < cCat.length; i++) {
@@ -77,7 +77,7 @@ function createAboutMenu() { // create menu with all cipher catergories
 
 	o += '<center>'
 	o += '<div style="display: flex; justify-content: center;"><img src="res/logo.svg" style="height: 16px"></div>'
-	o += '<div style="display: flex; justify-content: center;"><span style="font-size: 70%; color: hsl(222 0% 50% / 1);">by ravic norsou</span></div>'
+	o += '<div style="display: flex; justify-content: center;"><span style="font-size: 70%; color: rgb(186,186,186);">by ravic norsou</span></div>'
 	o += '</center>'
 	o += '<div style="margin: 0.5em;"></div>'
 	o += '<input id="toggleCatBtn" class="intBtn" type="button" value="GitHub Repository" onclick="gotoGitHubRepo()">'
@@ -105,37 +105,36 @@ function createOptionsMenu() {
 
 	o += create_NumCalc() // Number Calculation
 	o += create_PL() // Phrase Limit (End)
-	o += create_WB() // Word Breakdown
 
 	// get checkbox states
-	var WAHstate, SCMstate, CCMstate, CHTstate, THTstate, LWCstate, SRstate, SCCstate, LUHCstate, MCRstate = ""
+	var CCMstate, SCMstate, CHTstate, THTstate, LWCstate, SRstate, WBstate, SCCstate, LUHCstate, MCRstate = ""
 
-	if (optWeightedAutoHlt) WAHstate = "checked" // Weighted Auto Highlighter
-	if (optFiltSameCipherMatch) SCMstate = "checked" // Same Cipher Match
 	if (optFiltCrossCipherMatch) CCMstate = "checked" // Cross Cipher Match
+	if (optFiltSameCipherMatch) SCMstate = "checked" // Same Cipher Match
 
 	if (optCompactHistoryTable) CHTstate = "checked" // Compact History
 	if (optTinyHistoryTable) THTstate = "checked" // Tiny History
 
 	if (optLetterWordCount) LWCstate = "checked" // Letter/Word Count
 	if (optSimpleResult) SRstate = "checked" // Simple Result
+	if (optWordBreakdown) WBstate = "checked" // Word Breakdown
 	if (optShowCipherChart) SCCstate = "checked" // Cipher Chart
 
 	if (optLoadUserHistCiphers) LUHCstate = "checked" // Load User Ciphers (CSV)
 	if (!optMatrixCodeRain) MCRstate = "checked" // Matrix Code Rain
 
-	o += '<div class="optionElement"><input type="checkbox" class="calcOptCheckbox" id="chkbox_WAH" name="Weighted Auto Highlighter" value="" onclick="conf_WAH()" '+WAHstate+'><span class="optionElementLabel">Weighted Auto Highlighter</span></div>'
-	o += '<div class="optionElement"><input type="checkbox" class="calcOptCheckbox" id="chkbox_SCM" name="Same Cipher Match" value="" onclick="conf_SCM()" '+SCMstate+'><span class="optionElementLabel">Same Cipher Match</span></div>'
 	o += '<div class="optionElement"><input type="checkbox" class="calcOptCheckbox" id="chkbox_CCM" name="Cross Cipher Match" value="" onclick="conf_CCM()" '+CCMstate+'><span class="optionElementLabel">Cross Cipher Match</span></div>'
+	o += '<div class="optionElement"><input type="checkbox" class="calcOptCheckbox" id="chkbox_SCM" name="Same Cipher Match" value="" onclick="conf_SCM()" '+SCMstate+'><span class="optionElementLabel">Same Cipher Match</span></div>'
 	o += '<div style="margin: 1em"></div>'
-	o += '<div class="optionElement"><input type="checkbox" class="calcOptCheckbox" id="chkbox_CH" name="Compact History" value="" onclick="conf_CH()" '+CHTstate+'><span class="optionElementLabel">Compact History</span></div>'
-	o += '<div class="optionElement"><input type="checkbox" class="calcOptCheckbox" id="chkbox_TH" name="Tiny History" value="" onclick="conf_TH()" '+THTstate+'><span class="optionElementLabel">Tiny History</span></div>'
+	o += '<div class="optionElement"><input type="checkbox" id="chkbox_CH" name="Compact History" value="" onclick="conf_CH()" '+CHTstate+'><span class="optionElementLabel">Compact History</span></div>'
+	o += '<div class="optionElement"><input type="checkbox" id="chkbox_TH" name="Tiny History" value="" onclick="conf_TH()" '+THTstate+'><span class="optionElementLabel">Tiny History</span></div>'
 	o += '<div style="margin: 1em"></div>'
 	o += '<div class="optionElement"><input type="checkbox" id="chkbox_LWC" value="" onclick="conf_LWC()" '+LWCstate+'><span class="optionElementLabel">Letter/Word Count</span></div>'
 	o += '<div class="optionElement"><input type="checkbox" id="chkbox_SR" value="" onclick="conf_SR()" '+SRstate+'><span class="optionElementLabel">Simple Result</span></div>'
+	o += '<div class="optionElement"><input type="checkbox" id="chkbox_WB" value="" onclick="conf_WB()" '+WBstate+'><span class="optionElementLabel">Word Breakdown</span></div>'
 	o += '<div class="optionElement"><input type="checkbox" id="chkbox_CC" value="" onclick="conf_CC()" '+SCCstate+'><span class="optionElementLabel">Cipher Chart</span></div>'
 	o += '<div style="margin: 1em"></div>'
-	o += '<div class="optionElement"><input type="checkbox" class="calcOptCheckbox" id="chkbox_LUC" name="Load User Ciphers (CSV)" value="" onclick="conf_LUC()" '+LUHCstate+'><span class="optionElementLabel">Load User Ciphers (CSV)</span></div>'
+	o += '<div class="optionElement"><input type="checkbox" id="chkbox_LUC" name="Load User Ciphers (CSV)" value="" onclick="conf_LUC()" '+LUHCstate+'><span class="optionElementLabel">Load User Ciphers (CSV)</span></div>'
 	o += '<div class="optionElement"><input type="checkbox" id="chkbox_MCR" value="" onclick="conf_MCR()" '+MCRstate+'><span class="optionElementLabel">Matrix Code Rain</span></div>'
 	o += '<div style="margin: 1em"></div>'
 
@@ -144,46 +143,19 @@ function createOptionsMenu() {
 	document.getElementById("calcOptionsPanel").innerHTML = o
 
 	// set checkbox states
-	if (optWeightedAutoHlt) document.getElementById("chkbox_WAH").checked = true // Weighted Auto Highlighter
-	if (optFiltSameCipherMatch) document.getElementById("chkbox_SCM").checked = true // Same Cipher Match
 	if (optFiltCrossCipherMatch) document.getElementById("chkbox_CCM").checked = true // Cross Cipher Match
+	if (optFiltSameCipherMatch) document.getElementById("chkbox_SCM").checked = true // Same Cipher Match
 
 	if (optCompactHistoryTable) document.getElementById("chkbox_CH").checked = true // Compact History
 	if (optTinyHistoryTable) document.getElementById("chkbox_TH").checked = true // Tiny History
 
 	if (optLetterWordCount) document.getElementById("chkbox_LWC").checked = true // Letter/Word Count
 	if (optSimpleResult) document.getElementById("chkbox_SR").checked = true // Simple Result
+	if (optShowCipherChart) document.getElementById("chkbox_WB").checked = true // Word Breakdown
 	if (optShowCipherChart) document.getElementById("chkbox_CC").checked = true // Cipher Chart
 
 	if (optLoadUserHistCiphers) document.getElementById("chkbox_LUC").checked = true // Load User Ciphers (CSV)
 	if (!optMatrixCodeRain) document.getElementById("chkbox_MCR").checked = true // Matrix Code Rain
-}
-
-function conf_WAH() { // Weighted Auto Highlighter
-	optWeightedAutoHlt = !optWeightedAutoHlt
-	// only one option can be active
-	if (optWeightedAutoHlt) {
-		optFiltSameCipherMatch = false
-		chkSCM = document.getElementById("chkbox_SCM")
-		if (chkSCM != null) chkSCM.checked = false
-		optFiltCrossCipherMatch = false
-		chkCCM = document.getElementById("chkbox_CCM")
-		if (chkCCM != null) chkCCM.checked = false
-	}
-	console.log(optWeightedAutoHlt)
-}
-
-function conf_SCM() { // Same Cipher Match
-	optFiltSameCipherMatch = !optFiltSameCipherMatch
-	if (optFiltSameCipherMatch) {
-		optFiltCrossCipherMatch = false
-		chkCCM = document.getElementById("chkbox_CCM")
-		if (chkCCM != null) chkCCM.checked = false
-		optWeightedAutoHlt = false
-		chkWAH = document.getElementById("chkbox_WAH")
-		if (chkWAH != null) chkWAH.checked = false
-	}
-	console.log(optFiltSameCipherMatch)
 }
 
 function conf_CCM() { // Cross Cipher Match
@@ -192,11 +164,24 @@ function conf_CCM() { // Cross Cipher Match
 		optFiltSameCipherMatch = false
 		chkSCM = document.getElementById("chkbox_SCM")
 		if (chkSCM != null) chkSCM.checked = false
-		optWeightedAutoHlt = false
-		chkWAH = document.getElementById("chkbox_WAH")
-		if (chkWAH != null) chkWAH.checked = false
+	} else if (!optFiltCrossCipherMatch && !optFiltSameCipherMatch) {
+		optFiltCrossCipherMatch = true // can't disable both, revert to cross match as default
+		chkCCM = document.getElementById("chkbox_CCM")
+		if (chkCCM != null) chkCCM.checked = true
 	}
-	console.log(optFiltCrossCipherMatch)
+}
+
+function conf_SCM() { // Same Cipher Match
+	optFiltSameCipherMatch = !optFiltSameCipherMatch
+	if (optFiltSameCipherMatch) {
+		optFiltCrossCipherMatch = false
+		chkCCM = document.getElementById("chkbox_CCM")
+		if (chkCCM != null) chkCCM.checked = false
+	} else if (!optFiltCrossCipherMatch && !optFiltSameCipherMatch) {
+		optFiltCrossCipherMatch = true // can't disable both, revert to cross match as default
+		chkCCM = document.getElementById("chkbox_CCM")
+		if (chkCCM != null) chkCCM.checked = true
+	}
 }
 
 function conf_CH() { // Compact History
@@ -235,6 +220,11 @@ function conf_SR() { // Simple Result
 	if (element !== null && !optSimpleResult) element.classList.add("hideValue")
 }
 
+function conf_WB() { // Word Breakdown
+	optWordBreakdown = !optWordBreakdown
+	updateWordBreakdown()
+}
+
 function conf_CC() { // Cipher Chart
 	optShowCipherChart = !optShowCipherChart
 	updateWordBreakdown()
@@ -255,7 +245,7 @@ function create_NumCalc() { // Number Calculation
 	var ns = ""
 	var nArr = ["Off", "Full", "Reduced"]
 	var nArr2 = [" ", " (123 = 123)", " (123 = 1+2+3 = 6)"]
-	ns += '<div class="optionElementDropdown"><span style="size: 80%">Number Calculation: </span>'
+	ns += '<div class="optionElementDropdown"><span style="size: 80%">Number Calculation</span>'
 	ns += '<select id="numCalcBox" onchange="conf_NumCalc()">'
 	for (x = 0; x < nArr.length; x++) {
 		if (nArr[x] == optNumCalcMethod) {
@@ -277,7 +267,7 @@ function conf_NumCalc() { // Number Calculation
 function create_PL() { // Phrase Limit (End)
 	var ns = ""
 	var nArr = [1,2,3,4,5,6,7,8,9,10]
-	ns += '<div class="optionElementDropdown"><span style="size: 80%">Phrase Limit (End): </span>'
+	ns += '<div class="optionElementDropdown"><span style="size: 80%">Phrase Limit (End)</span>'
 	ns += '<select id="PhrLimitBox" onchange="conf_PL()">'
 	for (x = 0; x < nArr.length; x++) {
 		ns += '<option value="' + nArr[x] + '"'
@@ -291,35 +281,6 @@ function create_PL() { // Phrase Limit (End)
 function conf_PL() {
 	var pLimit = document.getElementById("PhrLimitBox")
 	optPhraseLimit = pLimit.value
-}
-
-function create_WB() { // Word Breakdown
-	var ns = ""
-	var nArr = ["Enabled", "Disabled"]
-	ns += '<div class="optionElementDropdown"><span>Word Breakdown: </span><select id="WBBox" onchange="conf_WB()">'
-	for (x = 0; x < nArr.length; x++) {
-		if (nArr[x] == optBreakdownType) {
-			ns += '<option value="' + nArr[x] + '" selected="selected">' +  nArr[x] + '</option>'
-		} else {
-			ns += '<option value="' + nArr[x] + '">' +  nArr[x] + '</option>'
-		}
-	}
-	ns += '</select></div>'
-	return ns
-}
-function conf_WB() {
-	var bdType = document.getElementById("WBBox")
-	optBreakdownType = bdType.value
-	updateWordBreakdown()
-	element = document.getElementById("BreakTableContainer")
-	if (element !== null) { 
-		if (optBreakdownType == "Disabled") {
-			element.classList.add("hideValue")
-		} else {
-			element.classList.remove("hideValue")
-
-		}
-	}
 }
 
 // ========================= Color Functions ========================
@@ -859,43 +820,16 @@ function updateHistoryTable(hltBoolArr) {
 
 				// if highlight mode is on
 				if (hltMode) {
-					// if optWeightedAutoHlt doesn't populate freq[], hltBoolArr was passed and value inside hltBoolArr is not active
-					//freq.length == 0 && 
-					if ( typeof hltBoolArr !== 'undefined' && hltBoolArr[x][ciphCount] == false ) {
+					// if cross cipher match and highlight box doesn't include number
+					if ( optFiltCrossCipherMatch && !highlt_num.includes(gemVal) ) {
 						col = 'hsl('+curCiph.H+' '+curCiph.S+'% '+curCiph.L+'% / '+(alpha*0.2)+')'
-						//col_bg = 'hsl('+curCiph.H+' '+curCiph.S+'% '+curCiph.L+'% / '+alpha/17+')' // background gradient color
-					// if cross cipher match and doesn't include number or - freq[] is empty, hltBoolArr was not passed and value is not present in highlight box
-					// freq.length == 0 && 
-					} else if ( (optFiltCrossCipherMatch && !highlt_num.includes(gemVal)) || (freq.length == 0 && typeof hltBoolArr == 'undefined' && !highlt_num.includes(gemVal)) ) {
+					// hltBoolArr was passed and value inside hltBoolArr is not active
+					} else if ( typeof hltBoolArr !== 'undefined' && hltBoolArr[x][ciphCount] == false ) {
 						col = 'hsl('+curCiph.H+' '+curCiph.S+'% '+curCiph.L+'% / '+(alpha*0.2)+')'
-						//col_bg = 'hsl('+curCiph.H+' '+curCiph.S+'% '+curCiph.L+'% / '+alpha/17+')' // background gradient color
-					// if cross cipher match and value is not present in highlight box
-					// } else if ( optFiltCrossCipherMatch && !highlt_num.includes(gemVal) ) {
-					// 	alpha *= 0.3
-					// 	col = 'hsl('+curCiph.H+' '+curCiph.S+'% '+curCiph.L+'% / '+alpha+')'
-					// if weighted auto highlighter mode, frequency array is not empty
-					} else if ( optWeightedAutoHlt && freq.length !== 0 ) {
-						if ( !highlt_num.includes(gemVal) ) { // if highlight mode is on and current value doesn't match
-							alpha = 0 // invisible
-							//col_bg = 'transparent'
-						}
-						maxMatch = freq[freq.length-1][1]; // last value, array is sorted
-						for (i = 0; i < freq.length; i++) { // weighted coloring
-							if (freq[i][0] == gemVal) {
-								alpha = freq[i][1]/maxMatch // if max - value 1.0
-								alpha = alpha*alpha*alpha // less significant values are darker, "gamma curve"
-								//col_bg = 'transparent'
-							}
-						}
-						//col = 'hsl('+curCiph.H+' '+curCiph.S+'% '+curCiph.L+'% / '+alpha+')'
-						col = 'hsl(120 100% 50% / '+alpha+')' // green
 					}
 				}
 				ciphCount++ // next position in hltBoolArr
-				// value including tooltip with colored cipher name and phrase
 				ms += '<td class="tC"><span style="color: '+col+'" class="gV"> '+gemVal+' </span></td>'
-				//ms += '<td class="tC" style="background: linear-gradient(90deg, '+col_bg+', transparent);"><span style="color: '+col+'">'+gemSum+'</span></td>'
-				//ms += '<td class="tC histValTooltip"><span style="color: '+col+'">'+gemSum+'</span><span class="histValTooltipTxt"><span style="color: '+col+'">'+cipherList[y].cipherName+'</span><br><br>'+sHistory[x]+'</span></td>'
 			}
 		}
 		ms += '</tr>'

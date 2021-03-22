@@ -299,6 +299,16 @@ function numBaseXtoY (num, x, y, separator = "") { // convert number from one ba
 	return out
 }
 
+function incEachDigit(num, inc, separator = "") { // 314 + 1 -> 425
+	num = num.toString()
+	var res = ""
+	for (i = 0; i < num.length; i++) { // increment each digit
+		res += (parseInt(num.substring(i,i+1)) + inc).toString() + separator
+	}
+	if (separator !== "") res = res.slice(0,-1) // remove last separator if present
+	return res
+}
+
 function reduceNumber(num) { // digital root of a number
 	num = parseInt(num), 10
 	var droot = num; var d = 0
@@ -314,7 +324,7 @@ function reduceNumber(num) { // digital root of a number
 }
 
 function getRomanNumerals(num) {
-	if (num == 0 || num >= 10000) return "n/a"
+	if (num == 0 || num >= 4000) return "n/a"
 	var roman = [[1000, 'M'],[900, 'CM'],[500, 'D'],
 		[400, 'CD'],[100, 'C'],[90, 'XC'],
 		[50, 'L'],[40, 'XL'],[10, 'X'],
@@ -327,14 +337,4 @@ function getRomanNumerals(num) {
 		}
 	}
 	return res;
-}
-
-function incEachDigit(num, inc, separator = "") {
-	num = num.toString()
-	var res = ""
-	for (i = 0; i < num.length; i++) { // increment each digit
-		res += (parseInt(num.substring(i,i+1)) + inc).toString() + separator
-	}
-	if (separator !== "") res = res.slice(0,-1) // remove last separator if present
-	return res
 }
