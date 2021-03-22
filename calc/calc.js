@@ -23,12 +23,15 @@ var optTinyHistoryTable = false // tiny mode - hide cipher names, no break each 
 var optCompactHistoryTable = false // compact mode - vertical cipher names
 var optLoadUserHistCiphers = true // load ciphers when CSV file is imported
 
+var optHideNotMatching = false // set opacity of non matching values to zero
+
 var optNumCalcMethod = "Full" // "Reduced", "Full", "Off" or anything - default option to calculate 19 as 1+9
 var optLetterWordCount = true // show word/letter count
 
 // only one can be active
-var optFiltSameCipherMatch = false; // filter shows only phrases that match in the same cipher
-var optFiltCrossCipherMatch = true; // filter shows only ciphers that have matching values
+var optFiltSameCipherMatch = false // filter shows only phrases that match in the same cipher
+var optFiltCrossCipherMatch = true // filter shows only ciphers that have matching values
+var alphaHlt = 0.2 // opacity for values that do not match
 
 function initCalc() { // run after page has finished loading
 	initCiphers()
@@ -107,10 +110,11 @@ function createOptionsMenu() {
 	o += create_PL() // Phrase Limit (End)
 
 	// get checkbox states
-	var CCMstate, SCMstate, CHTstate, THTstate, LWCstate, SRstate, WBstate, SCCstate, LUHCstate, MCRstate = ""
+	var CCMstate, SCMstate, HNMstate, CHTstate, THTstate, LWCstate, SRstate, WBstate, SCCstate, LUHCstate, MCRstate = ""
 
 	if (optFiltCrossCipherMatch) CCMstate = "checked" // Cross Cipher Match
 	if (optFiltSameCipherMatch) SCMstate = "checked" // Same Cipher Match
+	if (optHideNotMatching) HNMstate = "checked" // Hide Not Matching
 
 	if (optCompactHistoryTable) CHTstate = "checked" // Compact History
 	if (optTinyHistoryTable) THTstate = "checked" // Tiny History
@@ -123,18 +127,19 @@ function createOptionsMenu() {
 	if (optLoadUserHistCiphers) LUHCstate = "checked" // Load User Ciphers (CSV)
 	if (!optMatrixCodeRain) MCRstate = "checked" // Matrix Code Rain
 
-	o += '<div class="optionElement"><input type="checkbox" class="calcOptCheckbox" id="chkbox_CCM" name="Cross Cipher Match" value="" onclick="conf_CCM()" '+CCMstate+'><span class="optionElementLabel">Cross Cipher Match</span></div>'
-	o += '<div class="optionElement"><input type="checkbox" class="calcOptCheckbox" id="chkbox_SCM" name="Same Cipher Match" value="" onclick="conf_SCM()" '+SCMstate+'><span class="optionElementLabel">Same Cipher Match</span></div>'
+	o += '<div class="optionElement"><input type="checkbox" id="chkbox_CCM" value="" onclick="conf_CCM()" '+CCMstate+'><span class="optionElementLabel">Cross Cipher Match</span></div>'
+	o += '<div class="optionElement"><input type="checkbox" id="chkbox_SCM" value="" onclick="conf_SCM()" '+SCMstate+'><span class="optionElementLabel">Same Cipher Match</span></div>'
+	o += '<div class="optionElement"><input type="checkbox" id="chkbox_HNM" value="" onclick="conf_HNM()" '+HNMstate+'><span class="optionElementLabel">Hide Not Matching</span></div>'
 	o += '<div style="margin: 1em"></div>'
-	o += '<div class="optionElement"><input type="checkbox" id="chkbox_CH" name="Compact History" value="" onclick="conf_CH()" '+CHTstate+'><span class="optionElementLabel">Compact History</span></div>'
-	o += '<div class="optionElement"><input type="checkbox" id="chkbox_TH" name="Tiny History" value="" onclick="conf_TH()" '+THTstate+'><span class="optionElementLabel">Tiny History</span></div>'
+	o += '<div class="optionElement"><input type="checkbox" id="chkbox_CH" value="" onclick="conf_CH()" '+CHTstate+'><span class="optionElementLabel">Compact History</span></div>'
+	o += '<div class="optionElement"><input type="checkbox" id="chkbox_TH" value="" onclick="conf_TH()" '+THTstate+'><span class="optionElementLabel">Tiny History</span></div>'
 	o += '<div style="margin: 1em"></div>'
 	o += '<div class="optionElement"><input type="checkbox" id="chkbox_LWC" value="" onclick="conf_LWC()" '+LWCstate+'><span class="optionElementLabel">Letter/Word Count</span></div>'
 	o += '<div class="optionElement"><input type="checkbox" id="chkbox_SR" value="" onclick="conf_SR()" '+SRstate+'><span class="optionElementLabel">Simple Result</span></div>'
 	o += '<div class="optionElement"><input type="checkbox" id="chkbox_WB" value="" onclick="conf_WB()" '+WBstate+'><span class="optionElementLabel">Word Breakdown</span></div>'
 	o += '<div class="optionElement"><input type="checkbox" id="chkbox_CC" value="" onclick="conf_CC()" '+SCCstate+'><span class="optionElementLabel">Cipher Chart</span></div>'
 	o += '<div style="margin: 1em"></div>'
-	o += '<div class="optionElement"><input type="checkbox" id="chkbox_LUC" name="Load User Ciphers (CSV)" value="" onclick="conf_LUC()" '+LUHCstate+'><span class="optionElementLabel">Load User Ciphers (CSV)</span></div>'
+	o += '<div class="optionElement"><input type="checkbox" id="chkbox_LUC" value="" onclick="conf_LUC()" '+LUHCstate+'><span class="optionElementLabel">Load User Ciphers (CSV)</span></div>'
 	o += '<div class="optionElement"><input type="checkbox" id="chkbox_MCR" value="" onclick="conf_MCR()" '+MCRstate+'><span class="optionElementLabel">Matrix Code Rain</span></div>'
 	o += '<div style="margin: 1em"></div>'
 
@@ -145,6 +150,7 @@ function createOptionsMenu() {
 	// set checkbox states
 	if (optFiltCrossCipherMatch) document.getElementById("chkbox_CCM").checked = true // Cross Cipher Match
 	if (optFiltSameCipherMatch) document.getElementById("chkbox_SCM").checked = true // Same Cipher Match
+	if (optHideNotMatching) document.getElementById("chkbox_HNM").checked = true // Hide Not Matching
 
 	if (optCompactHistoryTable) document.getElementById("chkbox_CH").checked = true // Compact History
 	if (optTinyHistoryTable) document.getElementById("chkbox_TH").checked = true // Tiny History
@@ -182,6 +188,12 @@ function conf_SCM() { // Same Cipher Match
 		chkCCM = document.getElementById("chkbox_CCM")
 		if (chkCCM != null) chkCCM.checked = true
 	}
+}
+
+function conf_HNM() { // Hide Not Matching
+	optHideNotMatching = !optHideNotMatching
+	if (optHideNotMatching) { alphaHlt = 0; } else { alphaHlt = 0.2; } 
+	updateTables()
 }
 
 function conf_CH() { // Compact History
@@ -767,7 +779,6 @@ function addPhraseToHistory(phr, upd) { // add new phrase to search history
 
 function updateHistoryTable(hltBoolArr) {
 	var ms, i, x, y, z, curCiph, gemVal, maxMatch
-	var alpha; // opacity
 	var ciphCount = 0 // count enabled ciphers (for hltBoolArr)
 	histTable = document.getElementById("HistoryTableArea")
 	
@@ -810,22 +821,20 @@ function updateHistoryTable(hltBoolArr) {
 
 		for (y = 0; y < cipherList.length; y++) {
 			if (cipherList[y].enabled) {
-				alpha = 1.0 // reset
 				curCiph = cipherList[y]
 				gemVal = curCiph.calcGematria(sHistory[x]) // value only
 				
 				//phrase x, cipher y
 				col = 'hsl('+curCiph.H+' '+curCiph.S+'% '+curCiph.L+'% / 1)' // default value color
-				//col_bg = 'hsl('+curCiph.H+' '+curCiph.S+'% '+curCiph.L+'% / '+curCiph.A/17+')' // background gradient color
 
 				// if highlight mode is on
 				if (hltMode) {
 					// if cross cipher match and highlight box doesn't include number
 					if ( optFiltCrossCipherMatch && !highlt_num.includes(gemVal) ) {
-						col = 'hsl('+curCiph.H+' '+curCiph.S+'% '+curCiph.L+'% / '+(alpha*0.2)+')'
-					// hltBoolArr was passed and value inside hltBoolArr is not active
+						col = 'hsl('+curCiph.H+' '+curCiph.S+'% '+curCiph.L+'% / '+alphaHlt+')'
+					// hltBoolArr was passed and value inside hltBoolArr is not active (optFiltSameCipherMatch)
 					} else if ( typeof hltBoolArr !== 'undefined' && hltBoolArr[x][ciphCount] == false ) {
-						col = 'hsl('+curCiph.H+' '+curCiph.S+'% '+curCiph.L+'% / '+(alpha*0.2)+')'
+						col = 'hsl('+curCiph.H+' '+curCiph.S+'% '+curCiph.L+'% / '+alphaHlt+')'
 					}
 				}
 				ciphCount++ // next position in hltBoolArr
