@@ -61,7 +61,7 @@ $(document).ready(function(){
 		if (optFiltCrossCipherMatch) { updateHistoryTable(); } else { updateHistoryTableSameCiphMatch(); }
     });
 	
-	$("body").on("click", ".hC", function () { // Cipher Name in history table (normal mode)
+	$("body").on("click", "td.hC", function () { // Cipher Name in history table (normal mode)
 		if(shiftIsPressed) { // Shift + Left Click
 			var val = $(this).html(); // cipher name
 			//console.log("    disabled: "+valueToRemove);
@@ -76,9 +76,9 @@ $(document).ready(function(){
 		}
 	});
 	
-	$("body").on("click", ".hCV", function () { // Cipher Name in history table (compact mode)
+	$("body").on("click", "td.hCV", function () { // Cipher Name in history table (compact mode)
 		if(shiftIsPressed) { // Shift + Left Click
-			var val = $(this).html(); // cipher name
+			var val = $(this).find(".hCV2").html(); // cipher name
 			for (i = 0; i < cipherList.length; i++) {
 				if (cipherList[i].cipherName == val) {
 					toggleCipher(i, true) // update checkbox

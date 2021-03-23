@@ -39,20 +39,20 @@ $(document).ready(function() {
 			var tooltipX = 0; var tooltipY = 0; // final tooltip coordinates
 			//console.log("X:"+coordX+" Y:"+coordY)
 
-			if (coordX + tW + 8 < viewportW + wndW) { // X position
+			if (coordX + tW + 8 + 35 < viewportW + wndW) { // X position
 				tooltipX = coordX + 8; // follow cursor position
 			} else { // if outside of visible viewport
 				tooltipX = viewportW + wndW - tW - 35 // display at furthest visible position
 			}
 
-			if (coordY + tH + 8 < viewportH + wndH) { // Y position
+			if (coordY + tH + 8 + 35 < viewportH + wndH) { // Y position
 				tooltipY = coordY + 8;
 			} else {
 				tooltipY = viewportH + wndH - tH - 35
 			}
 
 			// bottom right corner, out of viewport
-			if (coordX + tW + 8 > viewportW + wndW && coordY + tH + 8 > viewportH + wndH) {
+			if (coordX + tW + 8 + 35 > viewportW + wndW && coordY + tH + 8 + 35 > viewportH + wndH) {
 				tooltipX = event.pageX - tW - 27 // display to the left and above of cursor
 				tooltipY = event.pageY - tH - 27
 			}
