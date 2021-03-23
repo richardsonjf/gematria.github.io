@@ -26,31 +26,62 @@ $(document).ready(function() {
 		}
 	};
 
-	var changeTooltipPosition = function(event) {
-		var tooltipX = event.pageX - 8;
-		var tooltipY = event.pageY + 8;
-		$('div.numPropTooltip').css({top: tooltipY, left: tooltipX});
+	var changeTooltipPosition = function(event, wasClicked = false) {
+		if (ctrlIsPressed || shiftIsPressed || wasClicked == true) { // if modifier keys were used or opened with click
+			var tW = $('div.numPropTooltip').outerWidth() // tooltip dimensions
+			var tH = $('div.numPropTooltip').outerHeight()
+			var wndW = $(window).width() // viewport dimensions
+			var wndH = $(window).height()
+			var viewportW = $(document).scrollLeft() // window scroll position
+			var viewportH = $(document).scrollTop()
+			var coordX = event.pageX // cursor coordinates
+			var coordY = event.pageY
+			var tooltipX = 0; var tooltipY = 0; // final tooltip coordinates
+			//console.log("X:"+coordX+" Y:"+coordY)
+
+			if (coordX + tW + 8 < viewportW + wndW) { // X position
+				tooltipX = coordX + 8; // follow cursor position
+			} else { // if outside of visible viewport
+				tooltipX = viewportW + wndW - tW - 35 // display at furthest visible position
+			}
+
+			if (coordY + tH + 8 < viewportH + wndH) { // Y position
+				tooltipY = coordY + 8;
+			} else {
+				tooltipY = viewportH + wndH - tH - 35
+			}
+
+			// bottom right corner, out of viewport
+			if (coordX + tW + 8 > viewportW + wndW && coordY + tH + 8 > viewportH + wndH) {
+				tooltipX = event.pageX - tW - 27 // display to the left and above of cursor
+				tooltipY = event.pageY - tH - 27
+			}
+
+			$('div.numPropTooltip').css({top: tooltipY, left: tooltipX});
+		}
 	};
 
 	var hideTooltip = function() {
 		$('div.numPropTooltip').remove();
 	};
 
-	$("body").on("mouseenter", ".numProp", showTooltip);
-	$("body").on("mousemove", ".numProp", changeTooltipPosition);
-	$("body").on("mouseleave", ".numProp", hideTooltip);
+	// numbers inside enabled ciphers and history tables
+	$("body").on("mouseenter", ".numProp, .gV", showTooltip);
+	$("body").on("mousemove", ".numProp, .gV", changeTooltipPosition);
+	//$("body").on("mouseleave", ".numProp, .gV", hideTooltip);
+	$("body").on("mouseleave", "div.numPropTooltip", hideTooltip);
 
 	var showTooltipClick = function(event) {
 		$('div.numPropTooltip').remove(); // old tooltip
 		val = $(this).text()
 		$('<div class="numPropTooltip">'+listNumberProperties(val)+'</div>').appendTo('body');
-		changeTooltipPosition(event);
+		changeTooltipPosition(event, true); // a click was issued
 	}
 	var showTooltipClickAlt = function(event) {
 		$('div.numPropTooltip').remove(); // old tooltip
 		val = $(this).text()
 		$('<div class="numPropTooltip" style="max-width: unset;">'+listNumberPropertiesAlt(val)+'</div>').appendTo('body');
-		changeTooltipPosition(event);
+		changeTooltipPosition(event, true);
 		return false; // no context menu
 	};
 

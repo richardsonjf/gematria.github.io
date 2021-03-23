@@ -441,7 +441,7 @@ body {
     border-left: 1px solid rgb(58,58,58) ;
 }
 .cH { /* cipher header bar, history table */
-	background: -webkit-linear-gradient(0deg, rgb(20,23,27), transparent);
+	background: -webkit-linear-gradient(0deg, rgb(20,23,27), transparent); /*20,23,27*/
 	background: -moz-linear-gradient(0deg, rgb(20,23,27), transparent);
 	background: -o-linear-gradient(0deg, rgb(20,23,27), transparent);
 	background: linear-gradient(0deg, rgb(20,23,27), transparent);
@@ -452,8 +452,9 @@ body {
 	border-spacing: 0px;
 	/* border: 1px solid rgb(151,151,151); */
 	/*border: 1px solid rgb(105,105,105);*/
-	border-top: 1px solid rgb(58,58,58) ;
-	border-right: 1px solid rgb(58,58,58) ;
+	border-top: 1px solid rgb(58,58,58);
+	border-right: 1px solid rgb(58,58,58);
+	margin: 0.5em 1em 2.5em 1em;
 }
 /*.HistoryTable td {
 	padding-right: 3px; padding-left: 4px;
@@ -498,18 +499,20 @@ body {
 	/*text-overflow: ellipsis;*/
 	padding: 0em 0.5em;
     font-size: 110%;
+    /*background: linear-gradient(90deg, rgb(20,23,27), transparent);*/
 }
 .mP { /* history table header "Gematria" */
 	color: rgb(195,173,78);
 	/*color: hsl(46 78% 44% / 1.0);*/
 	padding: 5px 3px 5px 3px;
-	min-width: 80px;
+	min-width: 110px;
     font-weight: 500;
     font-size: 125%;
 }
 .gV { /* gematria value in history table */
 	font-size: 125%; /*115%*/
 	font-weight: 500;
+	cursor: pointer;
 }
 
 /* Highlight classes */
@@ -585,8 +588,8 @@ body {
 #HistoryTableArea {
 	/*display: flex;
 	justify-content: center;*/
-	margin-top: 0.5em;
-	margin-bottom: 2.5em;
+	/*margin-top: 0.5em;*/
+	/*margin-bottom: 2.5em;*/
 }
 
 #calcOptionsPanel {
@@ -694,7 +697,7 @@ body {
 	/*background-color: rgb(43,50,65);*/
 	background-color: rgb(49,56,73);
 	/*border: 1px solid rgb(105,105,105);*/
-	z-index: 100;
+	z-index: 200;
 	padding: 1em;
 	text-align: left;
 }

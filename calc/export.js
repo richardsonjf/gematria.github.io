@@ -15,6 +15,8 @@ function createExportMenu() {
 	o += '<input id="btn-print-word-break-png" class="intBtn" type="button" value="Print Word Breakdown" />' // print word breakdown table
 	o += '<div style="margin: 0.5em;"></div>'
 	o += '<input id="btn-print-breakdown-details-png" class="intBtn" type="button" value="Print Gematria Card" />' // print detailed breakdown
+	o += '<div style="margin: 0.5em;"></div>'
+	o += '<input id="btn-num-props-png" class="intBtn" type="button" value="Print Number Properties" />' // print number properties
 	
 	o += '<hr style="background-color: rgb(77,77,77); height: 1px; border: none; margin: 0.75em;">'
 
@@ -55,6 +57,10 @@ $(document).ready(function(){
 		$("#ChartTable").addClass("borderCipherTable"); // cipher chart with borders
 		openImageWindow("#BreakdownDetails", 1.5); // scale 1.5x
 		//$(".LetterCounts").text(o); // restore original contents
+	});
+
+	$("body").on("click", "#btn-num-props-png", function () {
+		openImageWindow(".numPropTooltip");
 	});
 
 	$("body").on("click", "#btn-export-history-png", function () {

@@ -1,11 +1,6 @@
 // ================= Word Breakdown & Cipher Chart ==================
 
-var optLetterCount = true // 6 letters, 1 word
-var optSimpleResult = true // Simple Result - phrase = 67 (English Ordinal)
-var optWordBreakdown = true // word breakdown
-var optShowCipherChart = true // cipher breakdown chart
 var breakCipher = "English Ordinal" // current cipher for breakdown
-
 var bgCol = "rgb(26,30,40)" // breakdown table background color
 
 function getSum(total, num) { // used to .reduce() array, adds all values
@@ -49,10 +44,10 @@ function updateWordBreakdown(impName = breakCipher, impBool = false, chartUpd = 
 		
 		o = ""
 
-		if (optLetterCount == true) {
+		if (optLetterWordCount == true) {
 			if (aCipher.LetterCount > 1) {acl = " letters, "} else {acl = " letter, "}
 			if (aCipher.WordCount > 1) {acw = " words"} else {acw = " word"}
-			o = '<div class="LetterCounts">' + aCipher.LetterCount + acl + aCipher.WordCount + acw + '</div>'
+			o += '<div class="LetterCounts">' + aCipher.LetterCount + acl + aCipher.WordCount + acw + '</div>'
 		}
 
 		if (optSimpleResult == true) {

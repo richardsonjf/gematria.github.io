@@ -27,8 +27,10 @@ var optShowOnlyMatching = false // set opacity of nonmatching values to zero
 
 var optNumCalcMethod = "Full" // "Reduced", "Full", "Off" or anything - default option to calculate 19 as 1+9
 var optLetterWordCount = true // show word/letter count
+var optSimpleResult = true // Simple Result - phrase = 67 (English Ordinal)
+var optWordBreakdown = true // word breakdown
+var optShowCipherChart = true // cipher breakdown chart
 
-// only one can be active
 var optFiltSameCipherMatch = false // filter shows only phrases that match in the same cipher
 var optFiltCrossCipherMatch = true // filter shows only ciphers that have matching values
 var alphaHlt = 0.2 // opacity for values that do not match
@@ -193,7 +195,11 @@ function conf_SCM() { // Same Cipher Match
 function conf_SOM() { // Show Only Matching
 	optShowOnlyMatching = !optShowOnlyMatching
 	if (optShowOnlyMatching) { alphaHlt = 0; } else { alphaHlt = 0.2; } 
-	updateTables()
+	if (optFiltCrossCipherMatch) {
+		updateTables()
+	} else if (optFiltSameCipherMatch) {
+		updateHistoryTableSameCiphMatch()
+	}
 }
 
 function conf_CH() { // Compact History
@@ -217,9 +223,6 @@ function conf_TH() { // Tiny History
 function conf_LWC() { // Letter/Word Count
 	optLetterWordCount = !optLetterWordCount
 	updateWordBreakdown()
-	element = document.querySelector(".LetterCounts")
-	if (element !== null && optLetterWordCount) element.classList.remove("hideValue")
-	if (element !== null && !optLetterWordCount) element.classList.add("hideValue")
 }
 
 function conf_SR() { // Simple Result
@@ -710,8 +713,8 @@ function phraseBoxKeypress(e) { // run on each keystroke inside text box - onkey
 			if (phr !== "") {pBox.value = phr; updateWordBreakdown(); updateTables()}
 			break
 		case 46: // Delete - remove entries from history
-			if (sHistory.length == 1) {
-				sHistory = [] // reinitialize array if there is only one entry
+			if (sHistory.length == 1 && phrPos > -1) { // if one entry and matches box contents
+				sHistory = [] // reinit
 				tArea = document.getElementById("HistoryTableArea")
 				tArea.innerHTML = "" // clear table
 			}
@@ -798,7 +801,7 @@ function updateHistoryTable(hltBoolArr) {
 
 		if (x % 25 == 0 && !optTinyHistoryTable) {
 			// ms += '<tr><td class="mP">Word or Phrase</td>'
-			ms += '<tr class="cH"><td class="mP">Gematria</td>'
+			ms += '<tr class="cH"><td class="mP"></td>'
 			for (z = 0; z < cipherList.length; z++) {
 				if (cipherList[z].enabled) {
 					if (optCompactHistoryTable) {

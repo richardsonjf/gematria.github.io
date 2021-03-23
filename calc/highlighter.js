@@ -48,24 +48,17 @@ $(document).ready(function(){
 				document.getElementById("highlightBox").value = "";
 				updateHistoryTable();
 			}
-			return
+			return;
 		}
 		if ( event.which == 13 ) { // "Enter" - show only phrases that match
 			if (document.getElementById("highlightBox").value !== "") removeNotMatchingPhrases(); // no action if empty
-			return // don't update history as function is different
+			return; // don't update history as function is different
 		}
 		if ( event.which == 45 ) { // "Insert" - auto highlighter, find all available matches
 			updateHistoryTableAutoHlt();
-			return // don't update history
+			return; // don't update history
 		}
-		if (optFiltCrossCipherMatch) {
-			updateHistoryTable();
-			return;
-		}
-		if (optFiltSameCipherMatch) {
-			updateHistoryTableSameCiphMatch();
-			return // uses boolean array for highlighting
-		}
+		if (optFiltCrossCipherMatch) { updateHistoryTable(); } else { updateHistoryTableSameCiphMatch(); }
     });
 	
 	$("body").on("click", ".hC", function () { // Cipher Name in history table (normal mode)
@@ -104,20 +97,30 @@ $(document).ready(function(){
 
 	// history table value clicked (right mouse button)
 	// disable context menu for the element so right click works
+	// $(".tC").live('contextmenu', function() { // ".bind" for existing elements, ".live" for future
+	// 	$(this).find(".gV").toggleClass('hideValue'); // <b> "style="display: none;"
+	// 	return false; // don't show menu
+	// })
+
 	$(".tC").live('contextmenu', function() { // ".bind" for existing elements, ".live" for future
-		$(this).find(".gV").toggleClass('hideValue'); // <b> "style="display: none;"
-		return false; // don't show menu
+		// e.preventDefault();
+	 	return false; // don't show menu
 	})
 	
 	// history table value clicked (left mouse button)
 	// trick is that ".gV" is " 12 ", not "12", so td:contains can't match it to " 112 "
-	$("body").on("click", ".tC", function (e) { // tC - history table cell
+	$("body").on("mousedown", ".tC", function (e) { // tC - history table cell
 		//console.log($(this).find(".gV").html()); // inner html of .gV found in "this"
 		var val = $(this).find(".gV").html(); // get gematria value from element
-		if(ctrlIsPressed) { // Ctrl + Left Click
-			tdToggleHighlight(parseInt(val.trim(), 10)); // remove spaces, parse as integer and add (remove) to highlight box
-		} else { // Left Click only
+		// if(ctrlIsPressed) { // Ctrl + Left Click
+		// 	tdToggleHighlight(parseInt(val.trim(), 10)); // remove spaces, parse as integer and add (remove) to highlight box
+		// } else { // Left Click only
+		if (e.which == 1) { // Left Click - temporary blinking effect
 			$( "table.HistoryTable td.tC > span:contains('"+val+"')" ).toggleClass('highlightValueBlink'); // add blinking effect
+		} else if (e.which == 2) { // Mouse Wheel click - toggle value inside highlight box
+			tdToggleHighlight(parseInt(val.trim(), 10)); // remove spaces, parse as integer and add (remove) to highlight box
+		} else if (e.which == 3) { // Right Click - hide value
+			$(this).find(".gV").toggleClass('hideValue');
 		}
 	});
 	
@@ -646,17 +649,17 @@ function tdToggleHighlight(val){ // click on value in history table to toggle hi
 		return parseInt(x, 10); 
 	});
 	
-	var i = highlt_num.indexOf(val) // val needs to be an integer
-	//console.log("val:"+val+" i:"+i+" highlt_num:"+JSON.stringify(highlt_num))
+	var ind = highlt_num.indexOf(val) // val needs to be an integer
+	//console.log("val:"+val+" ind:"+ind+" highlt_num:"+JSON.stringify(highlt_num))
 	
 	// disable
 	var hlt_val
-	if (i > -1) { // if value is present
-		highlt_num.splice(i,1) // remove value
+	if (ind > -1) { // if value is present
+		highlt_num.splice(ind,1) // remove value
 		hlt_val = JSON.stringify(highlt_num).replace(/,/g, " ") // to string
 		hlt_val = hlt_val.substring(1, hlt_val.length-1) // remove brackets
 		document.getElementById("highlightBox").value = hlt_val // update values inside textbox
-		updateHistoryTable() // update table
+		if (optFiltCrossCipherMatch) { updateHistoryTable(); } else { updateHistoryTableSameCiphMatch(); }
 		return
 	}
 	
@@ -665,5 +668,5 @@ function tdToggleHighlight(val){ // click on value in history table to toggle hi
 		document.getElementById("highlightBox").value += " " // append space if necessary
 	}
 	document.getElementById("highlightBox").value += val // append clicked value to Highlight textbox
-	updateHistoryTable() // update table
+	if (optFiltCrossCipherMatch) { updateHistoryTable(); } else { updateHistoryTableSameCiphMatch(); }
 };
