@@ -65,7 +65,7 @@ $(document).ready(function() {
 		$('div.numPropTooltip').remove();
 	};
 	var hideTooltipMobile = function() {
-		if (navigator.maxTouchPoints > 1) $('div.numPropTooltip').remove(); // for mobile devices
+		if (navigator.maxTouchPoints > 1) { $('div.numPropTooltip').remove(); } // for mobile devices
 	};
 
 	// numbers inside enabled ciphers and history tables
