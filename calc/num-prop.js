@@ -64,12 +64,15 @@ $(document).ready(function() {
 	var hideTooltip = function() {
 		$('div.numPropTooltip').remove();
 	};
+	var hideTooltipMobile = function() {
+		if (navigator.maxTouchPoints > 1) $('div.numPropTooltip').remove(); // for mobile devices
+	};
 
 	// numbers inside enabled ciphers and history tables
 	$("body").on("mouseenter", ".numProp, .gV", showTooltip);
 	$("body").on("mousemove", ".numProp, .gV", changeTooltipPosition);
-	//$("body").on("mouseleave", ".numProp, .gV", hideTooltip);
 	$("body").on("mouseleave", "div.numPropTooltip", hideTooltip);
+	$("body").on("mouseleave", ".numProp, .gV", hideTooltipMobile); // for mobile devices
 
 	var showTooltipClick = function(event) {
 		$('div.numPropTooltip').remove(); // old tooltip
