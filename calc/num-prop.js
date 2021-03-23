@@ -73,8 +73,11 @@ $(document).ready(function() {
 	// numbers inside enabled ciphers and history tables
 	$("body").on("mouseenter", ".numProp, .gV", showTooltip);
 	$("body").on("mousemove", ".numProp, .gV", changeTooltipPosition);
-	//$("body").on("mouseleave", ".numProp, .gV", hideTooltip);
-	$("body").on("mouseleave", "div.numPropTooltip", hideTooltip);
+	if (navigator.maxTouchPoints > 1) {
+		$("body").on("mouseleave", ".numProp, .gV", hideTooltip); // for mobile devices
+	} else {
+		$("body").on("mouseleave", "div.numPropTooltip", hideTooltip);
+	}
 
 	var showTooltipClick = function(event) {
 		$('div.numPropTooltip').remove(); // old tooltip
