@@ -59,20 +59,22 @@ $(document).ready(function() {
 
 			$('div.numPropTooltip').css({top: tooltipY, left: tooltipX});
 		}
+		if (navigator.maxTouchPoints > 1) { // for mobile devices
+			var tooltipX = event.pageX - 8;
+			var tooltipY = event.pageY + 8;
+			$('div.numPropTooltip').css({top: tooltipY, left: tooltipX});
+		}
 	};
 
 	var hideTooltip = function() {
 		$('div.numPropTooltip').remove();
 	};
-	var hideTooltipMobile = function() {
-		if (navigator.maxTouchPoints > 1) { $('div.numPropTooltip').remove(); } // for mobile devices
-	};
 
 	// numbers inside enabled ciphers and history tables
 	$("body").on("mouseenter", ".numProp, .gV", showTooltip);
 	$("body").on("mousemove", ".numProp, .gV", changeTooltipPosition);
+	//$("body").on("mouseleave", ".numProp, .gV", hideTooltip);
 	$("body").on("mouseleave", "div.numPropTooltip", hideTooltip);
-	$("body").on("mouseleave", ".numProp, .gV", hideTooltipMobile); // for mobile devices
 
 	var showTooltipClick = function(event) {
 		$('div.numPropTooltip').remove(); // old tooltip
