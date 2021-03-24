@@ -20,6 +20,7 @@
 <script src="calc/export.js"></script>
 <script src="calc/export-csv.js"></script>
 <script src="calc/num-prop.js"></script>
+<script src="calc/edit-ciphers.js"></script>
 
 <link rel="stylesheet" type="text/css" href="calc/styles.css">
 
@@ -42,11 +43,12 @@ $(window).load(function(){
 
 	<div id="logoArea"><img id="calcLogo" src="res/logo.svg"></div>
 	<div id="calcOptionsPanel"></div>
-	<div id="indColorCtrlMenu"></div>
+	<div id="colorControlsMenuArea"></div>
+	<div id="editCiphersMenuArea"></div>
 
 	<div id="inputArea">
-	  <input id="phraseBox" autofocus type="text" autocomplete="off" oninput="updateEnabledCipherTable(); updateWordBreakdown(breakCipher,false,false);" onkeydown="phraseBoxKeypress(event.keyCode)" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)"></input>
-	  <input id="highlightBox" type="text" autocomplete="off"></input><span id="clearFilterButton"></span>
+	  <input id="phraseBox" autofocus type="text" autocomplete="off" oninput="updateEnabledCipherTable(); updateWordBreakdown(breakCipher,false,false);" onkeydown="phraseBoxKeypress(event.keyCode)" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)">
+	  <input id="highlightBox" type="text" autocomplete="off"><span id="clearFilterButton"></span>
 	</div>
 
 	<div id="enabledCiphTable"></div>

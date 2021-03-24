@@ -7,7 +7,8 @@ var cCat = []; // list of all available cipher categories
 // Layout
 var cipherMenuColumns = 4 // number of columns for all available ciphers table
 var enabledCiphColumns = 4 // number of columns for enabled ciphers table (for phrase)
-var cipherMenuOpened = false // is cipher menu open
+var colorControlsMenuOpened = false // color controls menu state
+var editCiphersMenuOpened = false // edit ciphers menu state
 
 var enabledCiphCount = 0 // number of enabled ciphers
 
@@ -257,7 +258,7 @@ function create_NumCalc() { // Number Calculation
 	var ns = ""
 	var nArr = ["Off", "Full", "Reduced"]
 	var nArr2 = [" ", " (123 = 123)", " (123 = 1+2+3 = 6)"]
-	ns += '<div class="optionElementDropdown"><span style="size: 80%">Number Calculation</span>'
+	ns += '<div class="optionElementDropdown"><span>Number Calculation</span>'
 	ns += '<select id="numCalcBox" onchange="conf_NumCalc()">'
 	for (x = 0; x < nArr.length; x++) {
 		if (nArr[x] == optNumCalcMethod) {
@@ -280,7 +281,7 @@ function create_PL() { // Phrase Limit (End)
 	var ns = ""
 	var nArr = [1,2,3,4,5,6,7,8,9,10]
 	ns += '<div class="optionElementDropdown"><span style="size: 80%">Phrase Limit (End)</span>'
-	ns += '<select id="PhrLimitBox" onchange="conf_PL()">'
+	ns += '<select id="phrLimitBox" onchange="conf_PL()">'
 	for (x = 0; x < nArr.length; x++) {
 		ns += '<option value="' + nArr[x] + '"'
 		if (nArr[x] == optPhraseLimit) {ns += ' selected="selected"'}
@@ -291,7 +292,7 @@ function create_PL() { // Phrase Limit (End)
 	return ns
 }
 function conf_PL() {
-	var pLimit = document.getElementById("PhrLimitBox")
+	var pLimit = document.getElementById("phrLimitBox")
 	optPhraseLimit = pLimit.value
 }
 
@@ -306,14 +307,14 @@ function createFeaturesMenu() {
 
 	o += '<input id="toggleCatBtn" class="intBtn" type="button" value="Color Controls" onclick="toggleIndColorControlsMenu()">'
 	o += '<div style="margin: 0.5em;"></div>'
-	o += '<input id="toggleCatBtn" class="intBtn" type="button" value="Edit Ciphers" onclick="">'
+	o += '<input id="toggleCatBtn" class="intBtn" type="button" value="Edit Ciphers" onclick="toggleEditCiphersMenu()">'
 
 	o += '</div></div>'
 	document.getElementById("calcOptionsPanel").innerHTML = o
 }
 
 function displayIndColorControls() { // display control menu to adjust each cipher
-	document.getElementById("indColorCtrlMenu").innerHTML = "" // clear previous table
+	document.getElementById("colorControlsMenuArea").innerHTML = "" // clear previous table
 	
 	var cur_ciph_index = 0 // index of current of enabled cipher that will be added to the table (total # of ciphers added so far + 1)
 	var new_row_opened = false // condition to open new row inside table
@@ -328,7 +329,7 @@ function displayIndColorControls() { // display control menu to adjust each ciph
 			new_row_opened = true
 		}
 		var chk = ""
-		if (ciph_in_row < cipherMenuColumns) { // until number of ciphers in row equals number of colums
+		if (ciph_in_row < cipherMenuColumns) { // until number of ciphers in row equals number of columns
 			if (cipherList[i].enabled) {chk = " checked";} else {chk = ""} // checkbox state
 			o += '<td><input type="checkbox" class="ciphCheckbox" id="cipher_chkbox'+i+'" name="cipher_chkbox_name'+i+'" value="" onclick="toggleCipher('+i+')"'+chk+'></td>'
 			o += '<td><label class="ciphCheckboxLabel" for="cipher_chkbox_name'+i+'">'+cipherList[i].cipherName+'</label></td>'
@@ -369,25 +370,25 @@ function displayIndColorControls() { // display control menu to adjust each ciph
 	o += '</tr></table>'
 	o += '</center>'
 	
-	document.getElementById("indColorCtrlMenu").innerHTML += o
+	document.getElementById("colorControlsMenuArea").innerHTML += o
 }
 
 function updIndColorCtrlLayout(n_columns) {
 	cipherMenuColumns = n_columns
-	if (cipherMenuOpened) {
+	if (colorControlsMenuOpened) {
 		displayIndColorControls()
 		populateColorValues()
 	}
 }
 
 function toggleIndColorControlsMenu() { // show/hide individual color controls
-	if (!cipherMenuOpened) {
+	if (!colorControlsMenuOpened) {
 		displayIndColorControls()
 		populateColorValues()
-		cipherMenuOpened = true
+		colorControlsMenuOpened = true
 	} else {
-		document.getElementById("indColorCtrlMenu").innerHTML = "" // clear
-		cipherMenuOpened = false
+		document.getElementById("colorControlsMenuArea").innerHTML = "" // clear
+		colorControlsMenuOpened = false
 	}
 }
 
@@ -580,7 +581,8 @@ function toggleCipher(c_id, chk = false) {
 
 function updateTables() {
 	for (i = 0; i < cipherList.length; i++) {
-		if (cipherList[i].cipherName == breakCipher && !cipherList[i].enabled) { // if previous breakdown cipher is not enabled
+		// if previous breakdown cipher is not enabled or if cipher no longer exists
+		if ( cipherList[i].cipherName == breakCipher && !cipherList[i].enabled || typeof cipherList.find(o => o.cipherName == breakCipher) == 'undefined' ) {
 			for (n = 0; n < cipherList.length; n++) {
 				if (cipherList[n].enabled) {
 					breakCipher = cipherList[n].cipherName // load first enabled cipher instead
