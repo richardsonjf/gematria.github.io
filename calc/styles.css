@@ -232,6 +232,12 @@ body {
 	padding: 0em 0.4em 0em 0.1em;
 	white-space: nowrap;
 }
+.ciphCheckboxLabel2 {
+	font-size: 100%;
+	font-weight: 500;
+	padding: 0em 0em 0em 0.1em;
+	white-space: nowrap;
+}
 
 .cipherHoverLabel {
 	text-decoration: none;

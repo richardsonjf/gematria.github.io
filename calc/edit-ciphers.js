@@ -1,5 +1,7 @@
 // ========================== Edit Ciphers ==========================
 
+var ignoreDiarciticsCustom = true // flag for custom cipher
+
 $(document).ready(function(){
 
 	// click on cipher name in enabled ciphers table to load existing cipher
@@ -44,14 +46,14 @@ $(document).ready(function(){
 
 });
 
-var ignoreDiarciticsCustom = true
-
 function toggleEditCiphersMenu() {
 
 	if (!editCiphersMenuOpened) {
 
+		colorControlsMenuOpened = false // close Colors Menu
+		document.getElementById("colorControlsMenuArea").innerHTML = ""
+
 		editCiphersMenuOpened = true
-		document.getElementById("editCiphersMenuArea").innerHTML = "" // clear previous table
 		
 		var o = '<div class="editCiphersContainer">'
 
@@ -128,10 +130,10 @@ function createIndLetterControls() {
 
 	var o = '<table class="custCipherTable"><tbody>'
 	
+	//  flip logic, if charsInRow is reached, switch to next row but use values from beginning, then flip back to chars
 	var tmpValues = []
 	var curCharVal = 0
 	for (i = 0; i < customChars.length; i++) {
-
 		
 		if (typeof customVals[i] !== 'undefined' && customVals[i] !== "") { // read from array if available
 			curCharVal = customVals[i];
@@ -150,7 +152,6 @@ function createIndLetterControls() {
 		var chk = ""
 		if (charsInCurRow < charsInRow) { // until number of ciphers in row equals number of columns
 			o += '<td><table class="custCharIndTable"><tbody>'
-			// o += '<tr><td><span id="custChar'+i+'" class="custCharIndLabel">'+customChars[i]+'</span></td></tr>'
 			o += '<tr><td class="custCharIndLabel"><input id="custChar'+i+'" type="text" autocomplete="off" oninput="changeIndLetter('+i+')" class="custCharInd" value="'+customChars[i]+'"></input></td></tr>'
 			o += '<tr><td><input id="chVal'+i+'" type="text" autocomplete="off" oninput="changeIndLetterValue('+i+')" class="custCharIndValue" value="'+curCharVal+'"></input></div></center></td></tr>'
 			o += '</tbody></table></td>'
@@ -168,20 +169,6 @@ function createIndLetterControls() {
 }
 
 function changeIndLetterValue(id) { // update char value from individual input box
-	// var alphabetLen = document.getElementById("custCipherAlphabet").value.length // get n of chars
-	// var valArr = []; var tmpVal = 0;
-
-	// for (i = 0; i < alphabetLen; i++) {
-	// 	tmpVal = document.getElementById("chVal"+i+"").value // read values for each char
-	// 	valArr.push(parseInt(tmpVal))
-	// }
-
-	// var curIdVal = document.getElementById("chVal"+id+"").value // get value for current char
-	// valArr[id] = parseInt(curIdVal) // update value for current char
-
-	// tmpVal = JSON.stringify(valArr).slice(1,-1) // convert to string
-	// document.getElementById("custCipherGlobVals").value = tmpVal // update box with new values
-
 	var alphabetValues = document.getElementById("custCipherGlobVals").value
 	var valArr = alphabetValues.split(",") // string to array
 	valArr = valArr.map(function (e) { return parseInt(e, 10); }) // parse string array as integer array to exclude quotes
@@ -237,26 +224,56 @@ function addNewCipherAction() { // update existing cipher if ID is specified
 		if (cipherList[i].cipherName == custName) { replaceID = i; break; } // if name matches existing cipher
 	}
 
+	resetColorControls() // reset color changes (otherwise they become permanent)
 	var custCipher
 	if (replaceID > -1) { // cipher needs to be updated (retain colors)
 		custCipher = new cipher(custName, custCat, cipherList[replaceID].H, cipherList[replaceID].S, cipherList[replaceID].L, charsArr, valArr, ignoreDiarciticsCustom, true)
-		cipherList[replaceID] = custCipher // replace existing cipher
+		if (cipherList[replaceID].cipherCategory == custCat) { // same category
+			cipherList[replaceID] = custCipher // replace existing cipher
+		} else if (cCat.indexOf(custCat) > -1) { // other existing category
+			cipherList.splice(replaceID, 1) // remove original cipher first
+			for (i = cipherList.length-1; i > -1; i--) { // go in reverse order
+				// insert after last cipher in that category
+				if (cipherList[i].cipherCategory == custCat) { cipherList.splice(i+1, 0, custCipher); break; }
+			}
+		} else if (cCat.indexOf(custCat) == -1) { // new category
+			cipherList.splice(replaceID, 1) // remove original cipher first
+			cipherList.push(custCipher) // add new cipher in the end of array
+		}
 	} else { // use random colors
 		custCipher = new cipher(custName, custCat, rndInt(0, 360), rndInt(30, 68), rndInt(51, 65), charsArr, valArr, ignoreDiarciticsCustom, true)
-		cipherList.push(custCipher) // add new cipher
+		if (cCat.indexOf(custCat) > -1) { // existing category
+			for (i = cipherList.length-1; i > -1; i--) { // go in reverse order
+				// insert after last cipher in that category
+				if (cipherList[i].cipherCategory == custCat) { cipherList.splice(i+1, 0, custCipher); break; }
+			}
+		} else { // new category
+			cipherList.push(custCipher) // add new cipher in the end of array
+		}
 	}
 
-	document.getElementById("calcOptionsPanel").innerHTML = "" // clear menu panel
-	initCalc() // reinit
-	updateTables() // update tables
+	initCalcCustCiph() // update
 }
 
 function deleteCipherAction() {
 	var curCiphName = document.getElementById("custCipherNameInput").value.trim() // remove spaces
+	resetColorControls() // reset color changes (otherwise they become permanent)
 	for (i = 0; i < cipherList.length; i++) { // get cipher ID
 		if (cipherList[i].cipherName == curCiphName) { cipherList.splice(i,1); break; } // remove cipher
 	}
+	initCalcCustCiph() // update
+}
+
+function initCalcCustCiph() {
 	document.getElementById("calcOptionsPanel").innerHTML = "" // clear menu panel
-	initCalc() // reinit
-	updateTables() // update tables
+	// reinit, create menus
+	initCiphers(false) // don't alter default ciphers
+	createCiphersMenu()
+	createOptionsMenu()
+	createFeaturesMenu()
+	createExportMenu()
+	createAboutMenu()
+	// update tables
+	updateTables() 
+	checkCustCipherName() // redraw add/update custom cipher button
 }
