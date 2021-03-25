@@ -89,14 +89,13 @@ $(document).ready(function(){
 
 	$(".ciphCatButton").live('contextmenu', function() {
 		// e.preventDefault();
+		toggleCipherCategory( $(this).val() ) // toggle current category
 	 	return false; // don't show menu
 	})
 
-	$("body").on("mousedown", ".ciphCatButton", function (e) {
-		if (e.which == 1 && navigator.maxTouchPoints < 1) { // Left Click (desktop)
+	$("body").on("click", ".ciphCatButton", function (e) {
+		if (navigator.maxTouchPoints < 1) { // Left Click (desktop)
 			toggleCipherCategory( $(this).val() ) // toggle category
-		} else if (e.which == 3) { // Right Click (mobile and desktop)
-			toggleCipherCategory( $(this).val() )
 		}
 	});
 });
