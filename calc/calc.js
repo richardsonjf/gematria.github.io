@@ -87,12 +87,6 @@ $(document).ready(function(){
 		displayCipherCatDetailed( $(this).val() );
 	});
 
-	$(".ciphCatButton").live('contextmenu', function() {
-		// e.preventDefault();
-		toggleCipherCategory( $(this).val() ) // toggle current category
-	 	return false; // don't show menu
-	})
-
 	$("body").on("click", ".ciphCatButton", function (e) {
 		if (navigator.maxTouchPoints < 1) { // Left Click (desktop)
 			toggleCipherCategory( $(this).val() ) // toggle category
@@ -101,8 +95,12 @@ $(document).ready(function(){
 });
 
 function displayCipherCatDetailed(curCat) {
-	var chk = ""
-	var o = '<table class="cipherCatDetails"><tbody>'
+	var chk = ""; var o = ""
+	if (navigator.maxTouchPoints > 1) {
+		o += '<input class="intBtn2" type="button" value="Toggle Category" style="background: transparent;" onclick="toggleCipherCategory(&quot;'+curCat+'&quot;)">'
+		o += '<div style="padding: 0.25em;"></div>'
+	}
+	o += '<table class="cipherCatDetails"><tbody>'
 	for (i = 0; i < cipherList.length; i++) {
 		if (cipherList[i].cipherCategory == curCat) {
 			if (cipherList[i].enabled) {chk = " checked";} else {chk = ""} // checkbox state
