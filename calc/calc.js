@@ -97,7 +97,7 @@ $(document).ready(function(){
 function displayCipherCatDetailed(curCat) {
 	var chk = ""; var o = ""
 	if (navigator.maxTouchPoints > 1) {
-		o += '<input class="intBtn2" type="button" value="Toggle Category" style="background: transparent;" onclick="toggleCipherCategory(&quot;'+curCat+'&quot;)">'
+		o += '<input class="intBtn3" type="button" value="Toggle Category" style="width: 100%; margin-top: 0.1em" onclick="toggleCipherCategory(&quot;'+curCat+'&quot;)">'
 		o += '<div style="padding: 0.25em;"></div>'
 	}
 	o += '<table class="cipherCatDetails"><tbody>'
