@@ -27,6 +27,7 @@ function updateWordBreakdown(impName = breakCipher, impBool = false, chartUpd = 
 	if (enabledCiphCount == 0 || breakCipher == "" && impName == "") {
 		document.getElementById("BreakdownSpot").innerHTML = ""
 		document.getElementById("ChartSpot").innerHTML = ""
+		$("#ChartSpot").attr("style", "border: none;"); // reset gradient for cipher chart
 		return;
 	}
 
@@ -195,6 +196,6 @@ function updateCipherChartGemCard(impName = breakCipher) {
 	o += '</tr></tbody></table>'
 
 	document.getElementById("ChartSpot").innerHTML = o
-	$("#ChartTable").addClass("borderCipherTable"); // cipher chart with borders
-	$("#ChartSpot").attr("style", "border: none;"); // clear div gradient background, remove border
+	$("#ChartTable").addClass("borderCipherTable") // cipher chart with borders
+	$("#ChartSpot").attr("style", "border: none;") // clear div gradient background, remove border
 }
