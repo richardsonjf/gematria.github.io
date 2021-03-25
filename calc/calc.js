@@ -128,7 +128,7 @@ function createAboutMenu() { // create menu with all cipher catergories
 	o += '<div style="margin: 0.5em;"></div>'
 	o += '<input class="intBtn" type="button" value="GitHub Repository" onclick="gotoGitHubRepo()">'
 	o += '<div style="margin: 0.5em;"></div>'
-	o += '<input class="intBtn" type="button" value="Shortcuts" onclick="">'
+	o += '<input class="intBtn" type="button" value="Quickstart Guide" onclick="">'
 
 	o += '</div></div>'
 
@@ -537,7 +537,7 @@ function clampNum(number, min, max) { // clamp number within specified range
 	return Math.max(min, Math.min(number, max))
 }
 
-function colPad (val, last = false) { // padding for color values (monospace)
+function colPad(val, last = false) { // padding for color values (monospace)
 	val = String(val+"    ").substring(0,4)
 	if (last) val = val.substring(0,val.length-1) // last value has no extra space
 	return val

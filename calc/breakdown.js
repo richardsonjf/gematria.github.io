@@ -22,8 +22,11 @@ function updateWordBreakdown(impName = breakCipher, impBool = false, chartUpd = 
 	var o, oo, acw, acl
 
 	updateEnabledCipherCount()
+	$("#BreakTableContainer").removeClass("hideValue") // unhide breakdown
 
 	if (impBool == true) breakCipher = impName // lock to a specific cipher
+		
+	if (!optShowCipherChart) $("#ChartSpot").attr("style", "border: none;"); // reset gradient for cipher chart
 	if (enabledCiphCount == 0 || breakCipher == "" && impName == "") {
 		document.getElementById("BreakdownSpot").innerHTML = ""
 		document.getElementById("ChartSpot").innerHTML = ""
@@ -57,7 +60,7 @@ function updateWordBreakdown(impName = breakCipher, impBool = false, chartUpd = 
 			o += '<div class="breakCipher"><font style="color: hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 1)"> (' + curCipher.cipherName + ')</font></div>'
 		}
 
-		if (optWordBreakdown == true && curCipher.cp.length <= 60) {
+		if (optWordBreakdown == true && curCipher.cp.length <= 80 ) { // 80 character limit, calculated even if out of screen bounds
 			var tdCount = 0; var wCount = 0;
 
 			o += '</div><div id="BreakTableContainer"><table class="BreakTable">'
@@ -100,6 +103,10 @@ function updateWordBreakdown(impName = breakCipher, impBool = false, chartUpd = 
 	oo += 'background: '+bgCol+' -moz-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
 	oo += 'background: '+bgCol+' linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0));'
 	$("#BreakTableContainer").attr("style", oo);
+
+	if ( $(window).width() <= $("#BreakTableContainer").outerWidth() + 50 ) { // breakdown doesn't fit viewport
+		$("#BreakTableContainer").addClass("hideValue") // hide element
+	}
 }
 
 function updateCipherChart(curCipher) {

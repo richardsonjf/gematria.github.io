@@ -559,7 +559,7 @@ body {
 	background: rgba(192,192,192,0.15);
 	/*color: rgb(23,23,23) !important;*/
 }
-.hideValue {display: none !important;}
+.hideValue {display: none;}
 @keyframes blink {
 	0% {
 		opacity: 0.0;
