@@ -241,7 +241,7 @@ function addNewCipherAction() { // update existing cipher if ID is specified
 			cipherList.push(custCipher) // add new cipher in the end of array
 		}
 	} else { // use random colors
-		custCipher = new cipher(custName, custCat, rndInt(0, 360), rndInt(30, 68), rndInt(51, 65), charsArr, valArr, ignoreDiarciticsCustom, true)
+		custCipher = new cipher(custName, custCat, rndInt(0, 360), rndInt(z0, 68), rndInt(53, 67), charsArr, valArr, ignoreDiarciticsCustom, true)
 		if (cCat.indexOf(custCat) > -1) { // existing category
 			for (i = cipherList.length-1; i > -1; i--) { // go in reverse order
 				// insert after last cipher in that category

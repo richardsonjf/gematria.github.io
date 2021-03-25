@@ -7,19 +7,19 @@ function getSum(total, num) { // used to .reduce() array, adds all values
     return total + num;
 }
 
-function HeadLink(impCipher) { // change breakdown tables when mouse over/click
+function HeadLink(curCipher) { // change breakdown tables when mouse over/click
 	var o = ""
 	o += '<a class="cipherHoverLabel" onmouseover="javascript:updateWordBreakdown('
-	o += "'" + impCipher.cipherName + "', false)"
+	o += "'" + curCipher.cipherName + "', false)"
 	o += '" onmouseout="updateWordBreakdown()" href="javascript:updateWordBreakdown('
-	o += "'" + impCipher.cipherName + "', true"
-	o += ')">' + impCipher.cipherName + '</a>'
+	o += "'" + curCipher.cipherName + "', true"
+	o += ')">' + curCipher.cipherName + '</a>'
 	return o
 }
 
 function updateWordBreakdown(impName = breakCipher, impBool = false, chartUpd = true) { // false - preview temporary (hover), true - lock breakdown to a specific cipher
-	var x, aCipher, cSpot
-	var o, acw, acl
+	var x, curCipher, cSpot
+	var o, oo, acw, acl
 
 	updateEnabledCipherCount()
 
@@ -37,103 +37,164 @@ function updateWordBreakdown(impName = breakCipher, impBool = false, chartUpd = 
 			break
 		}
 	}
-	aCipher = cipherList[cSpot]
-	aCipher.calcBreakdown(sVal())
+	curCipher = cipherList[cSpot]
+	curCipher.calcBreakdown(sVal())
 
-	if (aCipher.sumArr.length > 0) {
+	if (curCipher.sumArr.length > 0) {
 		
 		o = ""
 
 		if (optLetterWordCount == true) {
-			if (aCipher.LetterCount > 1) {acl = " letters, "} else {acl = " letter, "}
-			if (aCipher.WordCount > 1) {acw = " words"} else {acw = " word"}
-			o += '<div class="LetterCounts">' + aCipher.LetterCount + acl + aCipher.WordCount + acw + '</div>'
+			if (curCipher.LetterCount > 1) {acl = " letters, "} else {acl = " letter, "}
+			if (curCipher.WordCount > 1) {acw = " words"} else {acw = " word"}
+			o += '<div class="LetterCounts">' + curCipher.LetterCount + acl + curCipher.WordCount + acw + '</div>'
 		}
 
 		if (optSimpleResult == true) {
 			o += '<div id="SimpleBreak">'
-			o += '<div class="breakPhrase">' + sVal() + ' = </div><div class="breakSum">' + aCipher.sumArr.reduce(getSum) + '</div>' // add all values in array
-			o += '<div class="breakCipher"><font style="color: hsl('+aCipher.H+' '+aCipher.S+'% '+aCipher.L+'% / 1)"> (' + aCipher.cipherName + ')</font></div>'
+			o += '<div class="breakPhrase">' + sVal() + ' = </div><div class="breakSum">' + curCipher.sumArr.reduce(getSum) + '</div>' // add all values in array
+			o += '<div class="breakCipher"><font style="color: hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 1)"> (' + curCipher.cipherName + ')</font></div>'
 		}
 
-		if (optWordBreakdown == true && aCipher.cp.length <= 60) {
+		if (optWordBreakdown == true && curCipher.cp.length <= 60) {
 			var tdCount = 0; var wCount = 0;
 
-			o += '</div><div id="BreakTableContainer"><table class="BreakTable"'
-			o += ' style="background: '+bgCol+' -webkit-linear-gradient(0deg,hsl('+aCipher.H+' '+aCipher.S+'% '+aCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
-			o += 'background: '+bgCol+' -o-linear-gradient(0deg,hsl('+aCipher.H+' '+aCipher.S+'% '+aCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
-			o += 'background: '+bgCol+' -moz-linear-gradient(0deg,hsl('+aCipher.H+' '+aCipher.S+'% '+aCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
-			o += 'background: '+bgCol+' linear-gradient(0deg,hsl('+aCipher.H+' '+aCipher.S+'% '+aCipher.L+'% / 0.2), rgba(0,0,0,0.0));">'
+			o += '</div><div id="BreakTableContainer"><table class="BreakTable">'
+			// o += ' style="background: '+bgCol+' -webkit-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
+			// o += 'background: '+bgCol+' -o-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
+			// o += 'background: '+bgCol+' -moz-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
+			// o += 'background: '+bgCol+' linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0));">'
 			o += '<tbody><tr>'
-			for (x = 0; x < aCipher.cp.length; x++) {
+			for (x = 0; x < curCipher.cp.length; x++) {
 
-				if (aCipher.cp[x] !== " ") {
-					if (String(aCipher.cp[x]).substring(0, 3) == "num") {
-						o += '<td class="BreakChar" style="color: hsl('+aCipher.H+' '+aCipher.S+'% '+aCipher.L+'% / 1)">' + aCipher.cp[x].substring(3, aCipher.cp[x].length) + '</td>'
+				if (curCipher.cp[x] !== " ") {
+					if (String(curCipher.cp[x]).substring(0, 3) == "num") {
+						o += '<td class="BreakChar" style="color: hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 1)">' + curCipher.cp[x].substring(3, curCipher.cp[x].length) + '</td>'
 					} else {
-						o += '<td class="BreakChar" style="color: hsl('+aCipher.H+' '+aCipher.S+'% '+aCipher.L+'% / 1)">' + String.fromCharCode(aCipher.cp[x]) + '</td>'
+						o += '<td class="BreakChar" style="color: hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 1)">' + String.fromCharCode(curCipher.cp[x]) + '</td>'
 					}
 				} else {
-					o += '<td class="BreakWordSum" rowspan="2">' + aCipher.sumArr[wCount] + '</td>'
+					o += '<td class="BreakWordSum" rowspan="2">' + curCipher.sumArr[wCount] + '</td>'
 					wCount++
 				}
 				tdCount++
 			}
-			o += '<td class="BreakPhraseSum" rowspan="2"><font style="color: hsl('+aCipher.H+' '+aCipher.S+'% '+aCipher.L+'% / 1)">' + aCipher.sumArr.reduce(getSum) + '</font></td>'
+			o += '<td class="BreakPhraseSum" rowspan="2"><font style="color: hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 1)">' + curCipher.sumArr.reduce(getSum) + '</font></td>'
 			o += '</tr><tr>'
 			tdCount++
 			for (z = 0; z < x; z++) {
-				if (aCipher.cv[z] !== " ") {
-					o += '<td class="BreakVal">' + aCipher.cv[z] + '</td>'
+				if (curCipher.cv[z] !== " ") {
+					o += '<td class="BreakVal">' + curCipher.cv[z] + '</td>'
 				}
 			}
-			o += '</tr><tr><td colspan=' + tdCount + ' class="CipherEnd"><font style="color: hsl('+aCipher.H+' '+aCipher.S+'% '+aCipher.L+'% / 1)">' + aCipher.cipherName + '</font></td></tr></table></div>'
+			o += '</tr><tr><td colspan=' + tdCount + ' class="CipherEnd"><font style="color: hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 1)">' + curCipher.cipherName + '</font></td></tr></table></div>'
 		}
 	} else {
 		o = ""
 	}
 
 	document.getElementById("BreakdownSpot").innerHTML = o
+	oo = 'background: '+bgCol+' -webkit-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
+	oo += 'background: '+bgCol+' -o-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
+	oo += 'background: '+bgCol+' -moz-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
+	oo += 'background: '+bgCol+' linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0));'
+	$("#BreakTableContainer").attr("style", oo);
 }
 
-function updateCipherChart(impCipher) {
+function updateCipherChart(curCipher) {
 
 	if (optShowCipherChart == false) {
 		document.getElementById("ChartSpot").innerHTML = ""
 		return
 	}
 
-	var o = '<table id="ChartTable" '
+	var o = 'background: '+bgCol+' -webkit-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
+	o += 'background: '+bgCol+' -o-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
+	o += 'background: '+bgCol+' -moz-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
+	o += 'background: '+bgCol+' linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0));'
+	$("#ChartSpot").attr("style", o);
+
+	o = '<table id="ChartTable" '
 	
 	// gradient table background based on cipher color
-	o += 'style="background: '+bgCol+' -webkit-linear-gradient(0deg,hsl('+impCipher.H+' '+impCipher.S+'% '+impCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
-	o += 'background: '+bgCol+' -o-linear-gradient(0deg,hsl('+impCipher.H+' '+impCipher.S+'% '+impCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
-	o += 'background: '+bgCol+' -moz-linear-gradient(0deg,hsl('+impCipher.H+' '+impCipher.S+'% '+impCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
-	o += 'background: '+bgCol+' linear-gradient(0deg,hsl('+impCipher.H+' '+impCipher.S+'% '+impCipher.L+'% / 0.2), rgba(0,0,0,0.0));">'
+	// o += 'style="background: '+bgCol+' -webkit-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
+	// o += 'background: '+bgCol+' -o-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
+	// o += 'background: '+bgCol+' -moz-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
+	// o += 'background: '+bgCol+' linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0));">'
 	o += '<tbody><tr>'
 
-	o += '<td colspan="' + impCipher.cArr.length + '">'
-	o += '<font style="font-size: 150%; font-weight: 500; color: hsl('+impCipher.H+' '+impCipher.S+'% '+impCipher.L+'% / 1)">' + impCipher.cipherName + '</font>'
+	o += '<td colspan="' + curCipher.cArr.length + '">'
+	o += '<font style="font-size: 150%; font-weight: 500; color: hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 1)">' + curCipher.cipherName + '</font>'
 	o += '</td></tr><tr>'
 
-	var halfL = impCipher.cArr.length / 2
-	for (var x = 0; x < impCipher.cArr.length; x++) {
+	var halfL = curCipher.cArr.length / 2
+	for (var x = 0; x < curCipher.cArr.length; x++) {
 		if (x - halfL == 0 || x - halfL == 0.5) {
 			o += '</tr><tr>'
 			for (var y = 0; y < x; y++) { // 2nd row (values)
-				o += '<td class="ChartVal">' + impCipher.vArr[y] + '</td>'
+				o += '<td class="ChartVal">' + curCipher.vArr[y] + '</td>'
 			}
 			o += '</tr><tr>'
 		}
-		o += '<td class="ChartChar" font style="color: hsl('+impCipher.H+' '+impCipher.S+'% '+impCipher.L+'% / 1)">' + String.fromCharCode(impCipher.cArr[x]) + '</td>'
+		o += '<td class="ChartChar" font style="color: hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 1)">' + String.fromCharCode(curCipher.cArr[x]) + '</td>'
 	}
-	if (impCipher.cArr.length % 2 == 1) { o += '<td class="ChartChar" font style="color: hsl('+impCipher.H+' '+impCipher.S+'% '+impCipher.L+'% / 1)"></td>' } // empty character cell to make even rows
+	if (curCipher.cArr.length % 2 == 1) { o += '<td class="ChartChar" font style="color: hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 1)"></td>' } // empty character cell to make even rows
 	o += '</tr><tr>'
 	for (y; y < x; y++) {
-		o += '<td class="ChartVal">' + impCipher.vArr[y] + '</td>' // 4th row (values)
+		o += '<td class="ChartVal">' + curCipher.vArr[y] + '</td>' // 4th row (values)
 	}
-	if (impCipher.cArr.length % 2 == 1) { o += '<td class="ChartVal"></td>' } // empty value cell to make even rows
+	if (curCipher.cArr.length % 2 == 1) { o += '<td class="ChartVal"></td>' } // empty value cell to make even rows
 	o += '</tr></tbody></table>'
 
 	document.getElementById("ChartSpot").innerHTML = o
+}
+
+function updateCipherChartGemCard(impName = breakCipher) {
+
+	if (optShowCipherChart == false) {
+		document.getElementById("ChartSpot").innerHTML = ""
+		return
+	}
+
+	var cSpot
+	for (x = 0; x < cipherList.length; x++) {
+		if (cipherList[x].cipherName == impName) { cSpot = x; break; }
+	}
+	curCipher = cipherList[cSpot]
+
+	o = '<table id="ChartTable" '
+	
+	// gradient table background based on cipher color
+	o += 'style="background: '+bgCol+' -webkit-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
+	o += 'background: '+bgCol+' -o-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
+	o += 'background: '+bgCol+' -moz-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
+	o += 'background: '+bgCol+' linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0));">'
+	o += '<tbody><tr>'
+
+	o += '<td colspan="' + curCipher.cArr.length + '">'
+	o += '<font style="font-size: 150%; font-weight: 500; color: hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 1)">' + curCipher.cipherName + '</font>'
+	o += '</td></tr><tr>'
+
+	var halfL = curCipher.cArr.length / 2
+	for (var x = 0; x < curCipher.cArr.length; x++) {
+		if (x - halfL == 0 || x - halfL == 0.5) {
+			o += '</tr><tr>'
+			for (var y = 0; y < x; y++) { // 2nd row (values)
+				o += '<td class="ChartVal">' + curCipher.vArr[y] + '</td>'
+			}
+			o += '</tr><tr>'
+		}
+		o += '<td class="ChartChar" font style="color: hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 1)">' + String.fromCharCode(curCipher.cArr[x]) + '</td>'
+	}
+	if (curCipher.cArr.length % 2 == 1) { o += '<td class="ChartChar" font style="color: hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 1)"></td>' } // empty character cell to make even rows
+	o += '</tr><tr>'
+	for (y; y < x; y++) {
+		o += '<td class="ChartVal">' + curCipher.vArr[y] + '</td>' // 4th row (values)
+	}
+	if (curCipher.cArr.length % 2 == 1) { o += '<td class="ChartVal"></td>' } // empty value cell to make even rows
+	o += '</tr></tbody></table>'
+
+	document.getElementById("ChartSpot").innerHTML = o
+	$("#ChartTable").addClass("borderCipherTable"); // cipher chart with borders
+	$("#ChartSpot").attr("style", "border: none;"); // clear div gradient background, remove border
 }

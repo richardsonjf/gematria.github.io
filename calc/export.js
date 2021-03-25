@@ -54,7 +54,9 @@ $(document).ready(function(){
 		}
 		//$(".LetterCounts").html('<span style="color: hsl('+c_h+' '+c_s+'% '+c_l+'% / 1); font-weight: 500; font-size: 200%;">Gematria</span><br><hr style="background-color: rgb(77,77,77); height: 2px; border: none;">' + $(".LetterCounts").text());
 		$(".LetterCounts").html('<span style="color: hsl('+c_h+' '+c_s+'% '+c_l+'% / 1); font-weight: 500; font-size: 200%;">Gematria</span><br><hr style="background-color: rgb(77,77,77); height: 2px; border: none;">');
-		$("#ChartTable").addClass("borderCipherTable"); // cipher chart with borders
+		$("#BreakdownDetails").attr("style", "padding-top: 1.25em;") // more padding
+		// $("#ChartTable").addClass("borderCipherTable"); // cipher chart with borders
+		updateCipherChartGemCard(breakCipher) // redraw cipher chart fro current cipher (with borders)
 		openImageWindow("#BreakdownDetails", 1.5); // scale 1.5x
 		//$(".LetterCounts").text(o); // restore original contents
 	});

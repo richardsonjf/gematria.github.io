@@ -11,6 +11,7 @@ var colorControlsMenuOpened = false // color controls menu state
 var editCiphersMenuOpened = false // edit ciphers menu state
 
 var enabledCiphCount = 0 // number of enabled ciphers
+var curOpenedCiphCat = "" // current cipher menu category
 
 // Cipher colors
 var origColors = [] // preserve original cipher colors
@@ -34,7 +35,7 @@ var optShowCipherChart = true // cipher breakdown chart
 
 var optFiltSameCipherMatch = false // filter shows only phrases that match in the same cipher
 var optFiltCrossCipherMatch = true // filter shows only ciphers that have matching values
-var alphaHlt = 0.2 // opacity for values that do not match
+var alphaHlt = 0.15 // opacity for values that do not match
 
 function initCalc() { // run after page has finished loading
 	initCiphers()
@@ -56,11 +57,13 @@ function createCiphersMenu() { // create menu with all cipher catergories
 	// o += '<div class="dropdown-content">'
 	o += '<div class="dropdown-content" style="width: 380px;">'
 
-	o += '<div style="display: flex;">'
-	o += '<input class="intBtn2" type="button" value="Empty" onclick="disableAllCiphers()">'
-	o += '<input class="intBtn2" type="button" value="Default" onclick="enableDefaultCiphers()">'
-	o += '<input class="intBtn2" type="button" value="All" onclick="enableAllCiphers()">'
-	o += '</div>'
+	o += '<div><center>'
+	o += '<span style="margin-right: 1.5em;">&#9737;</span>'
+	o += '<input class="intBtn3" type="button" value="Empty" onclick="disableAllCiphers()">'
+	o += '<input class="intBtn3" type="button" value="Default" onclick="enableDefaultCiphers()">'
+	o += '<input class="intBtn3" type="button" value="All" onclick="enableAllCiphers()">'
+	o += '<span style="margin-left: 1.5em;">&#9737;</span>'
+	o += '</center></div>'
 
 	o += '<hr style="background-color: rgb(77,77,77); height: 1px; border: none; margin: 0.4em;">'
 
@@ -79,6 +82,7 @@ function createCiphersMenu() { // create menu with all cipher catergories
 
 	document.getElementById("calcOptionsPanel").innerHTML = o
 	displayCipherCatDetailed(cCat[0]) // open first available category
+	curOpenedCiphCat = cCat[0] // current cipher menu category
 }
 
 $(document).ready(function(){
@@ -88,6 +92,7 @@ $(document).ready(function(){
 });
 
 function displayCipherCatDetailed(curCat) {
+	curOpenedCiphCat = curCat // update category
 	var chk = ""
 	var o = '<table class="cipherCatDetails"><tbody>'
 	for (i = 0; i < cipherList.length; i++) {
@@ -224,7 +229,7 @@ function conf_SCM() { // Same Cipher Match
 
 function conf_SOM() { // Show Only Matching
 	optShowOnlyMatching = !optShowOnlyMatching
-	if (optShowOnlyMatching) { alphaHlt = 0; } else { alphaHlt = 0.2; } 
+	if (optShowOnlyMatching) { alphaHlt = 0; } else { alphaHlt = 0.15; } 
 	if (optFiltCrossCipherMatch) {
 		updateTables()
 	} else if (optFiltSameCipherMatch) {
@@ -588,25 +593,28 @@ function disableAllCiphers() {
 }
 
 function toggleCipherCategory(ciph_cat, upd = true) {
-	var on_first = false
-	for (i = 0; i < cipherList.length; i++) {
-		if (cipherList[i].cipherCategory == ciph_cat && !cipherList[i].enabled) on_first = true // if one cipher is disabled
-	}
-	var cur_chkbox
-	for (i = 0; i < cipherList.length; i++) {
-		//console.log(cipherList[i].cipherCategory)
-		if (cipherList[i].cipherCategory == ciph_cat) {
-			cur_chkbox = document.getElementById("cipher_chkbox"+i)
-			if (on_first) { // if one cipher is disabled, first enable all
-				cipherList[i].enabled = true
-				if (cur_chkbox != null) cur_chkbox.checked = true
-			} else { // if all ciphers are enabled, disable all
-				cipherList[i].enabled = false
-				if (cur_chkbox != null) cur_chkbox.checked = false
+	// navigator.maxTouchPoints > 1 || 
+	if (curOpenedCiphCat == ciph_cat) { // cipher details menu is opened (fix for mobile devices)
+		var on_first = false
+		for (i = 0; i < cipherList.length; i++) {
+			if (cipherList[i].cipherCategory == ciph_cat && !cipherList[i].enabled) on_first = true // if one cipher is disabled
+		}
+		var cur_chkbox
+		for (i = 0; i < cipherList.length; i++) {
+			//console.log(cipherList[i].cipherCategory)
+			if (cipherList[i].cipherCategory == ciph_cat) {
+				cur_chkbox = document.getElementById("cipher_chkbox"+i)
+				if (on_first) { // if one cipher is disabled, first enable all
+					cipherList[i].enabled = true
+					if (cur_chkbox != null) cur_chkbox.checked = true
+				} else { // if all ciphers are enabled, disable all
+					cipherList[i].enabled = false
+					if (cur_chkbox != null) cur_chkbox.checked = false
+				}
 			}
 		}
+		if (upd) updateTables() // update
 	}
-	if (upd) updateTables() // update
 }
 
 function toggleCipher(c_id, chk = false) {
