@@ -375,10 +375,10 @@ function displayIndColorControls() { // display control menu to adjust each ciph
 				// o += '<td><input type="checkbox" class="ciphCheckbox" id="cipher_chkbox'+i+'" name="cipher_chkbox_name'+i+'" value="" onclick="toggleCipher('+i+')"'+chk+'></td>'
 				// o += '<td><label class="ciphCheckboxLabel" for="cipher_chkbox_name'+i+'">'+cipherList[i].cipherName+'</label></td>'
 				o += '<td><span class="ciphCheckboxLabel">'+cipherList[i].cipherName+'</span></td>'
-				o += '<td><input type="number" step="2" min="-360" max="360" value="'+chkboxColors[i].H+'" class="col_slider" id="sliderHue'+i+'" oninput="changeCipherColors(&quot;sliderHue'+i+'&quot;, &quot;Hue&quot;, '+i+')"></td>'
-				o += '<td><input type="number" step="1" min="-100" max="100" value="'+chkboxColors[i].S+'" class="col_slider" id="sliderSaturation'+i+'" oninput="changeCipherColors(&quot;sliderSaturation'+i+'&quot;, &quot;Saturation&quot;, '+i+')"></td>'
-				o += '<td><input type="number" step="1" min="-100" max="100" value="'+chkboxColors[i].L+'" class="col_slider" id="sliderLightness'+i+'" oninput="changeCipherColors(&quot;sliderLightness'+i+'&quot;, &quot;Lightness&quot;, '+i+')"></td>'
-				o += '<td><input type="text" value="" class="cipher_col_value" id="cipherHSL'+i+'"></td>'
+				o += '<td><input type="number" step="2" min="-360" max="360" value="'+chkboxColors[i].H+'" class="colSlider" id="sliderHue'+i+'" oninput="changeCipherColors(&quot;sliderHue'+i+'&quot;, &quot;Hue&quot;, '+i+')"></td>'
+				o += '<td><input type="number" step="1" min="-100" max="100" value="'+chkboxColors[i].S+'" class="colSlider" id="sliderSaturation'+i+'" oninput="changeCipherColors(&quot;sliderSaturation'+i+'&quot;, &quot;Saturation&quot;, '+i+')"></td>'
+				o += '<td><input type="number" step="1" min="-100" max="100" value="'+chkboxColors[i].L+'" class="colSlider" id="sliderLightness'+i+'" oninput="changeCipherColors(&quot;sliderLightness'+i+'&quot;, &quot;Lightness&quot;, '+i+')"></td>'
+				o += '<td><input type="text" value="" class="cipherColValueBox" id="cipherHSL'+i+'"></td>'
 				o += '<td style="min-width: 16px;"></td>'
 				ciph_in_row++
 			}
@@ -396,20 +396,20 @@ function displayIndColorControls() { // display control menu to adjust each ciph
 	o += '<table class="globColCtrlTable">'
 	o += '<tr style="line-height: 1em;"><td style="font-size: 90%; font-weight: 500; color: rgb(186,186,186); text-align: center;">Global Colors: </td>'
 	o += '<td style="font-size: 80%; font-weight: 500; text-align: right;">Hue</td>'
-	o += '<td><input type="number" step="2" min="-360" max="360" value="'+globColors.H+'" class="col_slider" id="globalSliderHue" oninput="changeCipherColors(&quot;globalSliderHue&quot;, &quot;Hue&quot;)"></td>'
+	o += '<td><input type="number" step="2" min="-360" max="360" value="'+globColors.H+'" class="colSlider" id="globalSliderHue" oninput="changeCipherColors(&quot;globalSliderHue&quot;, &quot;Hue&quot;)"></td>'
 	o += '<td style="font-size: 80%; font-weight: 500; text-align: right;">Saturation</td>'
-	o += '<td><input type="number" step="1" min="-100" max="100" value="'+globColors.S+'" class="col_slider" id="globalSliderSaturation" oninput="changeCipherColors(&quot;globalSliderSaturation&quot;, &quot;Saturation&quot;)"></td>'
+	o += '<td><input type="number" step="1" min="-100" max="100" value="'+globColors.S+'" class="colSlider" id="globalSliderSaturation" oninput="changeCipherColors(&quot;globalSliderSaturation&quot;, &quot;Saturation&quot;)"></td>'
 	o += '<td style="font-size: 80%; font-weight: 500; text-align: right;">Lightness</td>'
-	o += '<td><input type="number" step="1" min="-100" max="100" value="'+globColors.L+'" class="col_slider" id="globalSliderLightness" oninput="changeCipherColors(&quot;globalSliderLightness&quot;, &quot;Lightness&quot;)"></td>'
+	o += '<td><input type="number" step="1" min="-100" max="100" value="'+globColors.L+'" class="colSlider" id="globalSliderLightness" oninput="changeCipherColors(&quot;globalSliderLightness&quot;, &quot;Lightness&quot;)"></td>'
 	o += '<td rowspan=2></td>'
 	o += '<td rowspan=2><input id="resetColorsButton" class="intBtn" type="button" value="Reset Colors" style="margin: 0em 0.5em;" onclick="resetColorControls()"></td>'
 	
 	// column controls
 	o += '</tr><tr style="line-height: 1em;"><td style="font-size: 90%; font-weight: 500; color: rgb(186,186,186); text-align: center; padding-right: 0.4em;">Cipher Columns:</td>'
 	o += '<td style="font-size: 80%; font-weight: 500; text-align: right;">All</td>'
-	o += '<td><input type="number" step="1" min="1" max="10" value="'+cipherMenuColumns+'" class="col_slider" id="avail_ciphers_columns" oninput="updIndColorCtrlLayout()"></td>'
+	o += '<td><input type="number" step="1" min="1" max="10" value="'+cipherMenuColumns+'" class="colSlider" id="avail_ciphers_columns" oninput="updIndColorCtrlLayout()"></td>'
 	o += '<td style="font-size: 80%; font-weight: 500; text-align: right;">Enabled</td>'
-	o += '<td><input type="number" step="1" min="1" max="10" value="'+enabledCiphColumns+'" class="col_slider" id="enabled_ciphers_columns" oninput="updateTables(false)"></td>'
+	o += '<td><input type="number" step="1" min="1" max="10" value="'+enabledCiphColumns+'" class="colSlider" id="enabled_ciphers_columns" oninput="updateTables(false)"></td>'
 	o += '</tr></table>'
 	o += '</center>'
 	
@@ -704,7 +704,6 @@ function updateEnabledCipherTable() { // draws a table with phrase gematria for 
 					o += '<td class="phraseGemCiphName" style="'+cur_col+'">'+HeadLink(cipherList[i])+'</td>'
 					// o += '<td class="phraseGemValueOdd" style="'+cur_col+'">'+cipherList[i].calcGematria(phr)+'</td>'
 					o += '<td class="phraseGemValueOdd" style="'+cur_col+'"><span class="numProp">'+cipherList[i].calcGematria(phr)+'<span></td>'
-					// o += '<span class="histValTooltipTxt"><span style="'+cur_col+'">'+cipherList[i].cipherName+'</span><br><br>'+sVal()+'</span>'
 					ciph_in_row++
 					odd_col = false
 					//console.log(cipherList[i].cipherName+": odd")
@@ -848,9 +847,8 @@ function updateHistoryTable(hltBoolArr) {
 	var hltMode = false // highlighting mode
 	if (highlt !== "") {
 		highlt_num = highlt.split(" "); // create array, space delimited numbers
-		highlt_num = highlt_num.map(function (e) { // parse string array as integer array to exclude quotes
-			return parseInt(e, 10); 
-		});
+		highlt_num = highlt_num.map(function (e) { return parseInt(e, 10); }) // parse string array as integer array to exclude quotes
+		highlt_num = removeZeroHlt(highlt_num)
 		hltMode = true
 	}
 

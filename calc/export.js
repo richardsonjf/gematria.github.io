@@ -31,39 +31,52 @@ function createExportMenu() {
 $(document).ready(function(){
 
 	$("body").on("click", "#btn-print-cipher-png", function () { // for future elements
-		openImageWindow("#ChartSpot");
+		// English-Ordinal_cipher.png
+		var fileName = breakCipher.replace(/ /g, "-")+"_cipher.png";
+		openImageWindow("#ChartSpot", fileName);
 	});
 
 	$("body").on("click", "#btn-print-history-png", function () {
-		openImageWindow(".HistoryTable");
+		// phrase-with-spaces_2021-03-26_10-23-52_table.png
+		var fileName = sHistory[0].normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-")+
+			"_"+getTimestamp()+"_table.png";
+		openImageWindow(".HistoryTable", fileName);
 	});
 
 	$("body").on("click", "#btn-print-word-break-png", function () {
-		openImageWindow("#BreakTableContainer");
+		// phrase-with-spaces_English-Ordinal_190_breakdown.png
+		for (var i = 0; i < cipherList.length; i++) { if (cipherList[i].cipherName == breakCipher) break; } // get current cipher index
+		var fileName = sVal().normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-")+
+			"_"+breakCipher.replace(/ /g, "-")+"_"+cipherList[i].calcGematria(sVal())+"_breakdown.png";
+		openImageWindow("#BreakTableContainer", fileName);
 	});
 
 	$("body").on("click", "#btn-print-breakdown-details-png", function () {
 		var o = $(".LetterCounts").text();
-		var c_h, c_s, c_l = 0;
+		var i, c_h, c_s, c_l = 0;
 		for (i = 0; i < cipherList.length; i++) {
 			if (cipherList[i].cipherName == breakCipher) { // current active cipher
 				c_h = cipherList[i].H;
 				c_s = cipherList[i].S;
 				c_l = cipherList[i].L;
+				break;
 			}
 		}
-		//$(".LetterCounts").html('<span style="color: hsl('+c_h+' '+c_s+'% '+c_l+'% / 1); font-weight: 500; font-size: 200%;">Gematria</span><br><hr style="background-color: rgb(77,77,77); height: 2px; border: none;">' + $(".LetterCounts").text());
 		$(".LetterCounts").html('<span style="color: hsl('+c_h+' '+c_s+'% '+c_l+'% / 1); font-weight: 500; font-size: 200%;">Gematria</span><br><hr style="background-color: rgb(105,105,105); height: 2px; border: none;">');
-		$("#BreakdownDetails").attr("style", "padding-top: 1.25em;") // more padding
-		// $("#BreakTableContainer").addClass("borderClassGemCard") // bright border for word breakdown
-		// $("#ChartTable").addClass("borderCipherTable"); // cipher chart with borders
-		updateCipherChartGemCard() // redraw cipher chart fro current cipher (with borders)
-		openImageWindow("#BreakdownDetails", 1.5); // scale 1.5x
-		//$(".LetterCounts").text(o); // restore original contents
+		$("#BreakdownDetails").attr("style", "padding-top: 1.25em;"); // more padding
+		updateCipherChartGemCard(); // redraw cipher chart for current cipher (with borders)
+
+		// phrase-with-spaces_English-Ordinal_190_card.png
+		var fileName = sVal().normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-")+
+			"_"+breakCipher.replace(/ /g, "-")+"_"+cipherList[i].calcGematria(sVal())+"_card.png";
+		openImageWindow("#BreakdownDetails", fileName, 1.5); // scale 1.5x
 	});
 
 	$("body").on("click", "#btn-num-props-png", function () {
-		openImageWindow(".numPropTooltip");
+		// 123_number_properties.png OR 123_alt_number_properties.png
+		var curNum = document.querySelector('.numPropTooltip').dataset.number // current number
+		var fileName = curNum+"_number_properties.png";
+		openImageWindow(".numPropTooltip", fileName);
 	});
 
 	$("body").on("click", "#btn-export-history-png", function () {
@@ -75,8 +88,8 @@ $(document).ready(function(){
 	
 });
 
-function openImageWindow(element, sRatio = window.devicePixelRatio) { // sRatio is scaling
-	var imageURL,imgName, wnd, scl
+function openImageWindow(element, imgName = "", sRatio = window.devicePixelRatio) { // sRatio is scaling
+	var imageURL, wnd, scl
 	if ( $(element).length ) { // if specified element exists
 		// if browser zoom level is more than passed value, use current zoom level
 		if (typeof sRatio !== 'undefined' && sRatio < window.devicePixelRatio) { sRatio = window.devicePixelRatio}
@@ -87,7 +100,7 @@ function openImageWindow(element, sRatio = window.devicePixelRatio) { // sRatio 
 			//$("#previewImage").append(canvas);
 			
 			imageURL = canvas.toDataURL("image/png"); // canvas to "data:image/png;base64, ..."
-			imgName = getTimestamp()+".png"; // filename for download button
+			if (imgName == "" || imgName.length >= 200) imgName = getTimestamp()+".png"; // filename for download button (200 char limit)
 
 			wnd = window.open(""); // open new window
 			// add download button and image data inside centered <div>

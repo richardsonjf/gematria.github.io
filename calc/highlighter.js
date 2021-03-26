@@ -171,11 +171,21 @@ $(document).ready(function(){
 	
 });
 
+function removeZeroHlt(arr) {
+	console.log(arr)
+	for (p = 0; p < arr.length; p++) {
+		if (arr[p] == 0) arr.splice(p,1) // remove zero
+	}
+	console.log(arr)
+	return arr
+}
+
 function removeNotMatchingPhrases() {
 	// highlight box values to array
 	highlt = document.getElementById("highlightBox").value.replace(/ +/g," ") // get value, remove double spaces
 	highlt_num = highlt.split(" ") // create array from string, space as delimiter
 	highlt_num = highlt_num.map(function (x) { return parseInt(x, 10); }) // parse string array as integer array to exclude quotes
+	highlt_num = removeZeroHlt(highlt_num)
 	
 	// create a copy of history, since matching is destructive
 	if (userHistory.length == 0) userHistory = [...sHistory] // don't make new copies until filter is reset
@@ -396,6 +406,7 @@ function updateHistoryTableSameCiphMatch() {
 
 	highlt_num = highlt.split(" "); // create array, space delimited numbers
 	highlt_num = highlt_num.map(function (e) { return parseInt(e, 10); }) // parse string array as integer array to exclude quotes
+	highlt_num = removeZeroHlt(highlt_num)
 	// console.log("highlt_num:")
 	// console.log(highlt_num)
 
@@ -529,6 +540,7 @@ function updateHistoryTableAutoHlt() {
 		avail_match.sort(function(a, b) { // sort ascending order
 			return a - b; //  b - a, for descending sort
 		});
+		if (avail_match[0] == 0) avail_match.splice(0,1) // remove zero
 		
 		console.log(JSON.stringify(avail_match).replace(/,/g, " ").slice(1, -1)) // print available matches
 		//console.log(JSON.stringify(freq).replace(/\],\[/g, "\n").slice(2, -2)) // print frequency of available matches
@@ -575,8 +587,8 @@ function updateHistoryTableAutoHlt() {
 	for (i = 0; i < n_rows; i++) { // loop array
 		this_row = rows_arr[i] // select row with phrase values
 		for (n = 0; n < n_cols; n++) {
-			if (avail_match.indexOf(this_row[n]) == -1) { // take value that hasn't been checked
-				val = this_row[n] // take the first value of the first phrase
+			val = this_row[n] // take the first value of the first phrase
+			if (val > 0 && avail_match.indexOf(val) == -1) { // ignore zero, take value that hasn't been checked
 				//console.log("# row:"+(i+1)+" column:"+(n+1)+" value:"+val)
 				for (m = i+1; m < n_rows; m++) { // loop array again to find matches, start check from the next row
 					against_row = rows_arr[m] // select another row
@@ -645,9 +657,8 @@ function tdToggleHighlight(val){ // click on value in history table to toggle hi
 	lastchar = highlt.substring(highlt.length-1,highlt.length)
 	
 	highlt_num = highlt.split(" ") // create array, space delimited numbers
-	highlt_num = highlt_num.map(function (x) { // parse string array as integer array to exclude quotes
-		return parseInt(x, 10); 
-	});
+	highlt_num = highlt_num.map(function (x) { return parseInt(x, 10); }) // parse string array as integer array to exclude quotes
+	highlt_num = removeZeroHlt(highlt_num)
 	
 	var ind = highlt_num.indexOf(val) // val needs to be an integer
 	//console.log("val:"+val+" ind:"+ind+" highlt_num:"+JSON.stringify(highlt_num))

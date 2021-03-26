@@ -15,13 +15,13 @@ $(document).ready(function() {
 		if (ctrlIsPressed || navigator.maxTouchPoints > 1) {
 			$('div.numPropTooltip').remove(); // old tooltip
 			val = $(this).text()
-			$('<div class="numPropTooltip">'+listNumberProperties(val)+'</div>').appendTo('body');
+			$('<div class="numPropTooltip" data-number="'+val+'">'+listNumberProperties(val)+'</div>').appendTo('body');
 			changeTooltipPosition(event);
 		}
 		if (shiftIsPressed) { // additional properties
 			$('div.numPropTooltip').remove(); // old tooltip
 			val = $(this).text()
-			$('<div class="numPropTooltip" style="max-width: unset;">'+listNumberPropertiesAlt(val)+'</div>').appendTo('body');
+			$('<div class="numPropTooltip" data-number="'+val+'_alt" style="max-width: unset;">'+listNumberPropertiesAlt(val)+'</div>').appendTo('body');
 			changeTooltipPosition(event);
 		}
 	};
@@ -163,9 +163,9 @@ function getNumProp(val, searchArr) {
 	var ind = searchArr.indexOf(parseInt(val)) // integer value
 
 	if (ind > -1) {
-		cur = '<span class="numPropBoldValue">'+searchArr[ind]+' ('+(ind+1)+')</span>' // find current value in array, display position
+		cur = searchArr[ind]+' ('+(ind+1)+')' // find current value in array, display position
 	} else {
-		cur = '<span class="numPropBoldValue">n/a</span>'
+		cur = 'n/a'
 	}
 
 	if (ind > 0) { // use previous item in array if index is valid
