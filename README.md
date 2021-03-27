@@ -1,6 +1,7 @@
 ## GEMATRO - Gematria Calculator
 ![GEMATRO - Gematria Calculator](res/preview.png)
 ---
+> NOTE: Use a desktop Chromium based browser for best experience
 
 ### Features:
 <ul>
