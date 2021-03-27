@@ -37,11 +37,15 @@ function dropHandler(ev) {
 	}
 	
 	var file = ev.dataTransfer.files[0] // first file
+	importFileAction(file)
+}
+
+function importFileAction(file) {
 	var reader = new FileReader()
 	
 	var sb = "" // string builder
 	reader.onload = (event) => { // actions to perform after file is read
-		var file = event.target.result // full file contents
+		file = event.target.result // full file contents
 		userHist = file.split(/\r\n|\n/) // to string array, line break as separator
 
 		if (typeof databaseMode !== 'undefined' && databaseMode) { exportHistoryCSV(userHist); return } // line by line, only phrases

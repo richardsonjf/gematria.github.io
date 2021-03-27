@@ -8,21 +8,24 @@ function createExportMenu() {
 	o += '<button class="dropbtn">Export</button>'
 	o += '<div class="dropdown-content">'
 
-	o += '<input id="btn-print-cipher-png" class="intBtn" type="button" value="Print Cipher Chart" />' // cipher chart preview
+	o += '<input id="btn-print-cipher-png" class="intBtn" type="button" value="Print Cipher Chart">' // cipher chart preview
 	o += '<div style="margin: 0.5em;"></div>'
-	o += '<input id="btn-print-history-png" class="intBtn" type="button" value="Print History Table" />' // history table preview
+	o += '<input id="btn-print-history-png" class="intBtn" type="button" value="Print History Table">' // history table preview
 	o += '<div style="margin: 0.5em;"></div>'
-	o += '<input id="btn-print-word-break-png" class="intBtn" type="button" value="Print Word Breakdown" />' // print word breakdown table
+	o += '<input id="btn-print-word-break-png" class="intBtn" type="button" value="Print Word Breakdown">' // print word breakdown table
 	o += '<div style="margin: 0.5em;"></div>'
-	o += '<input id="btn-print-breakdown-details-png" class="intBtn" type="button" value="Print Gematria Card" />' // print detailed breakdown
+	o += '<input id="btn-print-breakdown-details-png" class="intBtn" type="button" value="Print Gematria Card">' // print detailed breakdown
 	o += '<div style="margin: 0.5em;"></div>'
-	o += '<input id="btn-num-props-png" class="intBtn" type="button" value="Print Number Properties" />' // print number properties
+	o += '<input id="btn-num-props-png" class="intBtn" type="button" value="Print Number Properties">' // print number properties
 	
 	o += '<hr style="background-color: rgb(77,77,77); height: 1px; border: none; margin: 0.75em;">'
 
-	o += '<input id="btn-export-history-png" class="intBtn" type="button" value="Export History (CSV)" />' // export history as CSV file
+	o += '<input type="file" id="importFileDummy" style="display: none;">' // dummy item for file import
+	o += '<label for="importFileDummy" class="intBtn" style="text-align: center; box-sizing: border-box;">Import File</label>' // import file
 	o += '<div style="margin: 0.5em;"></div>'
-	o += '<input id="btn-export-ciphers" class="intBtn" type="button" value="Export Ciphers" />' // export all available ciphers
+	o += '<input id="btn-export-history-png" class="intBtn" type="button" value="Export History (CSV)">' // export history as CSV file
+	o += '<div style="margin: 0.5em;"></div>'
+	o += '<input id="btn-export-ciphers" class="intBtn" type="button" value="Export Ciphers">' // export all available ciphers
 
 	o += '</div></div>'
 	document.getElementById("calcOptionsPanel").innerHTML = o
@@ -79,6 +82,10 @@ $(document).ready(function(){
 		openImageWindow(".numPropTooltip", fileName);
 	});
 
+	$("body").on("change", "#importFileDummy", function(){
+		var file = document.querySelector("#importFileDummy").files[0];
+		importFileAction(file);
+	});
 	$("body").on("click", "#btn-export-history-png", function () {
 		exportHistoryCSV(sHistory);
 	});
@@ -181,5 +188,6 @@ function exportCiphers() {
 	console.log(out)
 
 	out = 'data:text/js;charset=utf-8,'+encodeURIComponent(out) // format as text file
-	download("ciphers.js", out); // download file
+	// ciphers_2021-03-26_10-23-52.js
+	download("ciphers_"+getTimestamp()+".js", out); // download file
 }

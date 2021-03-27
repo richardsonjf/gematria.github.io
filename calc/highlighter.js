@@ -115,9 +115,9 @@ $(document).ready(function(){
 		// if(ctrlIsPressed) { // Ctrl + Left Click
 		// 	tdToggleHighlight(parseInt(val.trim(), 10)); // remove spaces, parse as integer and add (remove) to highlight box
 		// } else { // Left Click only
-		if (e.which == 1) { // Left Click - temporary blinking effect
+		if (e.which == 1 && !ctrlIsPressed) { // Left Click - temporary blinking effect
 			$( "table.HistoryTable td.tC > span:contains('"+val+"')" ).toggleClass('highlightValueBlink'); // add blinking effect
-		} else if (e.which == 2) { // Mouse Wheel click - toggle value inside highlight box
+		} else if (e.which == 1 && ctrlIsPressed) { // Ctrl + Left Click - toggle value inside highlight box
 			tdToggleHighlight(parseInt(val.trim(), 10)); // remove spaces, parse as integer and add (remove) to highlight box
 		} else if (e.which == 3) { // Right Click - hide value
 			$(this).find(".gV").toggleClass('hideValue');

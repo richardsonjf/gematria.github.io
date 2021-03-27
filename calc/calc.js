@@ -34,7 +34,7 @@ var optShowCipherChart = true // cipher breakdown chart
 
 var optFiltSameCipherMatch = false // filter shows only phrases that match in the same cipher
 var optFiltCrossCipherMatch = true // filter shows only ciphers that have matching values
-var alphaHlt = 0.15 // opacity for values that do not match
+var alphaHlt = 0.15 // opacity for values that do not match - change value here and in conf_SOM()
 
 function initCalc() { // run after page has finished loading
 	initCiphers()
@@ -53,7 +53,6 @@ function createCiphersMenu() { // create menu with all cipher catergories
 
 	o += '<div class="dropdown">'
 	o += '<button class="dropbtn">Ciphers</button>'
-	// o += '<div class="dropdown-content">'
 	o += '<div class="dropdown-content" style="width: 380px;">'
 
 	o += '<div><center>'
@@ -66,7 +65,6 @@ function createCiphersMenu() { // create menu with all cipher catergories
 
 	o += '<div style="width: 30%; float: left;">'
 	for (i = 0; i < cCat.length; i++) {
-		// o += '<input class="intBtn2 ciphCatButton" type="button" value="'+cCat[i]+'" onclick="toggleCipherCategory(&quot;'+cCat[i]+'&quot;)">'
 		o += '<input class="intBtn2 ciphCatButton" type="button" value="'+cCat[i]+'">'
 	}
 
@@ -128,7 +126,7 @@ function createAboutMenu() { // create menu with all cipher catergories
 	o += '<div style="margin: 0.5em;"></div>'
 	o += '<input class="intBtn" type="button" value="GitHub Repository" onclick="gotoGitHubRepo()">'
 	o += '<div style="margin: 0.5em;"></div>'
-	o += '<input class="intBtn" type="button" value="Quickstart Guide" onclick="">'
+	o += '<input class="intBtn" type="button" value="Quickstart Guide" onclick="displayQuickstartGuide()">'
 
 	o += '</div></div>'
 
@@ -153,7 +151,7 @@ function createOptionsMenu() {
 	o += create_PL() // Phrase Limit (End)
 
 	// get checkbox states
-	var CCMstate, SCMstate, SOMstate, CHTstate, THTstate, LWCstate, SRstate, WBstate, SCCstate, LUHCstate, MCRstate = ""
+	var CCMstate, SCMstate, SOMstate, CHTstate, THTstate, LWCstate, SRstate, WBstate, SCCstate, SWCstate, MCRstate = ""
 
 	if (optFiltCrossCipherMatch) CCMstate = "checked" // Cross Cipher Match
 	if (optFiltSameCipherMatch) SCMstate = "checked" // Same Cipher Match
@@ -167,7 +165,7 @@ function createOptionsMenu() {
 	if (optWordBreakdown) WBstate = "checked" // Word Breakdown
 	if (optShowCipherChart) SCCstate = "checked" // Cipher Chart
 
-	if (optLoadUserHistCiphers) LUHCstate = "checked" // Load User Ciphers (CSV)
+	if (optLoadUserHistCiphers) SWCstate = "checked" // Switch Ciphers (CSV)
 	if (!optMatrixCodeRain) MCRstate = "checked" // Matrix Code Rain
 
 	o += '<div class="optionElement"><input type="checkbox" id="chkbox_CCM" value="" onclick="conf_CCM()" '+CCMstate+'><span class="optionElementLabel">Cross Cipher Match</span></div>'
@@ -182,7 +180,7 @@ function createOptionsMenu() {
 	o += '<div class="optionElement"><input type="checkbox" id="chkbox_WB" value="" onclick="conf_WB()" '+WBstate+'><span class="optionElementLabel">Word Breakdown</span></div>'
 	o += '<div class="optionElement"><input type="checkbox" id="chkbox_CC" value="" onclick="conf_CC()" '+SCCstate+'><span class="optionElementLabel">Cipher Chart</span></div>'
 	o += '<div style="margin: 1em"></div>'
-	o += '<div class="optionElement"><input type="checkbox" id="chkbox_LUC" value="" onclick="conf_LUC()" '+LUHCstate+'><span class="optionElementLabel">Load User Ciphers (CSV)</span></div>'
+	o += '<div class="optionElement"><input type="checkbox" id="chkbox_SWC" value="" onclick="conf_SWC()" '+SWCstate+'><span class="optionElementLabel">Switch Ciphers (CSV)</span></div>'
 	o += '<div class="optionElement"><input type="checkbox" id="chkbox_MCR" value="" onclick="conf_MCR()" '+MCRstate+'><span class="optionElementLabel">Matrix Code Rain</span></div>'
 	o += '<div style="margin: 1em"></div>'
 
@@ -203,7 +201,7 @@ function createOptionsMenu() {
 	if (optShowCipherChart) document.getElementById("chkbox_WB").checked = true // Word Breakdown
 	if (optShowCipherChart) document.getElementById("chkbox_CC").checked = true // Cipher Chart
 
-	if (optLoadUserHistCiphers) document.getElementById("chkbox_LUC").checked = true // Load User Ciphers (CSV)
+	if (optLoadUserHistCiphers) document.getElementById("chkbox_SWC").checked = true // Switch Ciphers (CSV)
 	if (!optMatrixCodeRain) document.getElementById("chkbox_MCR").checked = true // Matrix Code Rain
 }
 
@@ -286,7 +284,7 @@ function conf_CC() { // Cipher Chart
 	element.classList.toggle("hideValue")
 }
 
-function conf_LUC() { // Load User Ciphers (CSV)
+function conf_SWC() { // Switch Ciphers (CSV)
 	optLoadUserHistCiphers = !optLoadUserHistCiphers
 }
 
@@ -320,7 +318,7 @@ function conf_NumCalc() { // Number Calculation
 function create_PL() { // Phrase Limit (End)
 	var ns = ""
 	var nArr = [1,2,3,4,5,6,7,8,9,10]
-	ns += '<div class="optionElementDropdown"><span style="size: 80%">Phrase Limit (End)</span>'
+	ns += '<div class="optionElementDropdown"><span style="size: 80%">Enter As Words (Limit)</span>'
 	ns += '<select id="phrLimitBox" onchange="conf_PL()">'
 	for (x = 0; x < nArr.length; x++) {
 		ns += '<option value="' + nArr[x] + '"'
@@ -349,6 +347,14 @@ function createFeaturesMenu() {
 	o += '<div style="margin: 0.5em;"></div>'
 	o += '<input class="intBtn" type="button" value="Edit Ciphers" onclick="toggleEditCiphersMenu()">'
 
+	o += '<hr style="background-color: rgb(77,77,77); height: 1px; border: none; margin: 0.75em;">'
+
+	o += '<input class="intBtn" type="button" value="Find Matches" onclick="updateHistoryTableAutoHlt()">'
+	o += '<div style="margin: 0.5em;"></div>'
+	o += '<input class="intBtn" type="button" value="Enter As Words" onclick="phraseBoxKeypress(35) ">' // "End" keystroke
+	o += '<div style="margin: 0.5em;"></div>'
+	o += '<input class="intBtn" type="button" value="Clear History" onclick="phraseBoxKeypress(36) ">' // "Home" keystroke
+
 	o += '</div></div>'
 	document.getElementById("calcOptionsPanel").innerHTML = o
 }
@@ -371,9 +377,6 @@ function displayIndColorControls() { // display control menu to adjust each ciph
 		var chk = ""
 		if (ciph_in_row < cipherMenuColumns) { // until number of ciphers in row equals number of columns
 			if (cipherList[i].enabled) {
-				// if (cipherList[i].enabled) {chk = " checked";} else {chk = ""} // checkbox state
-				// o += '<td><input type="checkbox" class="ciphCheckbox" id="cipher_chkbox'+i+'" name="cipher_chkbox_name'+i+'" value="" onclick="toggleCipher('+i+')"'+chk+'></td>'
-				// o += '<td><label class="ciphCheckboxLabel" for="cipher_chkbox_name'+i+'">'+cipherList[i].cipherName+'</label></td>'
 				o += '<td><span class="ciphCheckboxLabel">'+cipherList[i].cipherName+'</span></td>'
 				o += '<td><input type="number" step="2" min="-360" max="360" value="'+chkboxColors[i].H+'" class="colSlider" id="sliderHue'+i+'" oninput="changeCipherColors(&quot;sliderHue'+i+'&quot;, &quot;Hue&quot;, '+i+')"></td>'
 				o += '<td><input type="number" step="1" min="-100" max="100" value="'+chkboxColors[i].S+'" class="colSlider" id="sliderSaturation'+i+'" oninput="changeCipherColors(&quot;sliderSaturation'+i+'&quot;, &quot;Saturation&quot;, '+i+')"></td>'
@@ -406,7 +409,7 @@ function displayIndColorControls() { // display control menu to adjust each ciph
 	
 	// column controls
 	o += '</tr><tr style="line-height: 1em;"><td style="font-size: 90%; font-weight: 500; color: rgb(186,186,186); text-align: center; padding-right: 0.4em;">Cipher Columns:</td>'
-	o += '<td style="font-size: 80%; font-weight: 500; text-align: right;">All</td>'
+	o += '<td style="font-size: 80%; font-weight: 500; text-align: right;">Controls</td>'
 	o += '<td><input type="number" step="1" min="1" max="10" value="'+cipherMenuColumns+'" class="colSlider" id="avail_ciphers_columns" oninput="updIndColorCtrlLayout()"></td>'
 	o += '<td style="font-size: 80%; font-weight: 500; text-align: right;">Enabled</td>'
 	o += '<td><input type="number" step="1" min="1" max="10" value="'+enabledCiphColumns+'" class="colSlider" id="enabled_ciphers_columns" oninput="updateTables(false)"></td>'
@@ -645,7 +648,6 @@ function updateTables(updColorLayout = true) {
 			}
 		}
 	}
-	//console.log(breakCipher)
 	if (colorControlsMenuOpened && updColorLayout) updIndColorCtrlLayout() // update color controls if menu is opened
 	updateEnabledCipherTable() // update enabled cipher table
 	updateHistoryTable() // update history table
@@ -752,7 +754,7 @@ function phraseBoxKeypress(e) { // run on each keystroke inside text box - onkey
 	switch (e) { // keypress event
 		case 13: // Enter
 			addPhraseToHistory(phr, true) // enter as single phrase
-			if (!shiftIsPressed) pBox.value = "" // clear textbox on Enter, "Shift - Enter" preserves contents
+			pBox.value = "" // clear textbox on Enter
 			break
 		case 38: // Up Arrow
 			if (phrPos > 0) {
@@ -855,7 +857,6 @@ function updateHistoryTable(hltBoolArr) {
 	for (x = 0; x < sHistory.length; x++) {
 
 		if (x % 25 == 0 && !optTinyHistoryTable) {
-			// ms += '<tr><td class="mP">Word or Phrase</td>'
 			ms += '<tr class="cH"><td class="mP"></td>'
 			for (z = 0; z < cipherList.length; z++) {
 				if (cipherList[z].enabled) {
