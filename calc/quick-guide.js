@@ -3,6 +3,7 @@
 function closeQuickstartGuide() {
 	$('#quickGuideOverlay').remove();
 	$('.quickGuide').remove();
+	$('body').removeClass('noScroll') // restore scrolling
 }
 
 function displayQuickstartGuide() {
@@ -76,4 +77,5 @@ function displayQuickstartGuide() {
 	o += '</div>'
 
 	$(o).appendTo('body'); // guide
+	$('body').addClass('noScroll') // prevent scrolling
 }
