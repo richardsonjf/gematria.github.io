@@ -794,3 +794,6 @@ body {
 	font-size: 85%;
 	color: rgb(128,128,128);
 }
+.noScroll {
+	overflow: hidden;
+}
