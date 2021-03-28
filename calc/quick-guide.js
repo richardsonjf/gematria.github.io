@@ -70,7 +70,7 @@ function displayQuickstartGuide() {
 
 	o += '<li><span class="qgBold">"Export History (CSV)"</span> - export phrases from current history table as a CSV file, semicolon is used as separator, first row contains cipher names</li>'
 
-	o += '<li><span class="qgBold">"Export Ciphers"</span> - ciphers active at the time of export will become the new default ones on next import, file can have any name or extension<br><span class="qgNote">Note: You can edit file manually with a text editor, make sure to keep formatting<br>If you want to permanently change ciphers, you can download an offline version of calculator from GitHub repository and replace "ciphers" file inside "calc" directory<br>Online and offline versions are identical</span></li></ul>'
+	o += '<li><span class="qgBold">"Export Ciphers"</span> - ciphers active at the time of export will become the new default ones on next import, file can have any name or extension<br><span class="qgNote">Note: You can edit file manually with a text editor, make sure to keep formatting<br>If you want to permanently change ciphers, you can download an offline version of calculator from GitHub repository and replace "ciphers.js" file inside "calc" directory<br>Online and offline versions are identical</span></li></ul>'
 
 	o += '</div>'
 
