@@ -31,7 +31,7 @@ function displayQuickstartGuide() {
 
 	o += '<ul><li><span class="qgBold">"Number Calculation"</span><ul><li>Full (123 = 123) - <span class="qgBold">default</span></li><li>Reduced (123 = 1+2+3 = 6)</li><li>Off</li></ul></li>'
 
-	o += '<li><span class="qgBold">"Enter As Words (Limit)"</span> - maximum phrase length for <span class="qgBold""Enter As Words"</span> function</li>'
+	o += '<li><span class="qgBold">"Enter As Words (Limit)"</span> - maximum phrase length for <span class="qgBold">"Enter As Words"</span> function</li>'
 
 	o += '<li><span class="qgBold">Highlighter</span> has two different modes:<ul><li><span class="qgBold">"Cross Cipher Match"</span></li><li><span class="qgBold">"Same Cipher Match"</span><br><span class="qgNote">Note: If there is just one value, only "Cross Cipher Match" will pick that</span></li></ul></li>'
 
@@ -71,8 +71,6 @@ function displayQuickstartGuide() {
 	o += '<li><span class="qgBold">"Export History (CSV)"</span> - export phrases from current history table as a CSV file, semicolon is used as separator, first row contains cipher names</li>'
 
 	o += '<li><span class="qgBold">"Export Ciphers"</span> - ciphers active at the time of export will become the new default ones on next import, file can have any name or extension<br><span class="qgNote">Note: You can edit file manually with a text editor, make sure to keep formatting<br>If you want to permanently change ciphers, you can download an offline version of calculator from GitHub repository and replace "ciphers" file inside "calc" directory<br>Online and offline versions are identical</span></li></ul>'
-
-	o += '<p>The re&#383;t was not perfected.</p>'
 
 	o += '</div>'
 
