@@ -11,13 +11,14 @@ var starNums = populateStarNumbers(10000000)
 $(document).ready(function() {
 
 	var showTooltip = function(event) {
-		if (ctrlIsPressed) {
+		// if (ctrlIsPressed || navigator.maxTouchPoints > 1) { // support for mobile devices
+		if (ctrlIsPressed && navigator.maxTouchPoints < 1) { // desktop only
 			$('div.numPropTooltip').remove(); // old tooltip
 			val = $(this).text()
 			$('<div class="numPropTooltip" data-number="'+val+'">'+listNumberProperties(val)+'</div>').appendTo('body');
 			changeTooltipPosition(event);
 		}
-		if (shiftIsPressed) { // additional properties
+		if (shiftIsPressed && navigator.maxTouchPoints < 1) { // additional properties
 			$('div.numPropTooltip').remove(); // old tooltip
 			val = $(this).text()
 			$('<div class="numPropTooltip" data-number="'+val+'_alt" style="max-width: unset;">'+listNumberPropertiesAlt(val)+'</div>').appendTo('body');
