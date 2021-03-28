@@ -101,14 +101,14 @@ function listNumberProperties(val) {
 
 	var o = '<table class="numPropTable"><tbody>'
 
-	o += '<tr><td class="numPropLabel">Prime</td><tr>'
-	o += '<tr><td>'+getNumProp(val, primeNums)+'</td></tr>'
+	o += '<tr><td class="numPropLabel">Prime</td></tr>'
+	o += '<tr><td class="npLine">'+getNumProp(val, primeNums)+'</td></tr>'
 	o += '<tr><td class="numPropLabel">Fibonacci</td></tr>'
-	o += '<tr><td>'+getNumProp(val, fibonacciNums)+'</td></tr>'
+	o += '<tr><td class="npLine">'+getNumProp(val, fibonacciNums)+'</td></tr>'
 	o += '<tr><td class="numPropLabel">Triangular</td></tr>'
-	o += '<tr><td>'+getNumProp(val, triangularNums)+'</td></tr>'
+	o += '<tr><td class="npLine">'+getNumProp(val, triangularNums)+'</td></tr>'
 	o += '<tr><td class="numPropLabel">Star</td></tr>'
-	o += '<tr><td>'+getNumProp(val, starNums)+'</td></tr>'
+	o += '<tr><td class="npLine">'+getNumProp(val, starNums)+'</td></tr>'
 
 	o += '<tr><td><hr class="numPropSeparator"></td></tr>'
 
@@ -159,7 +159,7 @@ function listNumberPropertiesAlt(val) {
 }
 
 function getNumProp(val, searchArr) {
-	var out = ""; var cur = ""; var prev = "n/a - "; var next = " - n/a"
+	var out = ''; var cur = ''; var prev = 'n/a - '; var next = ' - n/a'; var n_th = '<br><span class="npSmall">&#10095; n/a &#10094;</span>'
 	var ind = searchArr.indexOf(parseInt(val)) // integer value
 
 	if (ind > -1) {
@@ -190,7 +190,11 @@ function getNumProp(val, searchArr) {
 		}
 	}
 
-	out = prev+cur+next
+	if (searchArr[parseInt(val)-1] !== undefined) {
+		n_th = '<br><span class="npSmall">'+searchArr[parseInt(val)-1]+' ('+parseInt(val)+')</span>'
+	}
+
+	out = prev+cur+next+n_th
 	return out
 }
 
