@@ -11,8 +11,7 @@ var starNums = populateStarNumbers(10000000)
 $(document).ready(function() {
 
 	var showTooltip = function(event) {
-		// if (ctrlIsPressed || navigator.maxTouchPoints > 1) { // support for mobile devices
-		if (ctrlIsPressed || navigator.maxTouchPoints > 1) {
+		if (ctrlIsPressed) {
 			$('div.numPropTooltip').remove(); // old tooltip
 			val = $(this).text()
 			$('<div class="numPropTooltip" data-number="'+val+'">'+listNumberProperties(val)+'</div>').appendTo('body');
