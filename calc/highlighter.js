@@ -97,30 +97,20 @@ $(document).ready(function(){
 
 	// history table value clicked (right mouse button)
 	// disable context menu for the element so right click works
-	// $(".tC").live('contextmenu', function() { // ".bind" for existing elements, ".live" for future
-	// 	$(this).find(".gV").toggleClass('hideValue'); // <b> "style="display: none;"
-	// 	return false; // don't show menu
-	// })
-
 	$(".tC").live('contextmenu', function() { // ".bind" for existing elements, ".live" for future
-		// e.preventDefault();
-	 	return false; // don't show menu
+		$(this).find(".gV").toggleClass('hideValue'); // <b> "style="display: none;"
+		return false; // don't show menu
 	})
 	
 	// history table value clicked (left mouse button)
 	// trick is that ".gV" is " 12 ", not "12", so td:contains can't match it to " 112 "
-	$("body").on("mousedown", ".tC", function (e) { // tC - history table cell
+	$("body").on("click", ".tC", function (e) { // tC - history table cell
 		//console.log($(this).find(".gV").html()); // inner html of .gV found in "this"
 		var val = $(this).find(".gV").html(); // get gematria value from element
-		// if(ctrlIsPressed) { // Ctrl + Left Click
-		// 	tdToggleHighlight(parseInt(val.trim(), 10)); // remove spaces, parse as integer and add (remove) to highlight box
-		// } else { // Left Click only
-		if (e.which == 1 && !ctrlIsPressed) { // Left Click - temporary blinking effect
-			$( "table.HistoryTable td.tC > span:contains('"+val+"')" ).toggleClass('highlightValueBlink'); // add blinking effect
-		} else if (e.which == 1 && ctrlIsPressed) { // Ctrl + Left Click - toggle value inside highlight box
+		if(ctrlIsPressed) { // Ctrl + Left Click - toggle value inside highlight box
 			tdToggleHighlight(parseInt(val.trim(), 10)); // remove spaces, parse as integer and add (remove) to highlight box
-		} else if (e.which == 3) { // Right Click - hide value
-			$(this).find(".gV").toggleClass('hideValue');
+		} else { // Left Click only - temporary blinking effect
+			$( "table.HistoryTable td.tC > span:contains('"+val+"')" ).toggleClass('highlightValueBlink'); // add blinking effect
 		}
 	});
 	

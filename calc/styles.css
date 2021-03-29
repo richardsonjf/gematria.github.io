@@ -49,7 +49,7 @@ html, body { /* full <body> height for <!DOCTYPE html> */
 }
 
 body * { /* disable Chromium's Text Autosizer (mobile) */
-	max-height: 999999px;
+	max-height: 9999999px;
 }
 
 /*               Text Selection               */
