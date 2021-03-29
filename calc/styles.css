@@ -137,6 +137,7 @@ body {
 	user-select: none;
 }
 #HistoryTableArea {
+	margin: 0.5em 1em 2.5em 1em;
 }
 #calcOptionsPanel {
 	padding: 0.6em 0em 0em 0em;
@@ -433,7 +434,6 @@ body {
 	border-spacing: 0px;
 	border-top: 1px solid var(--border-dark-accent);
 	border-right: 1px solid var(--border-dark-accent);
-	margin: 0.5em 1em 2.5em 1em;
 }
 .HistoryTable tr:nth-child(odd) {
 	background-color: var(--table-row-odd);
