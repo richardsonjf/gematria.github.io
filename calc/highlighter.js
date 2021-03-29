@@ -162,11 +162,9 @@ $(document).ready(function(){
 });
 
 function removeZeroHlt(arr) {
-	console.log(arr)
 	for (p = 0; p < arr.length; p++) {
 		if (arr[p] == 0) arr.splice(p,1) // remove zero
 	}
-	console.log(arr)
 	return arr
 }
 
