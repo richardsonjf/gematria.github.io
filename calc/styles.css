@@ -48,8 +48,10 @@ html, body { /* full <body> height for <!DOCTYPE html> */
 	margin: 0;
 }
 
-body * { /* disable Chromium's Text Autosizer (mobile) */
-	max-height: 9999999px;
+body { /* disable Chromium's Text Autosizer (mobile text inflation algorithm) */
+	-webkit-text-size-adjust: none;
+	-moz-text-size-adjust: none;
+	text-size-adjust: none;
 }
 
 /*               Text Selection               */
