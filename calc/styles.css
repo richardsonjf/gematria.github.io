@@ -196,7 +196,7 @@ body {
 	background-color: var(--table-row-even);
 }
 .phraseGemValueOdd, .phraseGemValueEven {
-	font-size: 220%;
+	font-size: 180%;
 	text-align: center;
 	min-width: 80px;
 	-webkit-user-select: none;
