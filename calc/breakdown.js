@@ -1,7 +1,7 @@
 // ================= Word Breakdown & Cipher Chart ==================
 
 var breakCipher = "English Ordinal" // current cipher for breakdown
-var bgCol = "rgb(26,30,40)" // breakdown table background color
+var bgCol = "var(--breakdown-bg-accent)" // breakdown table background color
 
 function getSum(total, num) { // used to .reduce() array, adds all values
     return total + num;
@@ -64,9 +64,9 @@ function updateWordBreakdown(impName = breakCipher, impBool = false, chartUpd = 
 			var tdCount = 0; var wCount = 0;
 
 			o += '</div><div id="BreakTableContainer"><table class="BreakTable">'
-			// o += ' style="background: '+bgCol+' -webkit-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
-			// o += 'background: '+bgCol+' -o-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
-			// o += 'background: '+bgCol+' -moz-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
+			// o += ' style="background: '+bgCol+' -webkit-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0));'
+			// o += 'background: '+bgCol+' -o-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0));'
+			// o += 'background: '+bgCol+' -moz-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0));'
 			// o += 'background: '+bgCol+' linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0));">'
 			o += '<tbody><tr>'
 			for (x = 0; x < curCipher.cp.length; x++) {
@@ -98,9 +98,9 @@ function updateWordBreakdown(impName = breakCipher, impBool = false, chartUpd = 
 	}
 
 	document.getElementById("BreakdownSpot").innerHTML = o
-	oo = 'background: '+bgCol+' -webkit-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
-	oo += 'background: '+bgCol+' -o-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
-	oo += 'background: '+bgCol+' -moz-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
+	oo = 'background: '+bgCol+' -webkit-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0));'
+	oo += 'background: '+bgCol+' -o-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0));'
+	oo += 'background: '+bgCol+' -moz-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0));'
 	oo += 'background: '+bgCol+' linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0));'
 	$("#BreakTableContainer").attr("style", oo);
 
@@ -116,10 +116,14 @@ function updateCipherChart(curCipher) {
 		return
 	}
 
-	var o = 'background: '+bgCol+' -webkit-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
-	o += 'background: '+bgCol+' -o-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
-	o += 'background: '+bgCol+' -moz-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
+	var o = 'background: '+bgCol+' -webkit-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0));'
+	o += 'background: '+bgCol+' -o-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0));'
+	o += 'background: '+bgCol+' -moz-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0));'
 	o += 'background: '+bgCol+' linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0));'
+	o += 'min-height: 160px;' // avoid layout shift when Agrippa ciphers are active
+	o += 'margin-top: 1em;'
+	o += 'margin-bottom: 0.5em;'
+	o += 'padding: 0.4em;'
 	$("#ChartSpot").attr("style", o);
 
 	o = '<table id="ChartTable" '
@@ -173,9 +177,9 @@ function updateCipherChartGemCard(impName = breakCipher) {
 	o = '<table id="ChartTable" '
 	
 	// gradient table background based on cipher color
-	o += 'style="background: '+bgCol+' -webkit-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
-	o += 'background: '+bgCol+' -o-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
-	o += 'background: '+bgCol+' -moz-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0)); '
+	o += 'style="background: '+bgCol+' -webkit-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0));'
+	o += 'background: '+bgCol+' -o-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0));'
+	o += 'background: '+bgCol+' -moz-linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0));'
 	o += 'background: '+bgCol+' linear-gradient(0deg,hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 0.2), rgba(0,0,0,0.0));">'
 	o += '<tbody><tr>'
 
@@ -204,5 +208,10 @@ function updateCipherChartGemCard(impName = breakCipher) {
 
 	document.getElementById("ChartSpot").innerHTML = o
 	$("#ChartTable").addClass("borderCipherTable") // cipher chart with borders
-	$("#ChartSpot").attr("style", "border: none;") // clear div gradient background, remove border
+
+	o = 'border: none;' // clear div gradient background, remove border
+	o += 'margin-top: 1em;'
+	o += 'margin-bottom: 0.5em;'
+	o += 'padding: 0.4em;'
+	$("#ChartSpot").attr("style", o)
 }

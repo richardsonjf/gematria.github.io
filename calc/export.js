@@ -100,7 +100,7 @@ function openImageWindow(element, imgName = "", sRatio = window.devicePixelRatio
 	if ( $(element).length ) { // if specified element exists
 		// if browser zoom level is more than passed value, use current zoom level
 		if (typeof sRatio !== 'undefined' && sRatio < window.devicePixelRatio) { sRatio = window.devicePixelRatio}
-		html2canvas($(element)[0], {allowTaint: true, backgroundColor: "rgba(32,37,50,1.0)", width: $(element).outerWidth(), height: $(element).outerHeight(), scale: sRatio} ).then((canvas) => { // e.g. html2canvas($("#ChartTable")[0]).then ...
+		html2canvas($(element)[0], {allowTaint: true, backgroundColor: calcBGhtml2canvas(), width: $(element).outerWidth(), height: $(element).outerHeight(), scale: sRatio} ).then((canvas) => { // e.g. html2canvas($("#ChartTable")[0]).then ...
 			//allowTaint: true, backgroundColor: "rgba(22,26,34,1.0)" - render white bg as transparent
 			//width: $(element).width(), height: $(element).height() - get proper element dimensions
 			//console.log("done ... ");
@@ -156,6 +156,7 @@ function exportCiphers() {
 		')\n'+
 		'*/\n\n'
 
+	out += "interfaceHue = "+interfaceHue+"\n" // save current interface color
 	out += "cipherList = [\n"
 	for (i = 0; i < cipherList.length; i++) {
 		
@@ -190,4 +191,61 @@ function exportCiphers() {
 	out = 'data:text/js;charset=utf-8,'+encodeURIComponent(out) // format as text file
 	// ciphers_2021-03-26_10-23-52.js
 	download("ciphers_"+getTimestamp()+".js", out); // download file
+}
+
+// ======================== Color Conversion ========================
+// ------------ html2canvas has no support of HSL values ------------
+
+function calcBGhtml2canvas() {
+	var element = document.querySelector('body')
+	var compStyles = window.getComputedStyle(element)
+	var bodyBg = compStyles.getPropertyValue('--body-bg-accent') // ' hsl(222 22% 16%)'
+	var colArr = bodyBg.trim().split(" ") // remove leading/trailing spaces, split to array, space as delimiter
+	for (i = 0; i < colArr.length; i++) {
+		colArr[i] = Number( colArr[i].replace(/[^\d|^\.]/g, '') ) // remove anything that is not a digit or a literal dot, parse as number
+	}
+	return HSLtoRGB(colArr[0], colArr[1], colArr[2]) // rgb(32,37,50)
+}
+
+function HSLtoRGB(h, s, l) {
+	var hsv = HSLtoHSV(h, s, l)
+	return HSVtoRGB(hsv.h, hsv.s, hsv.v)
+}
+
+function HSLtoHSV(h, s, l) {
+	h = h / 360, s = s / 100, l = l / 100;
+	var _h = h,
+		_s,
+		_v;
+
+	l *= 2;
+	s *= (l <= 1) ? l : 2 - l;
+	_v = (l + s) / 2;
+	_s = (2 * s) / (l + s);
+
+	return {
+		h: _h * 360,
+		s: _s * 100,
+		v: _v * 100
+	};
+}
+
+function HSVtoRGB(h, s, v) {
+	var r, g, b, i, f, p, q, t;
+	h = h / 360, s = s / 100, v = v / 100;
+
+	i = Math.floor(h * 6);
+	f = h * 6 - i;
+	p = v * (1 - s);
+	q = v * (1 - f * s);
+	t = v * (1 - (1 - f) * s);
+	switch (i % 6) {
+		case 0: r = v, g = t, b = p; break;
+		case 1: r = q, g = v, b = p; break;
+		case 2: r = p, g = v, b = t; break;
+		case 3: r = p, g = q, b = v; break;
+		case 4: r = t, g = p, b = v; break;
+		case 5: r = v, g = p, b = q; break;
+	}
+	return 'rgb('+Math.round(r * 255)+','+Math.round(g * 255)+','+Math.round(b * 255)+')'
 }

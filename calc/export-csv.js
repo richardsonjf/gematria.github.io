@@ -59,6 +59,9 @@ function importFileAction(file) {
 		
 		// detect cipher.js, load user ciphers
 		if (uCiph[0] == "// ciphers.js") {
+			var intHue = file.match(/(?<=interfaceHue = )\d+/, "") // consecutive digits
+			if (intHue !== null) interfaceHue = Number(intHue[0]) // update hue if match is found, use first match
+
 			var ciph = file.match(/(?<=cipherList = \[)[\s\S]+/m, "") // match after "cipherList = [" till end of file, multiple line regex - [\s\S]+
 			file = ciph[0].replace(/(\t|  +|\r|\n)/g, "").slice(10,-1) // remove tabs, consequtive spaces, line breaks - "new cipher" at start, last bracket
 			ciph = file.split(",new cipher") // split string into array
@@ -70,6 +73,7 @@ function importFileAction(file) {
 			document.getElementById("calcOptionsPanel").innerHTML = "" // clear menu panel
 			initCalc() // reinit
 			updateTables() // update tables
+			updateInterfaceHue(true) // update interface color (first run)
 			return
 		}
 

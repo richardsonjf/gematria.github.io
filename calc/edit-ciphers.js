@@ -50,7 +50,7 @@ function toggleEditCiphersMenu() {
 
 	if (!editCiphersMenuOpened) {
 
-		if (colorControlsMenuOpened) toggleIndColorControlsMenu() // close Colors Menu if previously opened
+		closeAllOpenedMenus()
 
 		editCiphersMenuOpened = true
 		

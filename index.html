@@ -21,11 +21,13 @@
 <script src="calc/export-csv.js"></script>
 <script src="calc/num-prop.js"></script>
 <script src="calc/edit-ciphers.js"></script>
+<script src="calc/date-calc.js"></script>
 <script src="calc/quick-guide.js"></script>
 
 <link rel="stylesheet" type="text/css" href="calc/styles.css">
 
 <script>
+window.onpaint = updateInterfaceHue(true); // update interface color (first run)
 $(window).load(function(){
 	$("#loader").delay(287).fadeOut("fast");
 });
@@ -43,8 +45,10 @@ $(window).load(function(){
 <center>
 
 	<div id="calcOptionsPanel"></div>
+
 	<div id="colorControlsMenuArea"></div>
 	<div id="editCiphersMenuArea"></div>
+	<div id="dateCalcMenuArea"></div>
 
 	<div id="inputArea">
 	  <input id="phraseBox" autofocus type="text" autocomplete="off" oninput="updateEnabledCipherTable(); updateWordBreakdown(breakCipher,false,false);" onkeydown="phraseBoxKeypress(event.keyCode)" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)">

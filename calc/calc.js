@@ -7,8 +7,10 @@ var cCat = []; // list of all available cipher categories
 // Layout
 var cipherMenuColumns = 4 // number of columns for all available ciphers table
 var enabledCiphColumns = 4 // number of columns for enabled ciphers table (for phrase)
+
 var colorControlsMenuOpened = false // color controls menu state
 var editCiphersMenuOpened = false // edit ciphers menu state
+var dateCalcMenuOpened = false // date calculator menu state
 
 var enabledCiphCount = 0 // number of enabled ciphers
 
@@ -36,6 +38,9 @@ var optFiltSameCipherMatch = false // filter shows only phrases that match in th
 var optFiltCrossCipherMatch = true // filter shows only ciphers that have matching values
 var alphaHlt = 0.15 // opacity for values that do not match - change value here and in conf_SOM()
 
+var interfaceHue = 222 // calculator interface color
+var interfaceHueDefault = 222 // value for reset, updated on first run of updateInterfaceHue()
+
 function initCalc() { // run after page has finished loading
 	initCiphers()
 	createCiphersMenu()
@@ -44,6 +49,12 @@ function initCalc() { // run after page has finished loading
 	createExportMenu()
 	createAboutMenu()
 	enableDefaultCiphers()
+}
+
+function closeAllOpenedMenus() {
+	if (colorControlsMenuOpened) toggleColorControlsMenu() // Colors Menu
+	if (dateCalcMenuOpened) toggleDateCalcMenu() // Date Calculator
+	if (editCiphersMenuOpened) toggleEditCiphersMenu() // Edit Ciphers
 }
 
 // ========================= Ciphers Menu ===========================
@@ -343,7 +354,9 @@ function createFeaturesMenu() {
 	o += '<button class="dropbtn">Features</button>'
 	o += '<div class="dropdown-content">'
 
-	o += '<input class="intBtn" type="button" value="Color Controls" onclick="toggleIndColorControlsMenu()">'
+	o += '<input class="intBtn" type="button" value="Date Calculator" onclick="toggleDateCalcMenu()">'
+	o += '<div style="margin: 0.5em;"></div>'
+	o += '<input class="intBtn" type="button" value="Color Controls" onclick="toggleColorControlsMenu()">'
 	o += '<div style="margin: 0.5em;"></div>'
 	o += '<input class="intBtn" type="button" value="Edit Ciphers" onclick="toggleEditCiphersMenu()">'
 
@@ -359,87 +372,97 @@ function createFeaturesMenu() {
 	document.getElementById("calcOptionsPanel").innerHTML = o
 }
 
-function displayIndColorControls() { // display control menu to adjust each cipher
-	document.getElementById("colorControlsMenuArea").innerHTML = "" // clear previous table
-	
-	var cur_ciph_index = 0 // index of current of enabled cipher that will be added to the table (total # of ciphers added so far + 1)
-	var new_row_opened = false // condition to open new row inside table
-	var ciph_in_row = 0 // count ciphers in current row
+function toggleColorControlsMenu(redraw = false) { // display control menu to adjust each cipher
+	if (!colorControlsMenuOpened || redraw) {
 
-	var o = '<table class="ciphToggleContainer"><tbody>'
-	
-	for (i = 0; i < cipherList.length; i++) {
-		cur_ciph_index++
-		if (!new_row_opened) { // check if new row has to be opened
-			o += '<tr>'
-			new_row_opened = true
+		if (!redraw) {
+			closeAllOpenedMenus()
+		} else {
+			document.getElementById("colorControlsMenuArea").innerHTML = "" // clear previous layout
 		}
-		var chk = ""
-		if (ciph_in_row < cipherMenuColumns) { // until number of ciphers in row equals number of columns
-			if (cipherList[i].enabled) {
-				o += '<td><span class="ciphCheckboxLabel">'+cipherList[i].cipherName+'</span></td>'
-				o += '<td><input type="number" step="2" min="-360" max="360" value="'+chkboxColors[i].H+'" class="colSlider" id="sliderHue'+i+'" oninput="changeCipherColors(&quot;sliderHue'+i+'&quot;, &quot;Hue&quot;, '+i+')"></td>'
-				o += '<td><input type="number" step="1" min="-100" max="100" value="'+chkboxColors[i].S+'" class="colSlider" id="sliderSaturation'+i+'" oninput="changeCipherColors(&quot;sliderSaturation'+i+'&quot;, &quot;Saturation&quot;, '+i+')"></td>'
-				o += '<td><input type="number" step="1" min="-100" max="100" value="'+chkboxColors[i].L+'" class="colSlider" id="sliderLightness'+i+'" oninput="changeCipherColors(&quot;sliderLightness'+i+'&quot;, &quot;Lightness&quot;, '+i+')"></td>'
-				o += '<td><input type="text" value="" class="cipherColValueBox" id="cipherHSL'+i+'"></td>'
-				o += '<td style="min-width: 16px;"></td>'
-				ciph_in_row++
+
+		colorControlsMenuOpened = true
+		
+		var cur_ciph_index = 0 // index of current of enabled cipher that will be added to the table (total # of ciphers added so far + 1)
+		var new_row_opened = false // condition to open new row inside table
+		var ciph_in_row = 0 // count ciphers in current row
+
+		var o = '<div class="colorControlsBG">'
+		o += '<table class="ciphToggleContainer"><tbody>'
+		
+		for (i = 0; i < cipherList.length; i++) {
+			cur_ciph_index++
+			if (!new_row_opened) { // check if new row has to be opened
+				o += '<tr>'
+				new_row_opened = true
+			}
+			var chk = ""
+			if (ciph_in_row < cipherMenuColumns) { // until number of ciphers in row equals number of columns
+				if (cipherList[i].enabled) {
+					o += '<td><span class="ciphCheckboxLabel">'+cipherList[i].cipherName+'</span></td>'
+					o += '<td><input type="number" step="2" min="-360" max="360" value="'+chkboxColors[i].H+'" class="colSlider" id="sliderHue'+i+'" oninput="changeCipherColors(&quot;sliderHue'+i+'&quot;, &quot;Hue&quot;, '+i+')"></td>'
+					o += '<td><input type="number" step="1" min="-100" max="100" value="'+chkboxColors[i].S+'" class="colSlider" id="sliderSaturation'+i+'" oninput="changeCipherColors(&quot;sliderSaturation'+i+'&quot;, &quot;Saturation&quot;, '+i+')"></td>'
+					o += '<td><input type="number" step="1" min="-100" max="100" value="'+chkboxColors[i].L+'" class="colSlider" id="sliderLightness'+i+'" oninput="changeCipherColors(&quot;sliderLightness'+i+'&quot;, &quot;Lightness&quot;, '+i+')"></td>'
+					o += '<td><input type="text" value="" class="cipherColValueBox" id="cipherHSL'+i+'"></td>'
+					o += '<td style="min-width: 16px;"></td>'
+					ciph_in_row++
+				}
+			}
+			if (ciph_in_row == cipherMenuColumns) { // check if row needs to be closed
+				o += '</tr>'
+				ciph_in_row = 0 // reset cipher count
+				new_row_opened = false
 			}
 		}
-		if (ciph_in_row == cipherMenuColumns) { // check if row needs to be closed
-			o += '</tr>'
-			ciph_in_row = 0 // reset cipher count
-			new_row_opened = false
-		}
-	}
-	o += '</tbody></table>'
+		o += '</tbody></table>'
 
-	// global color controls
-	o += '<center>'
-	o += '<table class="globColCtrlTable">'
-	o += '<tr style="line-height: 1em;"><td style="font-size: 90%; font-weight: 500; color: rgb(186,186,186); text-align: center;">Global Colors: </td>'
-	o += '<td style="font-size: 80%; font-weight: 500; text-align: right;">Hue</td>'
-	o += '<td><input type="number" step="2" min="-360" max="360" value="'+globColors.H+'" class="colSlider" id="globalSliderHue" oninput="changeCipherColors(&quot;globalSliderHue&quot;, &quot;Hue&quot;)"></td>'
-	o += '<td style="font-size: 80%; font-weight: 500; text-align: right;">Saturation</td>'
-	o += '<td><input type="number" step="1" min="-100" max="100" value="'+globColors.S+'" class="colSlider" id="globalSliderSaturation" oninput="changeCipherColors(&quot;globalSliderSaturation&quot;, &quot;Saturation&quot;)"></td>'
-	o += '<td style="font-size: 80%; font-weight: 500; text-align: right;">Lightness</td>'
-	o += '<td><input type="number" step="1" min="-100" max="100" value="'+globColors.L+'" class="colSlider" id="globalSliderLightness" oninput="changeCipherColors(&quot;globalSliderLightness&quot;, &quot;Lightness&quot;)"></td>'
-	o += '<td rowspan=2></td>'
-	o += '<td rowspan=2><input id="resetColorsButton" class="intBtn" type="button" value="Reset Colors" style="margin: 0em 0.5em;" onclick="resetColorControls()"></td>'
-	
-	// column controls
-	o += '</tr><tr style="line-height: 1em;"><td style="font-size: 90%; font-weight: 500; color: rgb(186,186,186); text-align: center; padding-right: 0.4em;">Cipher Columns:</td>'
-	o += '<td style="font-size: 80%; font-weight: 500; text-align: right;">Controls</td>'
-	o += '<td><input type="number" step="1" min="1" max="10" value="'+cipherMenuColumns+'" class="colSlider" id="avail_ciphers_columns" oninput="updIndColorCtrlLayout()"></td>'
-	o += '<td style="font-size: 80%; font-weight: 500; text-align: right;">Enabled</td>'
-	o += '<td><input type="number" step="1" min="1" max="10" value="'+enabledCiphColumns+'" class="colSlider" id="enabled_ciphers_columns" oninput="updateTables(false)"></td>'
-	o += '</tr></table>'
-	o += '</center>'
-	
-	document.getElementById("colorControlsMenuArea").innerHTML += o
-}
+		// global color controls
+		o += '<center>'
+		o += '<table class="globColCtrlTable">'
+		o += '<tr><td class="colLabel">Global Colors: </td>'
+		o += '<td class="colLabelSmall">Hue</td>'
+		o += '<td><input type="number" step="2" min="-360" max="360" value="'+globColors.H+'" class="colSlider" id="globalSliderHue" oninput="changeCipherColors(&quot;globalSliderHue&quot;, &quot;Hue&quot;)"></td>'
+		o += '<td class="colLabelSmall">Saturation</td>'
+		o += '<td><input type="number" step="1" min="-100" max="100" value="'+globColors.S+'" class="colSlider" id="globalSliderSaturation" oninput="changeCipherColors(&quot;globalSliderSaturation&quot;, &quot;Saturation&quot;)"></td>'
+		o += '<td class="colLabelSmall">Lightness</td>'
+		o += '<td><input type="number" step="1" min="-100" max="100" value="'+globColors.L+'" class="colSlider" id="globalSliderLightness" oninput="changeCipherColors(&quot;globalSliderLightness&quot;, &quot;Lightness&quot;)"></td>'
+		o += '<td rowspan=2></td>'
+		o += '<td rowspan=2><input id="resetColorsButton" class="intBtn" type="button" value="Reset Colors" style="margin: 0em 0.5em;" onclick="resetColorControls()"></td>'
+		o += '</tr>'
 
-function updIndColorCtrlLayout() {
-	cipherMenuColumns = document.getElementById("avail_ciphers_columns").value
-	if (colorControlsMenuOpened) {
-		displayIndColorControls()
-		populateColorValues()
-	}
-}
+		// column controls
+		o += '<tr><td class="colLabel" style="padding-right: 0.4em;">Cipher Columns:</td>'
+		o += '<td class="colLabelSmall">Controls</td>'
+		o += '<td><input type="number" step="1" min="1" max="10" value="'+cipherMenuColumns+'" class="colSlider" id="avail_ciphers_columns" oninput="updColorMenuLayout()"></td>'
+		o += '<td class="colLabelSmall">Enabled</td>'
+		o += '<td><input type="number" step="1" min="1" max="10" value="'+enabledCiphColumns+'" class="colSlider" id="enabled_ciphers_columns" oninput="updateTables(false)"></td>'
+		o += '<td class="colLabelSmall">Menu Color</td>'
+		o += '<td><input type="number" step="1" min="0" max="359" value="'+interfaceHue+'" class="colSlider" id="interfaceHueSlider" oninput="updateInterfaceHue()"></td>'
+		o += '</tr>'
+		o += '</table>'
+		o += '</center>'
 
-function toggleIndColorControlsMenu() { // show/hide individual color controls
-	if (!colorControlsMenuOpened) {
-		editCiphersMenuOpened = false // close Edit Ciphers menu
-		document.getElementById("editCiphersMenuArea").innerHTML = ""
-		$("#colorControlsMenuArea").attr("style", "padding: 0.5em 0em 0.75em 1em; margin: 0.5em 0em 0.5em 0em;") // add padding
-		displayIndColorControls()
-		populateColorValues()
-		colorControlsMenuOpened = true
+		o += '</div>' // colorControlsBG
+		
+		document.getElementById("colorControlsMenuArea").innerHTML += o
+		populateColorValues() // update values for controls
 	} else {
 		document.getElementById("colorControlsMenuArea").innerHTML = "" // clear
-		$("#colorControlsMenuArea").attr("style", "") // remove padding
 		colorControlsMenuOpened = false
 	}
+}
+
+function updateInterfaceHue(firstrun = false) { // change interface color
+	// update hue from slider if element exists
+	if (document.getElementById("interfaceHueSlider") != null) interfaceHue = document.getElementById("interfaceHueSlider").value
+	var root = document.documentElement
+	root.style.setProperty("--global-hue", interfaceHue.toString()) // update :root CSS variable
+	if (firstrun) interfaceHueDefault = interfaceHue // set default color for reset
+}
+
+function updColorMenuLayout() {
+	cipherMenuColumns = document.getElementById("avail_ciphers_columns").value
+	toggleColorControlsMenu(true) // flag to update layout
 }
 
 function initColorArrays() { // store original cipher colors and current modifier values
@@ -465,9 +488,8 @@ function resetColorControls() { // set all color controls to zero
 	// reset values for individual colors
 	chkboxColors = []
 	var tmp_H, tmp_S, tmp_L
-	var tmp = {H:0, S:0, L:0, A:0}
 	for (i = 0; i < cipherList.length; i++) {
-		chkboxColors.push(tmp)
+		chkboxColors.push({H:0, S:0, L:0}) // create new object for each cipher
 		tmp_H = document.getElementById("sliderHue"+i)
 		tmp_S = document.getElementById("sliderSaturation"+i)
 		tmp_L = document.getElementById("sliderLightness"+i)
@@ -482,6 +504,10 @@ function resetColorControls() { // set all color controls to zero
 	changeCipherColors(0, "Hue")
 	changeCipherColors(0, "Saturation")
 	changeCipherColors(0, "Lightness")
+
+	interfaceHue = interfaceHueDefault // reset interface color
+	if (document.getElementById("interfaceHueSlider") != null) document.getElementById("interfaceHueSlider").value = interfaceHue
+	updateInterfaceHue()
 
 	updateTables() // update
 }
@@ -648,7 +674,7 @@ function updateTables(updColorLayout = true) {
 			}
 		}
 	}
-	if (colorControlsMenuOpened && updColorLayout) updIndColorCtrlLayout() // update color controls if menu is opened
+	if (colorControlsMenuOpened && updColorLayout) updColorMenuLayout() // update color controls if menu is opened
 	updateEnabledCipherTable() // update enabled cipher table
 	updateHistoryTable() // update history table
 	updateWordBreakdown(breakCipher, true) // update word breakdown and choose first enabled cipher
