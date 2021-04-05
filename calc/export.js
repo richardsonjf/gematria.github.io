@@ -25,6 +25,8 @@ function createExportMenu() {
 	o += '<div style="margin: 0.5em;"></div>'
 	o += '<input id="btn-export-history-png" class="intBtn" type="button" value="Export History (CSV)">' // export history as CSV file
 	o += '<div style="margin: 0.5em;"></div>'
+	o += '<input id="btn-export-matches-txt" class="intBtn" type="button" value="Export Matches (TXT)">' // export available same/cross cipher matches
+	o += '<div style="margin: 0.5em;"></div>'
 	o += '<input id="btn-export-ciphers" class="intBtn" type="button" value="Export Ciphers">' // export all available ciphers
 
 	o += '</div></div>'
@@ -88,6 +90,9 @@ $(document).ready(function(){
 	});
 	$("body").on("click", "#btn-export-history-png", function () {
 		exportHistoryCSV(sHistory);
+	});
+	$("body").on("click", "#btn-export-matches-txt", function () {
+		exportHighlighterMatches(sHistory);
 	});
 	$("body").on("click", "#btn-export-ciphers", function () {
 		exportCiphers();
@@ -191,6 +196,123 @@ function exportCiphers() {
 	out = 'data:text/js;charset=utf-8,'+encodeURIComponent(out) // format as text file
 	// ciphers_2021-03-26_10-23-52.js
 	download("ciphers_"+getTimestamp()+".js", out); // download file
+}
+
+function exportHighlighterMatches(histArr) { // highlighter mode controls export mode
+	if (optFiltCrossCipherMatch) {
+		exportCrossCipherMatches(histArr)
+	} else if (optFiltSameCipherMatch) {
+		exportSameCipherMatches(histArr)
+	}
+}
+
+function exportSameCipherMatches(histArr) {
+	var pVal = [] // 2d array, all phrase values in one cipher for each existing cipher (use index to get cipher name, use index to get phrase)
+	var tmp = [] // gematria values for one phrase (all ciphers)
+	var g
+
+	for (n = 0; n < cipherList.length; n++) { // for each enabled cipher
+		tmp = [] // reset array
+		for (i = 0; i < histArr.length; i++) { // for each phrase
+			if (cipherList[n].enabled) {
+				g = cipherList[n].calcGematria(histArr[i]) // gematria for current phrase in one cipher
+			} else {
+				g = 0 // value for disabled ciphers
+			}
+			tmp.push(g) // separate phrase array
+		}
+		pVal.push(tmp) // add cipher with gematria, pVal[0][1] is cipherList[0], histArr[1]
+	}
+
+	var searchArr = [] // list of numbers that occur twice or more
+	var matchArr = [] // array with matches within one cipher
+	var o = '' // build string for output
+
+	for (p = 0; p < pVal.length; p++) { // for each cipher
+		searchArr = [] // reset
+		matchArr = countMatches(pVal[p]) // 2d array, number/amount of matches in one cipher
+
+		for (i = 0; i < matchArr.length; i++) { // for all available matches
+			if (matchArr[i][1] >= 2) searchArr.push(matchArr[i][0]) // add those that occur twice or more
+		}
+
+		searchArr.sort(function(a, b) { // sort ascending order
+			return a - b; //  b - a, for descending sort
+		});
+		if (searchArr[0] == 0) searchArr.splice(0,1) // remove zero (value for disabled ciphers)
+
+		for (i = 0; i < searchArr.length; i++) { // for each valid match
+			o += searchArr[i] + ' (' + cipherList[p].cipherName + ')' // 30 (English Ordinal)
+			o += '\n================================'
+			for (n = 0; n < pVal[p].length; n++) { // for each value in current cipher
+				if (pVal[p][n] == searchArr[i]) { // if gematria equals current searched number
+					o += '\n"' + histArr[n] + '"' // add "phrase"
+				}
+			}
+			o += '\n\n\n' // number added, new lines
+		}
+	}
+
+	o = o.substring(0, o.length-3) // remove last new lines
+
+	o = 'data:text/plain;charset=utf-8,'+encodeURIComponent(o) // format as text file
+	download(getTimestamp()+"_Same_Cipher_Match_gematria.txt", o); // download file
+}
+
+function exportCrossCipherMatches(histArr) { // maybe use highlighter mode to control behavior
+	var allVal = [] // all gematria in one array
+	var pVal = [] // 2d array, phrase [0], gematria value in cipher
+	var tmp = [] // gematria values for one phrase (all ciphers)
+	var g
+
+	for (i = 0; i < histArr.length; i++) { // for each phrase
+		tmp = [histArr[i]] // reset array, add phrase at index 0
+		for (n = 0; n < cipherList.length; n++) { // for each existing cipher
+			if (cipherList[n].enabled) {
+				g = cipherList[n].calcGematria(histArr[i]) // gematria for current cipher
+			} else {
+				g = 0 // zero value for disabled ciphers
+			}
+			tmp.push(g) // separate phrase array
+			allVal.push(g) // all gematria array
+		}
+		pVal.push(tmp) // add phrase with gematria, cipher indices are offset +1
+	}
+
+	var matchArr = countMatches(allVal) // 2d array, number/amount of matches
+	var searchArr = [] // list of numbers that occur twice or more
+
+	for (i = 0; i < matchArr.length; i++) { // for all available matches
+		if (matchArr[i][1] >= 2) searchArr.push(matchArr[i][0]) // add those that occur twice or more
+	}
+	
+	searchArr.sort(function(a, b) { // sort ascending order
+		return a - b; //  b - a, for descending sort
+	});
+	if (searchArr[0] == 0) searchArr.splice(0,1) // remove zero (value for disabled ciphers)
+
+	var nP = true // new phrase flag (used to add cipher names to existing matches)
+	var o = '' // build string for output
+	for (i = 0; i < searchArr.length; i++) { // for each valid match
+		o += searchArr[i] // number
+		o += '\n==============================================='
+		for (n = 0; n < pVal.length; n++) { // for each phrase
+			nP = true // new phrase
+			for (m = 0; m < pVal[n].length; m++) { // for each gematria value
+				if (pVal[n][m] == searchArr[i] && nP) { // if gematria equals searched number
+					o += '\n"' + pVal[n][0] + '" (' + cipherList[m-1].cipherName + ')' // "phrase" (English Ordinal)
+					nP = false // current phrase was added
+				} else if (pVal[n][m] == searchArr[i] && !nP) { // same phrase, different cipher match
+					o += ', (' + cipherList[m-1].cipherName + ')' // , (Reverse Ordinal)
+				}
+			}
+		}
+		o += '\n\n\n' // number added, new lines
+	}
+	o = o.substring(0, o.length-3) // remove last new lines
+
+	o = 'data:text/plain;charset=utf-8,'+encodeURIComponent(o) // format as text file
+	download(getTimestamp()+"_Cross_Cipher_Match_gematria.txt", o); // download file
 }
 
 // ======================== Color Conversion ========================

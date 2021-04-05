@@ -53,6 +53,8 @@ function displayQuickstartGuide() {
 	o += '<hr class="numPropSeparator">'
 	o += '<p><span class="qgBold2">Features</p>'
 
+	o += '<p class="qgMedium">Date Calculator</p>\n<ul><li>Calculates interval between two dates according to Gregorian calendar, supports <span class="qgBold">Add/Subtract</span> mode<br><span class="qgNote">Note: Make sure to consult timeanddate.com or other websites for precise calculations for old dates or other calendars (e.g. Julian)</span></li></ul>'
+
 	o += '<p class="qgMedium">Color Controls</p>\n<ul><li>Change cipher colors (<span class="qgBold">HSL</span> - Hue, Saturation, Lightness)</li><li>Make sure to <span class="qgBold">"Export Ciphers"</span> before you make any modifications inside <span class="qgBold">"Edit Ciphers"</span> menu</li></ul>'
 
 	o += '<p class="qgMedium">Edit Ciphers</p>\n<ul><li><span class="qgBold">"Left Click"</span> on cipher name in Enabled Ciphers Table to edit existing cipher</li><li>Cipher names are unique; if name matches, it means an existing cipher is modified</li><li>Existing cipher can be moved to a different category (it will be added as last item in that category)</li><li>Any cipher category can be created</li><li>Cells with individual letters or values can be modified</li><li><span class="qgBold">Unicode</span> characters are supported</li><li>Color controls are reset on any change in <span class="qgBold">"Edit Ciphers"</span> menu</li></ul>'
@@ -69,6 +71,8 @@ function displayQuickstartGuide() {
 	o += '<li><span class="qgBold">"Import File"</span> - import a text file (one phrase per line), previously exported history or ciphers<br><span class="qgNote">Note: You can also drag and drop file into Phrase Box</span></li>'
 
 	o += '<li><span class="qgBold">"Export History (CSV)"</span> - export phrases from current history table as a CSV file, semicolon is used as separator, first row contains cipher names</li>'
+
+	o += '<li><span class="qgBold">"Export Matches (TXT)"</span> - export all available matches from current history table as a TXT file, current highlighter mode (<span class="qgBold">"Cross Cipher Match"</span> or <span class="qgBold">"Same Cipher Match"</span>) is used during export<br><span class="qgNote">Note: This file cannot be imported back into calculator</span></li>'
 
 	o += '<li><span class="qgBold">"Export Ciphers"</span> - ciphers active at the time of export will become the new default ones on next import, file can have any name or extension<br><span class="qgNote">Note: You can edit file manually with a text editor, make sure to keep formatting<br>If you want to permanently change ciphers, you can download an offline version of calculator from GitHub repository and replace "ciphers.js" file inside "calc" directory<br>Online and offline versions are identical</span></li></ul>'
 
