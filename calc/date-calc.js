@@ -12,7 +12,7 @@ $(document).ready(function(){
 		$('#offsetD').val(0)
 		endChkEnabled = true // allow to toggle checkbox
 		$('#chkbox_incEndDate').prop("disabled", "")
-		updDates();
+		if ( $(this).val().length > 0 ) updDates(); // if input not empty
 	});
 	$("body").on("input", ".offsetDateInput", function () { // if input from add/subtract controls
 		offY = Number( $('#offsetY').val() );
