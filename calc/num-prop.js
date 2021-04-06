@@ -14,13 +14,13 @@ $(document).ready(function() {
 		// if (ctrlIsPressed || navigator.maxTouchPoints > 1) { // support for mobile devices
 		if (ctrlIsPressed && navigator.maxTouchPoints < 1) { // desktop only
 			$('div.numPropTooltip').remove(); // old tooltip
-			val = $(this).text()
+			val = $(this).text().trim() // remove spaces
 			$('<div class="numPropTooltip" data-number="'+val+'">'+listNumberProperties(val)+'</div>').appendTo('body');
 			changeTooltipPosition(event);
 		}
 		if (shiftIsPressed && navigator.maxTouchPoints < 1) { // additional properties
 			$('div.numPropTooltip').remove(); // old tooltip
-			val = $(this).text()
+			val = $(this).text().trim() // remove spaces
 			$('<div class="numPropTooltip" data-number="'+val+'_alt" style="max-width: unset;">'+listNumberPropertiesAlt(val)+'</div>').appendTo('body');
 			changeTooltipPosition(event);
 		}
@@ -78,14 +78,14 @@ $(document).ready(function() {
 
 	var showTooltipClick = function(event) {
 		$('div.numPropTooltip').remove(); // old tooltip
-		val = $(this).text()
-		$('<div class="numPropTooltip">'+listNumberProperties(val)+'</div>').appendTo('body');
+		val = $(this).text().trim() // remove spaces
+		$('<div class="numPropTooltip" data-number="'+val+'">'+listNumberProperties(val)+'</div>').appendTo('body');
 		changeTooltipPosition(event, true); // a click was issued
 	}
 	var showTooltipClickAlt = function(event) {
 		$('div.numPropTooltip').remove(); // old tooltip
-		val = $(this).text()
-		$('<div class="numPropTooltip" style="max-width: unset;">'+listNumberPropertiesAlt(val)+'</div>').appendTo('body');
+		val = $(this).text().trim() // remove spaces
+		$('<div class="numPropTooltip" data-number="'+val+'_alt" style="max-width: unset;">'+listNumberPropertiesAlt(val)+'</div>').appendTo('body');
 		changeTooltipPosition(event, true);
 		return false; // no context menu
 	};

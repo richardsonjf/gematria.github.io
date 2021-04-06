@@ -19,6 +19,8 @@ class cipher { // cipher constructor class
 		var ch_calc // // charcode for calculation
 		var gemValue = 0
 		
+		if (optAllowPhraseComments == true) { gemPhrase = gemPhrase.replace(/\[.+\]/g, '').trim() } // remove [...], leading/trailing spaces
+
 		for (i = 0; i < gemPhrase.length; i++) {
 			cur_char = gemPhrase.charCodeAt(i)
 
@@ -74,6 +76,9 @@ class cipher { // cipher constructor class
 		var lastSpace = true
 		var n, nv // n - character for display, nv - charcode for calculation
 		
+		 // remove [...], separate brackets, leading/trailing spaces
+		if (optAllowPhraseComments == true) { gemPhrase = gemPhrase.replace(/\[.+\]/g, '').replace(/\[/g, '').replace(/\]/g, '').trim() }
+
 		// character positions, character values, current number (if char is a digit)
 		this.cp = []; this.cv = []; this.curNum = ""; this.LetterCount = 0
 

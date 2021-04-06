@@ -55,8 +55,14 @@ function updateWordBreakdown(impName = breakCipher, impBool = false, chartUpd = 
 		}
 
 		if (optSimpleResult == true) {
+			var simplePhr = ""
+			if (optAllowPhraseComments) {
+				simplePhr = sValNoComments() // exclude text inside [...]
+			} else {
+				simplePhr = sVal() // display full phrase
+			}
 			o += '<div id="SimpleBreak">'
-			o += '<div class="breakPhrase">' + sVal() + ' = </div><div class="breakSum">' + curCipher.sumArr.reduce(getSum) + '</div>' // add all values in array
+			o += '<div class="breakPhrase">' + simplePhr + ' = </div><div class="breakSum">' + curCipher.sumArr.reduce(getSum) + '</div>' // add all values in array
 			o += '<div class="breakCipher"><font style="color: hsl('+curCipher.H+' '+curCipher.S+'% '+curCipher.L+'% / 1)"> (' + curCipher.cipherName + ')</font></div>'
 		}
 

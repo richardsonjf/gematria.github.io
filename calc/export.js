@@ -101,7 +101,7 @@ $(document).ready(function(){
 });
 
 function openImageWindow(element, imgName = "", sRatio = window.devicePixelRatio) { // sRatio is scaling
-	var imageURL, wnd, scl
+	var imageDataURL, wnd, scl
 	if ( $(element).length ) { // if specified element exists
 		// if browser zoom level is more than passed value, use current zoom level
 		if (typeof sRatio !== 'undefined' && sRatio < window.devicePixelRatio) { sRatio = window.devicePixelRatio}
@@ -111,15 +111,36 @@ function openImageWindow(element, imgName = "", sRatio = window.devicePixelRatio
 			//console.log("done ... ");
 			//$("#previewImage").append(canvas);
 			
-			imageURL = canvas.toDataURL("image/png"); // canvas to "data:image/png;base64, ..."
+			imageDataURL = canvas.toDataURL("image/png"); // canvas to "data:image/png;base64, ..."
 			if (imgName == "" || imgName.length >= 200) imgName = getTimestamp()+".png"; // filename for download button (200 char limit)
 
-			wnd = window.open(""); // open new window
 			// add download button and image data inside centered <div>
-			wnd.document.body.innerHTML = "<div style='max-height: 100%; max-width: 100%; position: absolute; top: 50%; left: 50%; -webkit-transform: translate(-50%,-50%); transform: translate(-50%,-50%);'><center><br><a href='"+imageURL+"' download='"+imgName+"' style='font-family: arial, sans-serif; color: #dedede' >Download</a></center><br><img src="+canvas.toDataURL("image/png")+"></div>";
-			wnd.document.body.style.backgroundColor = "#000000"; // black background
+			//wnd = window.open(""); // open new window
+			//wnd.document.body.innerHTML = "<div style='max-height: 100%; max-width: 100%; position: absolute; top: 50%; left: 50%; -webkit-transform: translate(-50%,-50%); transform: translate(-50%,-50%);'><center><br><a href='"+imageDataURL+"' download='"+imgName+"' style='font-family: arial, sans-serif; color: #dedede' >Download</a></center><br><img src="+canvas.toDataURL("image/png")+"></div>";
+			//wnd.document.body.style.backgroundColor = "#000000"; // black background
+			showPrintImagePreview(imageDataURL, imgName)
 		});
 	}
+}
+
+function showPrintImagePreview(imageDataURL, imgName) {
+	$('<div id="darkOverlay" onclick="closePrintImagePreview()"></div>').appendTo('body'); // overlay
+
+	var o = '<div class="printImageContainer">'
+	o += '<div class="previewImg">'
+	o += '<center><input class="downImgBtn" type="button" value="Save Image" onclick="download(&#39;'+imgName+'&#39;, &#39;'+imageDataURL+'&#39;)"></center>' // &#39; - single quote
+	o += '<img src="'+imageDataURL+'" style="padding: 1.5em 2em;">'
+	o += '</div>'
+	o += '</div>'
+
+	$(o).appendTo('body'); // preview image
+	$('body').addClass('noScroll') // prevent scrolling
+}
+
+function closePrintImagePreview() {
+	$('#darkOverlay').remove();
+	$('.printImageContainer').remove();
+	$('body').removeClass('noScroll') // restore scrolling
 }
 
 function getTimestamp() {

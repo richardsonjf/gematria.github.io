@@ -123,12 +123,12 @@ function n_th(i, yr) { // number ordinal suffix - 1st, 2nd, etc, marked with ast
 	var out;
 	var j = i % 10
 	var k = i % 100
-	if (j == 1 && k != 11) {
+	if (j == 1 && k !== 11) {
 		// return i + "st"
 		out = "st"
-	} else if (j == 2 && k != 12) {
+	} else if (j == 2 && k !== 12) {
 		out = "nd"
-	} else if (j == 3 && k != 13) {
+	} else if (j == 3 && k !== 13) {
 		out = "rd"
 	} else {
 		out = "th"
@@ -265,7 +265,7 @@ function toggleEndDateCalc() {
 }
 
 function isLeapYear(y) {
-	return ( y%4 == 0 && y%100 != 0 ) || y%400 == 0;
+	return ( y%4 == 0 && y%100 !== 0 ) || y%400 == 0;
 }
 
 function monthNames(m) {
@@ -288,7 +288,7 @@ function daysLeftInYear(d) {
 
 function daysInMonth(m, y) { // amount of days in month for given year
 	mDaysArr = [31,28,31,30,31,30,31,31,30,31,30,31] // 0 - January
-	if ( m == 1 && ( (y%4 == 0 && y%100 != 0) || y%400 == 0 ) ) return 29 // if February on leap year
+	if ( m == 1 && ( (y%4 == 0 && y%100 !== 0) || y%400 == 0 ) ) return 29 // if February on leap year
 	return mDaysArr[m]
 }
 

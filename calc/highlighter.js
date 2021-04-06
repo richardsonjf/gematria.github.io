@@ -139,7 +139,8 @@ $(document).ready(function(){
 	// Click on phrase in history table
 	$("body").on("click", ".hP", function (e) {
 		if(shiftIsPressed) { // Shift + Left Click - remove phrase from history table
-			var val = $(this).html(); // get gematria value from element
+			//var val = $(this).html(); // get gematria value from element
+			var ii = $(this).data("ind") // get phrase index
 			if (sHistory.length == 1) {
 				sHistory = [] // reinitialize array if there is only one entry
 				tArea = document.getElementById("HistoryTableArea")
@@ -147,12 +148,15 @@ $(document).ready(function(){
 				updateTables()
 				return
 			}
-			sHistory.splice(sHistory.indexOf(val),1)
+			//sHistory.splice(sHistory.indexOf(val),1)
+			sHistory.splice(ii,1)
 			updateTables()
 		} else if (ctrlIsPressed) { // Ctrl + Left Click - select phrase and load into phrase box
-			console.log($(this).html()); // inner html of "this"
-			var val = $(this).html(); // get gematria value from element
-			document.getElementById("phraseBox").value = val; // insert phrase into search box
+			//console.log($(this).html()); // inner html of "this"
+			//var val = $(this).html(); // get gematria value from element
+			//document.getElementById("phraseBox").value = val; // insert phrase into search box
+			var ii = $(this).data("ind") // get phrase index
+			document.getElementById("phraseBox").value = sHistory[ii]; // insert phrase into search box
 			updateWordBreakdown() // update breakdown for current phrase
 			updateEnabledCipherTable() // update enabled cipher values
 			document.getElementById("phraseBox").focus(); // focus input
@@ -247,7 +251,7 @@ function removeNotMatchingPhrases() {
 							if (cipherList[n].cipherName == valueToRemove) {
 								cipherList[n].enabled = false // disable cipher
 								cur_chkbox = document.getElementById("cipher_chkbox"+n)
-								if (cur_chkbox != null) { cur_chkbox.checked = !cur_chkbox.checked; } // update checkbox if visible
+								if (cur_chkbox !== null) { cur_chkbox.checked = !cur_chkbox.checked; } // update checkbox if visible
 							}
 						}
 					}
@@ -315,7 +319,7 @@ function removeNotMatchingPhrases() {
 						if (cipherList[n].cipherName == valueToRemove) {
 							cipherList[n].enabled = false // disable cipher
 							cur_chkbox = document.getElementById("cipher_chkbox"+n)
-							if (cur_chkbox != null) cur_chkbox.checked = !cur_chkbox.checked // update checkbox if visible
+							if (cur_chkbox !== null) cur_chkbox.checked = !cur_chkbox.checked // update checkbox if visible
 						}
 					}
 					//console.log("'"+cipherList[i].cipherName+"' was disabled")

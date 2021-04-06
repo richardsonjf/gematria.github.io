@@ -1,13 +1,13 @@
 // ======================== Quickstart Guide ========================
 
 function closeQuickstartGuide() {
-	$('#quickGuideOverlay').remove();
+	$('#darkOverlay').remove();
 	$('.quickGuide').remove();
 	$('body').removeClass('noScroll') // restore scrolling
 }
 
 function displayQuickstartGuide() {
-	$('<div id="quickGuideOverlay" onclick="closeQuickstartGuide()"></div>').appendTo('body'); // overlay
+	$('<div id="darkOverlay" onclick="closeQuickstartGuide()"></div>').appendTo('body'); // overlay
 
 	var o = '<div class="quickGuide">'
 	o += '<p><span class="qgBold2">Quickstart Guide</p>'

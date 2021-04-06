@@ -38,6 +38,8 @@ var optFiltSameCipherMatch = false // filter shows only phrases that match in th
 var optFiltCrossCipherMatch = true // filter shows only ciphers that have matching values
 var alphaHlt = 0.15 // opacity for values that do not match - change value here and in conf_SOM()
 
+var optAllowPhraseComments = true // allow phrase comments, text inside [...] is not evaluated
+
 var interfaceHue = 222 // calculator interface color
 var interfaceHueDefault = 222 // value for reset, updated on first run of updateInterfaceHue()
 
@@ -162,7 +164,7 @@ function createOptionsMenu() {
 	o += create_PL() // Phrase Limit (End)
 
 	// get checkbox states
-	var CCMstate, SCMstate, SOMstate, CHTstate, THTstate, LWCstate, SRstate, WBstate, SCCstate, SWCstate, MCRstate = ""
+	var CCMstate, SCMstate, SOMstate, CHTstate, THTstate, APCstate, LWCstate, SRstate, WBstate, SCCstate, SWCstate, MCRstate = ""
 
 	if (optFiltCrossCipherMatch) CCMstate = "checked" // Cross Cipher Match
 	if (optFiltSameCipherMatch) SCMstate = "checked" // Same Cipher Match
@@ -170,6 +172,8 @@ function createOptionsMenu() {
 
 	if (optCompactHistoryTable) CHTstate = "checked" // Compact History
 	if (optTinyHistoryTable) THTstate = "checked" // Tiny History
+
+	if (optAllowPhraseComments) APCstate = "checked" // Allow Phrase Comments
 
 	if (optLetterWordCount) LWCstate = "checked" // Letter/Word Count
 	if (optSimpleResult) SRstate = "checked" // Simple Result
@@ -185,6 +189,8 @@ function createOptionsMenu() {
 	o += '<div style="margin: 1em"></div>'
 	o += '<div class="optionElement"><input type="checkbox" id="chkbox_CH" value="" onclick="conf_CH()" '+CHTstate+'><span class="optionElementLabel">Compact History</span></div>'
 	o += '<div class="optionElement"><input type="checkbox" id="chkbox_TH" value="" onclick="conf_TH()" '+THTstate+'><span class="optionElementLabel">Tiny History</span></div>'
+	o += '<div style="margin: 1em"></div>'
+	o += '<div class="optionElement"><input type="checkbox" id="chkbox_APC" value="" onclick="conf_APC()" '+APCstate+'><span class="optionElementLabel">Ignore Comments [...]</span></div>'
 	o += '<div style="margin: 1em"></div>'
 	o += '<div class="optionElement"><input type="checkbox" id="chkbox_LWC" value="" onclick="conf_LWC()" '+LWCstate+'><span class="optionElementLabel">Letter/Word Count</span></div>'
 	o += '<div class="optionElement"><input type="checkbox" id="chkbox_SR" value="" onclick="conf_SR()" '+SRstate+'><span class="optionElementLabel">Simple Result</span></div>'
@@ -207,6 +213,8 @@ function createOptionsMenu() {
 	if (optCompactHistoryTable) document.getElementById("chkbox_CH").checked = true // Compact History
 	if (optTinyHistoryTable) document.getElementById("chkbox_TH").checked = true // Tiny History
 
+	if (optAllowPhraseComments) document.getElementById("chkbox_APC").checked = true // Allow Phrase Comments
+
 	if (optLetterWordCount) document.getElementById("chkbox_LWC").checked = true // Letter/Word Count
 	if (optSimpleResult) document.getElementById("chkbox_SR").checked = true // Simple Result
 	if (optShowCipherChart) document.getElementById("chkbox_WB").checked = true // Word Breakdown
@@ -221,11 +229,11 @@ function conf_CCM() { // Cross Cipher Match
 	if (optFiltCrossCipherMatch) {
 		optFiltSameCipherMatch = false
 		chkSCM = document.getElementById("chkbox_SCM")
-		if (chkSCM != null) chkSCM.checked = false
+		if (chkSCM !== null) chkSCM.checked = false
 	} else if (!optFiltCrossCipherMatch && !optFiltSameCipherMatch) {
 		optFiltCrossCipherMatch = true // can't disable both, revert to cross match as default
 		chkCCM = document.getElementById("chkbox_CCM")
-		if (chkCCM != null) chkCCM.checked = true
+		if (chkCCM !== null) chkCCM.checked = true
 	}
 }
 
@@ -234,11 +242,11 @@ function conf_SCM() { // Same Cipher Match
 	if (optFiltSameCipherMatch) {
 		optFiltCrossCipherMatch = false
 		chkCCM = document.getElementById("chkbox_CCM")
-		if (chkCCM != null) chkCCM.checked = false
+		if (chkCCM !== null) chkCCM.checked = false
 	} else if (!optFiltCrossCipherMatch && !optFiltSameCipherMatch) {
 		optFiltCrossCipherMatch = true // can't disable both, revert to cross match as default
 		chkCCM = document.getElementById("chkbox_CCM")
-		if (chkCCM != null) chkCCM.checked = true
+		if (chkCCM !== null) chkCCM.checked = true
 	}
 }
 
@@ -256,7 +264,7 @@ function conf_CH() { // Compact History
 	optCompactHistoryTable = !optCompactHistoryTable
 	if (optTinyHistoryTable) { // only one option is allowed
 		optTinyHistoryTable = false
-		if (chkbox_TH != null) chkbox_TH.checked = false
+		if (chkbox_TH !== null) chkbox_TH.checked = false
 	}
 	updateTables()
 }
@@ -265,8 +273,13 @@ function conf_TH() { // Tiny History
 	optTinyHistoryTable = !optTinyHistoryTable
 	if (optCompactHistoryTable) { // only one option is allowed
 		optCompactHistoryTable = false
-		if (chkbox_CH != null) chkbox_CH.checked = false
+		if (chkbox_CH !== null) chkbox_CH.checked = false
 	}
+	updateTables()
+}
+
+function conf_APC() { // Allow Phrase Comments
+	optAllowPhraseComments = !optAllowPhraseComments
 	updateTables()
 }
 
@@ -454,7 +467,7 @@ function toggleColorControlsMenu(redraw = false) { // display control menu to ad
 
 function updateInterfaceHue(firstrun = false) { // change interface color
 	// update hue from slider if element exists
-	if (document.getElementById("interfaceHueSlider") != null) interfaceHue = document.getElementById("interfaceHueSlider").value
+	if (document.getElementById("interfaceHueSlider") !== null) interfaceHue = document.getElementById("interfaceHueSlider").value
 	var root = document.documentElement
 	root.style.setProperty("--global-hue", interfaceHue.toString()) // update :root CSS variable
 	if (firstrun) interfaceHueDefault = interfaceHue // set default color for reset
@@ -480,9 +493,9 @@ function initColorArrays() { // store original cipher colors and current modifie
 }
 
 function resetColorControls() { // set all color controls to zero
-	if (document.getElementById("globalSliderHue") != null) document.getElementById("globalSliderHue").value = 0
-	if (document.getElementById("globalSliderSaturation") != null) document.getElementById("globalSliderSaturation").value = 0
-	if (document.getElementById("globalSliderLightness") != null) document.getElementById("globalSliderLightness").value = 0
+	if (document.getElementById("globalSliderHue") !== null) document.getElementById("globalSliderHue").value = 0
+	if (document.getElementById("globalSliderSaturation") !== null) document.getElementById("globalSliderSaturation").value = 0
+	if (document.getElementById("globalSliderLightness") !== null) document.getElementById("globalSliderLightness").value = 0
 	globColors = {H:0, S:0, L:0} // reset global color modifier
 
 	// reset values for individual colors
@@ -493,7 +506,7 @@ function resetColorControls() { // set all color controls to zero
 		tmp_H = document.getElementById("sliderHue"+i)
 		tmp_S = document.getElementById("sliderSaturation"+i)
 		tmp_L = document.getElementById("sliderLightness"+i)
-		if (tmp_H != null && tmp_S != null && tmp_L != null) { // if individual sliders are visible
+		if (tmp_H !== null && tmp_S !== null && tmp_L !== null) { // if individual sliders are visible
 			tmp_H.value = 0
 			tmp_S.value = 0
 			tmp_L.value = 0
@@ -506,7 +519,7 @@ function resetColorControls() { // set all color controls to zero
 	changeCipherColors(0, "Lightness")
 
 	interfaceHue = interfaceHueDefault // reset interface color
-	if (document.getElementById("interfaceHueSlider") != null) document.getElementById("interfaceHueSlider").value = interfaceHue
+	if (document.getElementById("interfaceHueSlider") !== null) document.getElementById("interfaceHueSlider").value = interfaceHue
 	updateInterfaceHue()
 
 	updateTables() // update
@@ -544,7 +557,7 @@ function changeCipherColors(elem_id, col_mode, cipher_index) {
 			cipherList[i].L = colFmt(origColors[i].L + chkboxColors[i].L + globColors.L,"L")
 		}
 		cur_ciphColBox = document.getElementById("cipherHSL"+i) // textbox with HSLA values for current color
-		if (cur_ciphColBox != null) cur_ciphColBox.value = colPad(cipherList[i].H)+colPad(cipherList[i].S)+colPad(cipherList[i].L,true)
+		if (cur_ciphColBox !== null) cur_ciphColBox.value = colPad(cipherList[i].H)+colPad(cipherList[i].S)+colPad(cipherList[i].L,true)
 	}
 	updateTables(false) // update without redrawing color controls
 	updateWordBreakdown() // update word/cipher breakdown table
@@ -579,10 +592,10 @@ function populateColorValues() { // update color controls for each individual ci
 		tmp_S = document.getElementById("sliderSaturation"+i)
 		tmp_L = document.getElementById("sliderLightness"+i)
 		tmp_HSL = document.getElementById("cipherHSL"+i)
-		if (tmp_H != null) tmp_H.value = chkboxColors[i].H
-		if (tmp_S != null) tmp_S.value = chkboxColors[i].S
-		if (tmp_L != null) tmp_L.value = chkboxColors[i].L
-		if (tmp_HSL != null) tmp_HSL.value = colPad(cipherList[i].H)+colPad(cipherList[i].S)+colPad(cipherList[i].L,true)
+		if (tmp_H !== null) tmp_H.value = chkboxColors[i].H
+		if (tmp_S !== null) tmp_S.value = chkboxColors[i].S
+		if (tmp_L !== null) tmp_L.value = chkboxColors[i].L
+		if (tmp_HSL !== null) tmp_HSL.value = colPad(cipherList[i].H)+colPad(cipherList[i].S)+colPad(cipherList[i].L,true)
 	}
 }
 
@@ -605,7 +618,7 @@ function enableDefaultCiphers() {
 		if (ciphArr.indexOf(cipherList[n].cipherName) > -1) {
 			cipherList[n].enabled = true // enable cipher
 			cur_chkbox = document.getElementById("cipher_chkbox"+n)
-			if (cur_chkbox != null) cur_chkbox.checked = true // update checkbox if present
+			if (cur_chkbox !== null) cur_chkbox.checked = true // update checkbox if present
 		}
 	}
 	updateTables() // update
@@ -616,7 +629,7 @@ function enableAllCiphers() {
 	for (i = 0; i < cipherList.length; i++) {
 		cur_chkbox = document.getElementById("cipher_chkbox"+i)
 		cipherList[i].enabled = true
-		if (cur_chkbox != null) cur_chkbox.checked = true
+		if (cur_chkbox !== null) cur_chkbox.checked = true
 	}
 	updateTables() // update
 }
@@ -626,7 +639,7 @@ function disableAllCiphers() {
 	for (i = 0; i < cipherList.length; i++) {
 		cur_chkbox = document.getElementById("cipher_chkbox"+i)
 		cipherList[i].enabled = false // if checkbox exists toggle state (next line)
-		if (cur_chkbox != null) cur_chkbox.checked = false
+		if (cur_chkbox !== null) cur_chkbox.checked = false
 	}
 	updateTables() // update
 }
@@ -643,10 +656,10 @@ function toggleCipherCategory(ciph_cat) {
 			cur_chkbox = document.getElementById("cipher_chkbox"+i)
 			if (on_first) { // if one cipher is disabled, first enable all
 				cipherList[i].enabled = true
-				if (cur_chkbox != null) cur_chkbox.checked = true
+				if (cur_chkbox !== null) cur_chkbox.checked = true
 			} else { // if all ciphers are enabled, disable all
 				cipherList[i].enabled = false
-				if (cur_chkbox != null) cur_chkbox.checked = false
+				if (cur_chkbox !== null) cur_chkbox.checked = false
 			}
 		}
 	}
@@ -657,7 +670,7 @@ function toggleCipher(c_id, chk = false) {
 	cipherList[c_id].enabled = !cipherList[c_id].enabled // toggle true/false
 	if (chk) { // toggle checkbox state
 		cur_chkbox = document.getElementById("cipher_chkbox"+c_id);
-		if (cur_chkbox != null) cur_chkbox.checked = !cur_chkbox.checked; // update checkbox if visible
+		if (cur_chkbox !== null) cur_chkbox.checked = !cur_chkbox.checked; // update checkbox if visible
 	}
 	updateTables() // update
 }
@@ -691,6 +704,11 @@ function sVal() {
 	return document.getElementById("phraseBox").value.trim() // get value, remove spaces from both sides
 }
 
+function sValNoComments() {
+	// get value, remove text inside [...], remove [ and ] (unfinished input), remove spaces from both sides
+	return document.getElementById("phraseBox").value.replace(/\[.+\]/g, '').replace(/\[/g, '').replace(/\]/g, '').trim()
+}
+
 function updateEnabledCipherTable() { // draws a table with phrase gematria for enabled ciphers (odd/even)
 	document.getElementById("enabledCiphTable").innerHTML = "" // clear previous table
 	
@@ -699,7 +717,7 @@ function updateEnabledCipherTable() { // draws a table with phrase gematria for 
 	phr = sVal() // grab current phrase
 	// if (enabledCiphCount == 0 || phr == "") return // no enabled ciphers, empty phraseBox
 	
-	if (document.getElementById("enabled_ciphers_columns") != null ) enabledCiphColumns = document.getElementById("enabled_ciphers_columns").value // number of columns in cipher table, update value
+	if (document.getElementById("enabled_ciphers_columns") !== null ) enabledCiphColumns = document.getElementById("enabled_ciphers_columns").value // number of columns in cipher table, update value
 	var result_columns = enabledCiphColumns
 	if (enabledCiphCount <= enabledCiphColumns) { result_columns = enabledCiphCount }
 	// else if (enabledCiphCount > 6 && enabledCiphCount <= 20) { result_columns = 2 }
@@ -880,6 +898,8 @@ function updateHistoryTable(hltBoolArr) {
 		hltMode = true
 	}
 
+	var dispPhrase = "" // phrase to display inside history table
+	var tmpComment = ""; var commentMatch;
 	for (x = 0; x < sHistory.length; x++) {
 
 		if (x % 25 == 0 && !optTinyHistoryTable) {
@@ -898,7 +918,18 @@ function updateHistoryTable(hltBoolArr) {
 
 		ciphCount = 0 // reset enabled cipher count (for hltBoolArr)
 
-		ms += '<tr><td class="hP">' + sHistory[x] + '</td>' // hP - history phrase
+		if (optAllowPhraseComments) {
+			tmpComment = "" // reset
+			commentMatch = sHistory[x].match(/\[.+\]/g) // find comment
+			if (commentMatch !== null) {
+				tmpComment = commentMatch[0]
+			}
+			// comment first, phrase without comment and leading/trailing spaces
+			dispPhrase = '<span class="pCommentHistTable">'+tmpComment+'</span>' + sHistory[x].replace(/\[.+\]/g, '').trim()
+		} else {
+			dispPhrase = sHistory[x]
+		}
+		ms += '<tr><td class="hP" data-ind="'+x+'">' + dispPhrase + '</td>' // hP - history phrase, add data index
 		var col = "" // value color
 
 		for (y = 0; y < cipherList.length; y++) {

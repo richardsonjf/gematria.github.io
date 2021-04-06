@@ -503,6 +503,12 @@ body {
 	font-weight: 500;
 	cursor: pointer;
 }
+.pCommentHistTable {
+	font-size: 75%;
+	font-weight: 500;
+	color: hsl(0 0% 30% / 1);
+	padding-right: 0.35em;
+}
 
 /* -------------- Highlighting -------------- */
 .highlightCipherTable{
@@ -649,6 +655,51 @@ body {
 .dropdown:hover .dropdown-content, .dropdown:hover .dropdown-content-opt {display: block;}
 
 .dropdown:hover .dropbtn {background-color: var(--btn-active-accent);}
+
+/*             Print Image Preview            */
+/* ########################################## */
+
+.printImageContainer {
+	background-color: var(--menu-bg-accent2);
+	color: var(--font-white-2);
+	background-color: black;
+	border: 1px solid var(--border-dark-accent);
+	font-family: "Montserrat", "Arial", sans-serif;
+	font-size: 100%;
+	position: absolute;
+	top: 15%;
+	left: 15%;
+	height: 77%;
+	width: 70%;
+	overflow: auto;
+	z-index: 1000;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+.downImgBtn {
+    font-size: 125%;
+    font-weight: 500;
+    color: var(--font-white-2);
+    background-color: var(--menu-bg-accent2);
+    text-decoration: none;
+    padding: 0.35em 1em;
+    border: none;
+    outline: none;
+    border-radius: 20px;
+    margin-top: 1.25em;
+}
+.previewImg {
+	max-height: 100%;
+	max-width: 100%;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+}
+.downImgBtn:hover { background-color: var(--btn-hover-accent); }
+.downImgBtn:active { background-color: var(--btn-active-accent); }
 
 /*              Number Properties             */
 /* ########################################## */
@@ -874,7 +925,7 @@ body {
 /*              Quick Start Guide             */
 /* ########################################## */
 
-#quickGuideOverlay {
+#darkOverlay {
 	background-color: rgba(0,0,0,0.5);
 	width: 100%;
 	height: 100%;
