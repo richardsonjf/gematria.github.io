@@ -46,6 +46,8 @@ function displayQuickstartGuide() {
 
 	o += '<li><span class="qgBold">"Tiny History"</span> - no cipher names, seamless history table</li>'
 
+	o += '<li><span class="qgBold">"Ignore Comments [...]"</span> - exclude any text inside square brackets from gematria calculation<br><span class="qgNote">Note: Comments are preserved on export/import</span></li>'
+
 	o += '<li><span class="qgBold">"Switch Ciphers (CSV)"</span> - enable previously selected ciphers on history file import</li>'
 
 	o += '<li><span class="qgBold">"Matrix Code Rain"</span> - use dynamic background</li></ul>'
@@ -53,7 +55,7 @@ function displayQuickstartGuide() {
 	o += '<hr class="numPropSeparator">'
 	o += '<p><span class="qgBold2">Features</p>'
 
-	o += '<p class="qgMedium">Date Calculator</p>\n<ul><li>Calculates interval between two dates according to Gregorian calendar, supports <span class="qgBold">Add/Subtract</span> mode<br><span class="qgNote">Note: Make sure to consult timeanddate.com or other websites for precise calculations for old dates or other calendars (e.g. Julian)</span></li></ul>'
+	o += '<p class="qgMedium">Date Calculator</p>\n<ul><li>Calculate interval between two dates according to Gregorian calendar, supports <span class="qgBold">Add/Subtract</span> mode<br><span class="qgNote">Note: Make sure to consult timeanddate.com or other websites for precise calculations for old dates or other calendars (e.g. Julian)</span></li></ul>'
 
 	o += '<p class="qgMedium">Color Controls</p>\n<ul><li>Change cipher colors (<span class="qgBold">HSL</span> - Hue, Saturation, Lightness)</li><li>Make sure to <span class="qgBold">"Export Ciphers"</span> before you make any modifications inside <span class="qgBold">"Edit Ciphers"</span> menu</li></ul>'
 
@@ -66,7 +68,7 @@ function displayQuickstartGuide() {
 	o += '<hr class="numPropSeparator">'
 	o += '<p><span class="qgBold2">Export</p>'
 
-	o += '<ul><li><span class="qgBold">"Print Cipher Chart", etc</span> - render correspondent element as an image (PNG), image preview is opened in a separate tab, make sure your browser allows this behavior</li>'
+	o += '<ul><li><span class="qgBold">"Print Cipher Chart", etc</span> - render correspondent element as an image (PNG), image preview is opened first</li>'
 
 	o += '<li><span class="qgBold">"Import File"</span> - import a text file (one phrase per line), previously exported history or ciphers<br><span class="qgNote">Note: You can also drag and drop file into Phrase Box</span></li>'
 
