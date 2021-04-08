@@ -511,7 +511,7 @@ body {
 }
 
 /* -------------- Highlighting -------------- */
-.highlightCipherTable{
+.highlightCipherTable {
 	background: rgba(192,192,192,0.15);
 }
 .hideValue {display: none;}
@@ -529,9 +529,12 @@ body {
 		opacity: 0.0;
 	}
 }
-.highlightValueBlink{
+.highlightValueBlink {
 	animation: blink 500ms linear infinite;
 	z-index: 99;
+}
+.selectedPhrase {
+	background-color: hsla(var(--global-hue) 15% 50% / 0.2)
 }
 
 /*                Options Menu                */

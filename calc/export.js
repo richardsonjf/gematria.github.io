@@ -247,7 +247,7 @@ function exportSameCipherMatches(histArr) {
 
 	var searchArr = [] // list of numbers that occur twice or more
 	var matchArr = [] // array with matches within one cipher
-	var o = '' // build string for output
+	var o = '======= Same Cipher Match =======\n\n\n' // build string for output
 
 	for (p = 0; p < pVal.length; p++) { // for each cipher
 		searchArr = [] // reset
@@ -264,7 +264,7 @@ function exportSameCipherMatches(histArr) {
 
 		for (i = 0; i < searchArr.length; i++) { // for each valid match
 			o += searchArr[i] + ' (' + cipherList[p].cipherName + ')' // 30 (English Ordinal)
-			o += '\n================================'
+			o += '\n================================='
 			for (n = 0; n < pVal[p].length; n++) { // for each value in current cipher
 				if (pVal[p][n] == searchArr[i]) { // if gematria equals current searched number
 					o += '\n"' + histArr[n] + '"' // add "phrase"
@@ -313,10 +313,10 @@ function exportCrossCipherMatches(histArr) { // maybe use highlighter mode to co
 	if (searchArr[0] == 0) searchArr.splice(0,1) // remove zero (value for disabled ciphers)
 
 	var nP = true // new phrase flag (used to add cipher names to existing matches)
-	var o = '' // build string for output
+	var o = '============ Cross Cipher Match ============\n\n\n' // build string for output
 	for (i = 0; i < searchArr.length; i++) { // for each valid match
 		o += searchArr[i] // number
-		o += '\n==============================================='
+		o += '\n============================================'
 		for (n = 0; n < pVal.length; n++) { // for each phrase
 			nP = true // new phrase
 			for (m = 0; m < pVal[n].length; m++) { // for each gematria value

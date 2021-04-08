@@ -117,9 +117,45 @@ $(document).ready(function(){
 	// Right click on cipher name in enabled cipher table
 	$("body").on("contextmenu", ".phraseGemCiphName", function (e) { // tC - history table cell
 		var val = $(this).find(".cipherHoverLabel").html(); // get cipher name from element
-		for (i = 0; i < cipherList.length; i++) {
-			if (cipherList[i].cipherName == val) {
-				toggleCipher(i, true) // update checkbox
+		if (ctrlIsPressed) {
+			if (prevCiphIndex == -1) { // no previous selection
+				$(this).addClass("selectedPhrase") // highlight
+				for (i = 0; i < cipherList.length; i++) {
+					if (cipherList[i].cipherName == val) prevCiphIndex = i // select cipher
+				}
+			} else { // previous selection exists
+				var curCiphIndex
+				for (i = 0; i < cipherList.length; i++) {
+					if (cipherList[i].cipherName == val) curCiphIndex = i // get current index
+				}
+				var curCiph = cipherList[curCiphIndex]
+				var prevCiph = cipherList[prevCiphIndex]
+
+				if (curCiphIndex == prevCiphIndex) {
+					$(this).removeClass("selectedPhrase") // clear selection
+					prevCiphIndex = -1 // reset
+				} else { // different indices
+					cipherList.splice(prevCiphIndex, 1) // remove previous cipher, shifts array
+					origColors.splice(prevCiphIndex, 1) // update cipher colors
+					cipherList.splice(curCiphIndex, 0, prevCiph) // insert previous at the index of current
+					origColors.splice(curCiphIndex, 0, prevCiph)
+
+					document.getElementById("calcOptionsPanel").innerHTML = "" // clear menu panel
+					initCiphers(false) // don't update default ciphers, recalculate order of categories
+					createCiphersMenu() // recreate menus
+					createOptionsMenu()
+					createFeaturesMenu()
+					createExportMenu()
+					createAboutMenu()
+
+					updateTables() // index is reset by update
+				}
+			}
+		} else { // right click
+			for (i = 0; i < cipherList.length; i++) {
+				if (cipherList[i].cipherName == val) {
+					toggleCipher(i, true) // update checkbox
+				}
 			}
 		}
 		return false; // don't show menu
@@ -162,8 +198,34 @@ $(document).ready(function(){
 			document.getElementById("phraseBox").focus(); // focus input
 		}
 	});
+
+	// Ctrl + Right click on phrase in history table
+	$("body").on("contextmenu", ".hP", function (e) { // tC - history table cell
+		if (ctrlIsPressed) {
+			var curPhrID = $(this).data("ind") // get phrase index
+			if (prevPhrID == -1) { // no previous selection
+				$(this).addClass("selectedPhrase")
+				prevPhrID = curPhrID // save selection
+			} else { // previous selection exists
+				var curPhr = sHistory[curPhrID]
+				var prevPhr = sHistory[prevPhrID]
+				if (curPhrID == prevPhrID) { // clear selection
+					$(this).removeClass("selectedPhrase")
+				} else { // different ids
+					sHistory.splice(prevPhrID, 1) // remove previous phrase, shifts array
+					sHistory.splice(curPhrID, 0, prevPhr) // insert previous at the index of current
+					updateHistoryTable()
+				}
+				prevPhrID = -1 // reset
+			}
+			return false; // don't show menu
+		}
+	});
 	
 });
+
+var prevPhrID = -1 // index of previously selected phrase in history table
+var prevCiphIndex = -1 // index of previously selected cipher in enabled ciphers table
 
 function removeZeroHlt(arr) {
 	for (p = 0; p < arr.length; p++) {

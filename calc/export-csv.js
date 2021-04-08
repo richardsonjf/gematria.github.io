@@ -59,10 +59,10 @@ function importFileAction(file) {
 		
 		// detect cipher.js, load user ciphers
 		if (uCiph[0] == "// ciphers.js") {
-			var intHue = file.match(/(?<=interfaceHue = )\d+/, "") // consecutive digits
+			var intHue = file.match(/(?<=interfaceHue = )\d+/) // consecutive digits
 			if (intHue !== null) interfaceHue = Number(intHue[0]) // update hue if match is found, use first match
 
-			var ciph = file.match(/(?<=cipherList = \[)[\s\S]+/m, "") // match after "cipherList = [" till end of file, multiple line regex - [\s\S]+
+			var ciph = file.match(/(?<=cipherList = \[)[\s\S]+/m) // match after "cipherList = [" till end of file, multiple line regex - [\s\S]+
 			file = ciph[0].replace(/(\t|  +|\r|\n)/g, "").slice(10,-1) // remove tabs, consequtive spaces, line breaks - "new cipher" at start, last bracket
 			ciph = file.split(",new cipher") // split string into array
 
@@ -77,7 +77,21 @@ function importFileAction(file) {
 			return
 		}
 
-		if (optLoadUserHistCiphers) { // enable ciphers from user CSV file
+		// detect previously exported matches
+		if ( uCiph[0] == '======= Same Cipher Match =======' || uCiph[0] == '============ Cross Cipher Match ============' ) {
+			var phrMatch
+			for (i = userHist.length-1; i > -1; i--) { // add lines in reverse order, so you don't have to read backwards
+				phrMatch = userHist[i].match(/^\".+\"/) // grab phrase between a quote in the beginning and the last quote found in line (with quotes)
+				if (phrMatch !== null) {
+					addPhraseToHistory(phrMatch[0].slice(1,-1), false) // remove quotes, load extracted phrase (first item), false flag doesn't update history
+				}
+			}
+			updateTables() // update tables after all lines are added
+			return
+		}
+
+		// continue import of file as CSV history or plain text file
+		if (optLoadUserHistCiphers && uCiph[0] == "Word or Phrase") { // switch to ciphers from imported CSV file
 			disableAllCiphers()
 			for (z = 0; z < cipherList.length; z++) { // enable cipher if it is available
 				if (uCiph.indexOf(cipherList[z].cipherName) > -1) {
@@ -86,16 +100,18 @@ function importFileAction(file) {
 			}
 		}
 
-		var uPhr = []
+		var uPhr = ''; var plainTxt = true
 		var a = -1 // i > -1 to add all phrases, i > 0 to ignore first line (table header)
-		if (uCiph[0] == "Word or Phrase") a = 0 // ignore table header if present
+		if (uCiph[0] == "Word or Phrase") {
+			a = 0  // ignore table header if present
+			plainTxt = false // use substring to extract phrase from CSV later
+		}
 
 
 		for (i = userHist.length-1; i > a; i--) { // add lines in reverse order, so you don't have to read backwards
-			uPhr = userHist[i].split(";") // user phrase, load as array
-			addPhraseToHistory(uPhr[0], false) // load only phrase (first item), false flag doesn't update history
-			//addPhraseToHistory(userHist[i], false) // false flag doesn't update history after a new phrase is added
-			//console.log(i+": "+userHist[i])
+			uPhr = userHist[i] // load line, phrase with gematria
+			if (!plainTxt) uPhr = uPhr.substring(0, uPhr.indexOf(';')) // CSV, get text before the first semicolon (faster)
+			addPhraseToHistory(uPhr, false) // load phrase (first item), false flag doesn't update history
 		}
 		
 		updateTables() // update tables after all lines are added

@@ -603,6 +603,7 @@ function populateColorValues() { // update color controls for each individual ci
 
 function initCiphers(updDefCiph = true) { // list categories, define default (base) ciphers
 	var c = ""
+	cCat = [] // clear categories
 	for (i = 0; i < cipherList.length; i++) {
 		c = cipherList[i].cipherCategory
 		if (cCat.indexOf(c) == -1) cCat.push(c) // list categories
@@ -625,6 +626,7 @@ function enableDefaultCiphers() {
 }
 
 function enableAllCiphers() {
+	prevCiphIndex = -1 // reset cipher selection
 	var cur_chkbox
 	for (i = 0; i < cipherList.length; i++) {
 		cur_chkbox = document.getElementById("cipher_chkbox"+i)
@@ -635,6 +637,7 @@ function enableAllCiphers() {
 }
 
 function disableAllCiphers() {
+	prevCiphIndex = -1 // reset cipher selection
 	var cur_chkbox
 	for (i = 0; i < cipherList.length; i++) {
 		cur_chkbox = document.getElementById("cipher_chkbox"+i)
@@ -645,6 +648,7 @@ function disableAllCiphers() {
 }
 
 function toggleCipherCategory(ciph_cat) {
+	prevCiphIndex = -1 // reset cipher selection
 	var on_first = false
 	for (i = 0; i < cipherList.length; i++) {
 		if (cipherList[i].cipherCategory == ciph_cat && !cipherList[i].enabled) on_first = true // if one cipher is disabled
@@ -667,6 +671,7 @@ function toggleCipherCategory(ciph_cat) {
 }
 
 function toggleCipher(c_id, chk = false) {
+	prevCiphIndex = -1 // reset cipher selection
 	cipherList[c_id].enabled = !cipherList[c_id].enabled // toggle true/false
 	if (chk) { // toggle checkbox state
 		cur_chkbox = document.getElementById("cipher_chkbox"+c_id);
@@ -676,6 +681,7 @@ function toggleCipher(c_id, chk = false) {
 }
 
 function updateTables(updColorLayout = true) {
+	prevCiphIndex = -1 // reset cipher selection
 	for (i = 0; i < cipherList.length; i++) {
 		// if previous breakdown cipher is not enabled or if cipher no longer exists
 		if ( cipherList[i].cipherName == breakCipher && !cipherList[i].enabled || typeof cipherList.find(o => o.cipherName == breakCipher) == 'undefined' ) {
@@ -712,6 +718,7 @@ function sValNoComments() {
 function updateEnabledCipherTable() { // draws a table with phrase gematria for enabled ciphers (odd/even)
 	document.getElementById("enabledCiphTable").innerHTML = "" // clear previous table
 	
+	prevCiphIndex = -1 // reset cipher selection
 	updateEnabledCipherCount() // get number of enabled ciphers
 	
 	phr = sVal() // grab current phrase
@@ -835,10 +842,10 @@ function phraseBoxKeypress(e) { // run on each keystroke inside text box - onkey
 			phr = phr.replace(/\t/g, " ") // replace tab with spaces
 			phr = phr.replace(/ +/g, " ") // remove double spaces
 			// phr = phr.replace(/(\.|,|:|;|\\|)/g, "") // remove special characters, last one is "|"
-			
+
 			wordArr = phr.split(" ") // split string to array, space delimiter
 			phrLimit = optPhraseLimit // max phrase length
-			var phrase
+			var phrase = ""; var k = 1;
 			// for (i = 0; i < wordArr.length; i++) { // phrases in normal order
 				// k = 1 // init variable
 				// phrase = wordArr[i]
@@ -850,7 +857,7 @@ function phraseBoxKeypress(e) { // run on each keystroke inside text box - onkey
 				// }
 			// }
 			for (i = wordArr.length-1; i > -1; i--) { // add phrases in reverse order, so you don't have to read backwards
-				k = 1 // init variable
+				k = 1 // word count
 				phrase = wordArr[i]
 				addPhraseToHistory(phrase, false) // don't recalculate table yet
 				while (k < phrLimit && i-k > -1) { // add words to a phrase, check it is within wordArr size
@@ -880,12 +887,13 @@ function addPhraseToHistory(phr, upd) { // add new phrase to search history
 }
 
 function updateHistoryTable(hltBoolArr) {
-	var ms, i, x, y, z, curCiph, gemVal, maxMatch
+	var ms, i, x, y, z, curCiph, gemVal
 	var ciphCount = 0 // count enabled ciphers (for hltBoolArr)
 	histTable = document.getElementById("HistoryTableArea")
 	
 	if (sHistory.length == 0) {return}
 
+	prevPhrID = -1 // reset phrase selection
 	ms = '<table class="HistoryTable"><tbody>'
 
 	highlt = document.getElementById("highlightBox").value.replace(/ +/g," ") // get value of Highlight textbox, remove double spaces
