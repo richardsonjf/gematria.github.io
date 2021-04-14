@@ -78,6 +78,37 @@ function displayQuickstartGuide() {
 
 	o += '<li><span class="qgBold">"Export Ciphers"</span> - ciphers active at the time of export will become the new default ones on next import, file can have any name or extension<br><span class="qgNote">Note: You can edit file manually with a text editor, make sure to keep formatting<br>If you want to permanently change ciphers, you can download an offline version of calculator from GitHub repository and replace "ciphers.js" file inside "calc" directory<br>Online and offline versions are identical</span></li></ul>'
 
+	o += '<hr class="numPropSeparator">'
+	o += '<p><span class="qgBold2">Databases</p>'
+
+	o += '<ul><li><span class="qgBold">GEMATRO</span> can generate databases from plain TXT files<br><span class="qgNote">Note: File should contain one phrase per line, the first line must be<br>CREATE_GEMATRO_DB</span></li>'
+
+	o += '<li><span class="qgBold">"Ignore Comments [...]"</span> flag affects database generation<br><span class="qgNote">Note: When database is loaded, calculator should use the same mode of "Ignore Comments [...]" as at the moment of database generation, otherwise values inside database and calculator will differ</span></li>'
+
+	o += '<li><span class="qgBold">All available</span> ciphers should be enabled prior to database generation</li>'
+
+	o += '<li>After you import text file for database generation, calculation will start immediately and a dialogue that offers to save the database will appear. Process may take some time, please be patient</li>'
+
+	o += '<li>When a database is imported, new elements become available:<ul><li><span class="qgBold">"Query"</span> - match current phrase or number against database</li><li><span class="qgBold">"Clear DB Query" (Features)</span> - close current <span class="qgBold">Query Table</span> and switch back to centered interface</li><li><span class="qgBold">"Export DB Query (CSV)" (Export)</span> - save matching phrases from database as a CSV file</ul></li>'
+
+	o += '<li><span class="qgBold">"Cipher Edit"</span> (and rearrangement) is not available when database is loaded. If any of the ciphers were rearranged/renamed/deleted or new ones were added, database will not be loaded. Use the exact same set of ciphers as at the moment of database generation</li>'
+
+	o += '<li>Current highlighter mode (<span class="qgBold">"Cross Cipher Match"</span> or <span class="qgBold">"Same Cipher Match"</span>) controls database query<br><span class="qgNote">Note: "Show Only Matching" option hides nonmatching values as well</span></li>'
+
+	o += '<li>Query is based on current cipher selection. There is no limit for the amount of ciphers</li>'
+
+	o += '<li>Input any phrase into the <span class="qgBold">"Phrase Box"</span> and press <span class="qgBold">"Query"</span> button to match against currently loaded database. Numerical input is supported, several numbers are recognized as well:<br><span class="qgBold">74 0 142</span><br><span class="qgNote">Note: In the example above, the first enabled cipher will be matched against 74 and the third cipher will be matched against 142</span></ul>'
+
+	o += '<p class="qgMedium">Query Table</p>\n'
+
+	o += '<ul><li>Use <span class="qgBold">"Up"</span> and <span class="qgBold">"Down"</span> arrow keys to scroll one page at a time or use the mouse wheel. A horizontal scroll bar above the table can be used for navigation as well or you can input an exact position inside the box<br><span class="qgNote">Note: Up/Down arrow keys work only when input is focused inside textbox with current position</span></li>'
+
+	o += '<li>Drag the bottom-right corner of the <span class="qgBold">Query Table</span> to resize it<br><span class="qgNote">Hint: Extend the table in case if phrases do not fit on one line</span></li>'
+
+	o += '<li><span class="qgBold">"Ctrl + Left Click"</span> on phrase - load phrase from <span class="qgBold">Query Table</span> into <span class="qgBold">Phrase Box</span> and add it to <span class="qgBold">History Table</span></li>'
+
+	o += '<li><span class="qgBold">"Right Click"</span> on horizontal scroll bar to temporarily minimize the table if it obstructs the interface. Right click again to bring the table back<br><span class="qgNote">Hint: You can zoom out the page if too many ciphers are active</span></ul>'
+
 	o += '</div>'
 
 	$(o).appendTo('body'); // guide

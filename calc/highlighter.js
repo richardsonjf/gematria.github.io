@@ -117,7 +117,7 @@ $(document).ready(function(){
 	// Right click on cipher name in enabled cipher table
 	$("body").on("contextmenu", ".phraseGemCiphName", function (e) { // tC - history table cell
 		var val = $(this).find(".cipherHoverLabel").html(); // get cipher name from element
-		if (ctrlIsPressed) {
+		if (ctrlIsPressed && !dbLoaded) { // if no database was loaded
 			if (prevCiphIndex == -1) { // no previous selection
 				$(this).addClass("selectedPhrase") // highlight
 				for (i = 0; i < cipherList.length; i++) {
@@ -219,6 +219,19 @@ $(document).ready(function(){
 				prevPhrID = -1 // reset
 			}
 			return false; // don't show menu
+		}
+	});
+
+	// Ctrl + Click on phrase in query table
+	$("body").on("click", ".hPQ", function (e) {
+		if (ctrlIsPressed) { // Ctrl + Left Click - select phrase and load into phrase box
+			var ii = $(this).data("ind") // get phrase index
+			var phr = queryResult[ii][1] // phrase[1]
+			document.getElementById("phraseBox").value = phr; // insert into search box
+			updateWordBreakdown() // update breakdown for current phrase
+			updateEnabledCipherTable() // update enabled cipher values
+			document.getElementById("phraseBox").focus(); // focus input
+			addPhraseToHistory(phr, true) // enter as single phrase
 		}
 	});
 	

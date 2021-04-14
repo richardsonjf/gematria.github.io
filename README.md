@@ -7,8 +7,9 @@
 <ul>
 <li>Dynamic highlighter with filtering</li>
 <li>Support for characters with diacritical marks</li>
-<li>Date calculator (works offline)</li>
-<li>Number properties (works offline)</li>
+<li>Date calculator (offline)</li>
+<li>Number properties (offline)</li>
+<li>Database support (offline)</li>
 <li>History export/import (CSV format)</li>
 <li>Fully customizable ciphers (Unicode)</li>
 <li>Color controls</li>

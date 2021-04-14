@@ -36,6 +36,7 @@
 	--btn-hover-accent: hsl(var(--global-hue) 13% 33%);
 	--btn-active-accent: hsl(var(--global-hue) 13% 39%);
 	--body-bg-accent: hsl(var(--global-hue) 22% 16%);
+	--query-bg-accent: hsl(var(--global-hue) 20% 19%);
 	--placeholder-color: hsl(var(--global-hue) 20% 35%);
 	--hist-header-gradient: hsl(var(--global-hue) 13% 10%);
 	--table-row-odd: hsl(var(--global-hue) 14% 14%);
@@ -124,6 +125,30 @@ body {
 	background: var(--body-bg-accent);
 }
 
+.splitInterface {
+	width: 70%;
+	position: absolute;
+	top: 0;
+	right: 0;
+	overflow: auto;
+	height: 100%;
+}
+#queryArea {
+	width: 30%;
+	position: absolute;
+	/* border-right: 1px solid var(--border-accent); */
+	top: 4%;
+	left: 100px;
+	overflow: auto;
+	max-height: 92%;
+	border: 1px solid var(--border-accent);
+	/* background-color: var(--query-bg-accent); */
+	resize: horizontal;
+}
+.queryTextResult {
+	padding: 1em;
+	line-height: 2em;
+}
 .colorControlsBG {
 	/* width: 70%; */
 	/*font-size: 85%;*/
@@ -464,6 +489,14 @@ body {
 .HistoryTable tr:nth-child(even) {
 	background-color: var(--table-row-even);
 }
+#QueryTable {
+	table-layout: fixed;
+	width: 100%;
+	word-break: break-all;
+	margin: auto;
+	float: right;
+	border-top: none;
+}
 .hC { /* history table header, cipher name cell */
 	min-width: 80px;
 	max-width: 80px;
@@ -473,12 +506,15 @@ body {
 	font-weight: 500;
 	word-break: break-word; /* affects table performance */
 }
-.hCV { /* vertical history table header, cipher name cell */
+.hCV, .hCVQ { /* vertical history table header, cipher name cell */
 	font-size: 86%;
 	height: 180px;
 	text-align: center;
 	vertical-align: bottom;
 	font-weight: 500;
+}
+.hCVQ { /* vertical query table header, cipher name cell */
+	width: 55px;
 }
 .hCV2 {
 	transform: rotate(-90deg);
@@ -494,16 +530,24 @@ body {
 	padding: 0em 0.5em 0em 0.5em;
 	font-size: 110%;
 }
-.mP { /* history table - top left cell */
+.hPQ { /* history phrase - query table*/
+	text-align: right;
+	padding: 0em 0.5em 0em 0.5em;
+	font-size: 110%;
+}
+.mP, .mPQ { /* history table - top left cell */
 	font-weight: 500;
 	font-size: 125%;
+}
+.mPQ { /* query table - top left cell */
+	/*width: 300px;*/
 }
 .gV { /* gematria value in history table */
 	font-size: 125%;
 	font-weight: 500;
 	cursor: pointer;
 }
-.pCommentHistTable {
+.pCHT { /* phrase comment - history table */
 	font-size: 75%;
 	font-weight: 500;
 	color: hsl(0 0% 30% / 1);
@@ -514,7 +558,7 @@ body {
 .highlightCipherTable {
 	background: rgba(192,192,192,0.15);
 }
-.hideValue {display: none;}
+.hideValue {display: none !important;}
 @keyframes blink {
 	0% {
 		opacity: 0.0;
@@ -569,7 +613,7 @@ body {
 	background-color: var(--btn-bg-accent);
 	background-color: transparent;
 }
-.intBtn3, .intBtnResetDate { /* Empty, Default, All */
+.intBtn3, .intBtnResetDate, #queryDBbtn { /* Empty, Default, All */
 	display: inline-block;
 	color: var(--font-white-1);
 	color: var(--font-white-2);
@@ -590,10 +634,15 @@ body {
 	margin: 0em;
 	padding: 0em 0.4em 0em 0.4em;
 }
-.intBtn:hover, .intBtn2:hover, .intBtn3:hover, .intBtnResetDate:hover {
+#queryDBbtn {
+	padding: 0em;
+	margin: 0em 0.3em;
+	width: 75px;
+}
+.intBtn:hover, .intBtn2:hover, .intBtn3:hover, .intBtnResetDate:hover, #queryDBbtn:hover {
 	background-color: var(--btn-hover-accent);
 }
-.intBtn:active, .intBtn2:active, .intBtn3:active, .intBtnResetDate:active {
+.intBtn:active, .intBtn2:active, .intBtn3:active, .intBtnResetDate:active, #queryDBbtn:active {
 	background-color: var(--btn-active-accent);
 }
 
@@ -880,7 +929,7 @@ body {
 	font-size: 160%;
 	color: var(--font-white-1);
 }
-.dateInput, .dateInputYear, .offsetDateInput {
+.dateInput, .dateInputYear, .offsetDateInput, #queryPosInput {
 	text-align: center;
 	width: 55px;
 	font-size: 150%;
@@ -900,6 +949,20 @@ body {
 }
 .dateInputYear {
 	width: 100px;
+}
+#queryPosInput {
+	width: 95px;
+	font-size: 100%;
+	/* background: transparent; */
+	/* border: none; */
+	outline: none; 
+	color: var(--font-white-2);
+	caret-color: transparent !important;
+	background-color: var(--body-bg-accent);
+	border: 1px solid var(--border-dark-accent);
+}
+#queryPosInput:focus {
+	border: 1px solid var(--focus-outline);
 }
 .dateDetailsText {
 	font-weight: 500;
@@ -923,6 +986,58 @@ body {
 	font-weight: 600;
 	font-size: 120%;
 	color: var(--font-white-2);
+}
+
+/*                Query Table                 */
+/* ########################################## */
+
+.qSlider {
+	-webkit-appearance: none;
+	width: 100%;
+	height: 24px;
+	background: var(--hist-header-gradient);
+	outline: none;
+	/* opacity: 0.7; */
+	/* -webkit-transition: 0.2s; */
+	/* transition: opacity 0.2s; */
+	/* transform: rotate(90deg); */
+	/* transform-origin: left; */
+	/* position: absolute; */
+	margin: 0;
+	border-bottom: 1px solid var(--border-accent);
+	display: block;
+}
+.qSlider:hover {
+	opacity: 1;
+}
+.qSlider::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 12px;
+	height: 24px;
+	background: var(--border-dark-accent);
+	cursor: pointer;
+}
+.qSlider::-moz-range-thumb {
+	width: 12px;
+	height: 24px;
+	background: var(--border-accent);
+	cursor: pointer;
+}
+.minimizeQuery {
+	resize: none !important;
+	transition: 0.2s;
+	transform: translate(calc(-87% - 100px), 0);
+}
+.minimizeLabel {
+	position: absolute;
+	margin: 0.3em 1em 0.15em 0.15em;
+	right: 0;
+	user-select: none;
+	pointer-events: none;
+	font-size: 75%;
+	font-weight: 600;
+	color: var(--border-accent);
 }
 
 /*              Quick Start Guide             */

@@ -371,15 +371,17 @@ function createFeaturesMenu() {
 	o += '<div style="margin: 0.5em;"></div>'
 	o += '<input class="intBtn" type="button" value="Color Controls" onclick="toggleColorControlsMenu()">'
 	o += '<div style="margin: 0.5em;"></div>'
-	o += '<input class="intBtn" type="button" value="Edit Ciphers" onclick="toggleEditCiphersMenu()">'
+	o += '<input id="edCiphBtn" class="intBtn" type="button" value="Edit Ciphers" onclick="toggleEditCiphersMenu()">'
 
 	o += '<hr style="background-color: rgb(77,77,77); height: 1px; border: none; margin: 0.75em;">'
 
 	o += '<input class="intBtn" type="button" value="Find Matches" onclick="updateHistoryTableAutoHlt()">'
 	o += '<div style="margin: 0.5em;"></div>'
-	o += '<input class="intBtn" type="button" value="Enter As Words" onclick="phraseBoxKeypress(35) ">' // "End" keystroke
+	o += '<input class="intBtn" type="button" value="Enter As Words" onclick="phraseBoxKeypress(35)">' // "End" keystroke
 	o += '<div style="margin: 0.5em;"></div>'
-	o += '<input class="intBtn" type="button" value="Clear History" onclick="phraseBoxKeypress(36) ">' // "Home" keystroke
+	o += '<input id="clearDBqueryBtn" class="intBtn hideValue" type="button" value="Clear DB Query" onclick="clearDatabaseQueryTable()">' // clear database query
+	o += '<div style="margin: 0.5em;"></div>'
+	o += '<input class="intBtn" type="button" value="Clear History" onclick="phraseBoxKeypress(36)">' // "Home" keystroke
 
 	o += '</div></div>'
 	document.getElementById("calcOptionsPanel").innerHTML = o
@@ -933,7 +935,7 @@ function updateHistoryTable(hltBoolArr) {
 				tmpComment = commentMatch[0]
 			}
 			// comment first, phrase without comment and leading/trailing spaces
-			dispPhrase = '<span class="pCommentHistTable">'+tmpComment+'</span>' + sHistory[x].replace(/\[.+\]/g, '').trim()
+			dispPhrase = '<span class="pCHT">'+tmpComment+'</span>' + sHistory[x].replace(/\[.+\]/g, '').trim()
 		} else {
 			dispPhrase = sHistory[x]
 		}

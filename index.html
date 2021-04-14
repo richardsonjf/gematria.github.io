@@ -22,6 +22,7 @@
 <script src="calc/num-prop.js"></script>
 <script src="calc/edit-ciphers.js"></script>
 <script src="calc/date-calc.js"></script>
+<script src="calc/database.js"></script>
 <script src="calc/quick-guide.js"></script>
 
 <link rel="stylesheet" type="text/css" href="calc/styles.css">
@@ -42,31 +43,34 @@ $(window).load(function(){
 <!-- preload font -->
 <span style="font-family: 'Roboto Mono';"></span>
 
-<center>
+<div id="calcMain">
+	<center>
 
-	<div id="calcOptionsPanel"></div>
+		<div id="calcOptionsPanel"></div>
 
-	<div id="colorControlsMenuArea"></div>
-	<div id="editCiphersMenuArea"></div>
-	<div id="dateCalcMenuArea"></div>
+		<div id="colorControlsMenuArea"></div>
+		<div id="editCiphersMenuArea"></div>
+		<div id="dateCalcMenuArea"></div>
 
-	<div id="inputArea">
-	  <input id="phraseBox" autofocus type="text" autocomplete="off" oninput="updateEnabledCipherTable(); updateWordBreakdown(breakCipher,false,false);" onkeydown="phraseBoxKeypress(event.keyCode)" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)">
-	  <input id="highlightBox" type="text" autocomplete="off"><span id="clearFilterButton"></span>
-	</div>
+		<div id="inputArea">
+		  <input id="queryDBbtn" class="hideValue" type="button" onclick="queryDatabase()" value="Query">
+		  <input id="phraseBox" autofocus type="text" autocomplete="off" oninput="updateEnabledCipherTable(); updateWordBreakdown(breakCipher,false,false);" onkeydown="phraseBoxKeypress(event.keyCode)" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)">
+		  <input id="highlightBox" type="text" autocomplete="off"><span id="clearFilterButton"></span>
+		</div>
 
-	<div id="enabledCiphTable"></div>
+		<div id="enabledCiphTable"></div>
 
-	<div id="BreakdownDetails">
-		<div id="BreakdownSpot"></div>
-		<div id="ChartSpot"></div>
-	</div>
-</center>
+		<div id="BreakdownDetails">
+			<div id="BreakdownSpot"></div>
+			<div id="ChartSpot"></div>
+		</div>
+	</center>
 
 
-<center>	
-	<div id="HistoryTableArea"></div>
-</center>
+	<center>	
+		<div id="HistoryTableArea"></div>
+	</center>
+</div>
 
 </body>
 

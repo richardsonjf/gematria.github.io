@@ -47,8 +47,6 @@ function importFileAction(file) {
 	reader.onload = (event) => { // actions to perform after file is read
 		file = event.target.result // full file contents
 		userHist = file.split(/\r\n|\n/) // to string array, line break as separator
-
-		if (typeof databaseMode !== 'undefined' && databaseMode) { exportHistoryCSV(userHist); return } // line by line, only phrases
 		
 		//userHist.forEach((line) => { // print line by line
 		//	console.log(line)
@@ -56,9 +54,20 @@ function importFileAction(file) {
 		
 		var uCiph = [] // user saved ciphers
 		uCiph = userHist[0].split(";") // table header to array (user ciphers from CSV), semicolon separator
+
+		// detect database export mode
+		if (uCiph[0] == "CREATE_GEMATRO_DB") {
+			userHist.splice(0,1) // remove the first line
+			exportHistoryCSV(userHist, true) // export database
+			return
+		}
 		
 		// detect cipher.js, load user ciphers
 		if (uCiph[0] == "// ciphers.js") {
+			if (dbLoaded) { // return if database is loaded
+				alert("Cipher import is disabled!\nReload the page to unload the database.")
+				return
+			}
 			var intHue = file.match(/(?<=interfaceHue = )\d+/) // consecutive digits
 			if (intHue !== null) interfaceHue = Number(intHue[0]) // update hue if match is found, use first match
 
@@ -87,6 +96,42 @@ function importFileAction(file) {
 				}
 			}
 			updateTables() // update tables after all lines are added
+			return
+		}
+
+		// detect database import
+		if ( uCiph[0] == 'GEMATRO_DB' ) {
+			// check validity of DB, rearranged/renamed/missing/extra ciphers invalidate the database
+			var validDB = false
+			if (uCiph.length == cipherList.length+1) { // matching amount of ciphers (+1 table header)
+				validDB = true
+				for (i = 1; i < uCiph.length; i++) { // compare cipher names
+					if (cipherList[i-1].cipherName == uCiph[i]) { // names match, DB is valid
+					} else {
+						validDB = false // mismatch
+						break // exit loop
+					}
+				}
+			}
+			if (validDB) {
+				userDB = [] // clear previous DB
+				var tmp = []
+				for (i = 1; i < userHist.length; i++) { // ignore first line (cipher names)
+					tmp = userHist[i].split(";") // current line to array, phrase at index 0
+					// for (n = 1; n < tmp.length; n++) { tmp[n] = Number(tmp[n]) } // parse as numbers
+					// it takes some 5 seconds instead of 1s, maybe better to convert number to string when search is performed
+					userDB.push(tmp) // add phrase (no check for duplicates)
+				}
+				$("#queryDBbtn").removeClass("hideValue") // display query button
+				$("#clearDBqueryBtn").removeClass("hideValue") // clear button
+				$("#btn-export-db-query").removeClass("hideValue") // export button
+				$("#edCiphBtn").addClass("hideValue") // hide "Edit Ciphers"
+				closeAllOpenedMenus() // close "Edit Ciphers"
+				console.log("Database loaded! ("+userDB.length+" entries)")
+				dbLoaded = true // database loaded, disable cipher rearrangement
+			} else {
+				alert('Ciphers in database are different from ciphers used in calculator!\nFile was not loaded.')
+			}
 			return
 		}
 
@@ -129,7 +174,7 @@ function dragOverHandler(ev) {
 	ev.preventDefault() // Prevent default drag behavior (Prevent file from being opened)
 }
 
-function exportHistoryCSV(arr) {
+function exportHistoryCSV(arr, dbMode = false) {
 	if (arr.length == 0) return
 	
 	var t = ""
@@ -138,6 +183,7 @@ function exportHistoryCSV(arr) {
 	// table header (csv format, semicolon as separator)
 	if (enabledCiphCount > 0) {
 		t = "Word or Phrase"
+		if (dbMode) t = "GEMATRO_DB"
 		for (i = 0; i < cipherList.length; i++) {
 			if (cipherList[i].enabled) {
 				t += ";"+cipherList[i].cipherName // list of enabled ciphers
@@ -158,7 +204,36 @@ function exportHistoryCSV(arr) {
 	}
 	
 	t = 'data:text/plain;charset=utf-8,'+encodeURIComponent(t) // format as text file
-	download(getTimestamp()+"_gematria.txt", t); // download file
+	if (dbMode) {
+		download(getTimestamp()+"_GEMATRO_DB.txt", t); // download database
+	} else {
+		download(getTimestamp()+"_gematria.txt", t); // download file
+	}
+}
+
+function exportCurrentDBquery(arr) {
+	if (arr.length == 0) return
+	
+	var t = ""
+
+	// table header (csv format, semicolon as separator)
+	t = "Word or Phrase"
+	for (i = 0; i < gemArrCiph.length; i++) {
+		t += ";"+cipherList[gemArrCiph[i]].cipherName // list of ciphers used in query
+	}
+	t += "\n" // line break
+	
+	// table contents
+	for (i = 0; i < arr.length; i++) {
+		t += arr[i][1].replace(";", "") // add phrase[1], remove semicolons (it is a separator)
+		for (n = 2; n < arr[i].length; n++) { // values start at [2]
+			t += ";"+arr[i][n] // retrieve gematria value for each cipher
+		}
+		if (i+1 < arr.length) t += "\n" // line break, exclude last line
+	}
+	
+	t = 'data:text/plain;charset=utf-8,'+encodeURIComponent(t) // format as text file
+	download(getTimestamp()+"_gematria_DB_query.txt", t); // download file
 }
 
 function download(fileName, fileData) {
