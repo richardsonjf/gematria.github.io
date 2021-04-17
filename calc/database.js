@@ -127,6 +127,13 @@ function queryDatabase() {
 	else if (optFiltSameCipherMatch) { searchDBsameCipher() }
 	
 	// console.log(queryResult)
+	
+	// var longestPhr = 0; var tmp
+	// for (i = 0; i < queryResult.length; i++) {
+	// 	tmp = queryResult[i][1].length
+	// 	if (tmp > longestPhr) longestPhr = tmp
+	// }
+	// var tWidth = longestPhr*11 + 58*gemArrCiph.length // 2x1px outer borders + phrase cell and amount of ciphers
 
 	var tWidth = 202 + 58*gemArrCiph.length // 2x1px outer borders + phrase cell and amount of ciphers
 	$("#queryArea").css("min-width", tWidth) // set initial/minimal width for the table
@@ -291,4 +298,36 @@ function NumberArray() {
 		}
 	}
 	return isNum
+}
+
+function db_PhrLenStats(column = 1) { // phrase length statistics inside current database, column can be value[0] or matches[1]
+	var pLenArr = [] // phrase length array
+	for (i = 0; i < userDB.length; i++) {
+		pLenArr.push(userDB[i][0].length) // read length of each phrase
+	}
+	var pStat = countMatches(pLenArr) // number of matches[1] for each value[0]
+	pStat.sort(function(a, b) { // sort by score (descending)
+		return b[column] - a[column]; // sort based on index 1 values, (b-a) descending order, (a-b) ascending
+	});
+	var res = ""
+	for (i = 0; i < pStat.length; i++) {
+		res += pStat[i][0]+','+pStat[i][1]+'\n'
+	}
+	res = res.slice(0,-1) // remove last new line
+	copy(res)
+	console.log("Copied to clipboard!")
+}
+
+function db_CopyPhrOfLen(low, up) { // copy phrases of length within range (inclusive) from database
+	var pLenArr = [] // phrase length array
+	for (i = 0; i < userDB.length; i++) {
+		if (userDB[i][0].length >= low && userDB[i][0].length <= up) pLenArr.push(userDB[i][0]) // load phrase
+	}
+	var res = ""
+	for (i = 0; i < pLenArr.length; i++) {
+		res += pLenArr[i]+'\n'
+	}
+	res = res.slice(0,-1) // remove last new line
+	copy(res)
+	console.log("Copied to clipboard!")
 }

@@ -104,18 +104,22 @@ function updDates(offsetMode = false) { // offsetMode - add/subtract
 	var MD_arr = getMDdiff(d_min, d_max)
 	var WD_arr = getWDdiff(d_min, d_max)
 
-	$('#diff_YMWD').html( dFmt(YMWD_arr.Y)  + ' years ' + dFmt(YMWD_arr.M) + ' months ' + dFmt(MWD_arr.W) + ' weeks ' + dFmt(YMWD_arr.D) + ' days' )
-	$('#diff_YMD').html( dFmt(YMD_arr.Y)  + ' years ' + dFmt(YMD_arr.M) + ' months ' + dFmt(YMD_arr.D) + ' days' )
-	$('#diff_YWD').html( dFmt(YWD_arr.Y)  + ' years ' + dFmt(YWD_arr.W) + ' weeks ' + dFmt(YWD_arr.D) + ' days' )
-	$('#diff_YD').html( dFmt(YD_arr.Y) + ' years ' + dFmt(YD_arr.D) + ' days' )
-	$('#diff_MWD').html( dFmt(MWD_arr.M) + ' months ' + dFmt(MWD_arr.W) + ' weeks ' + dFmt(MWD_arr.D) + ' days' )
-	$('#diff_MD').html( dFmt(MD_arr.M) + ' months ' + dFmt(MD_arr.D) + ' days' )
-	$('#diff_WD').html( dFmt(WD_arr.W) + ' weeks ' + dFmt(WD_arr.D) + ' days' )
-	$('#diff_D').html( dFmt(getDayDiff(d_max, d_min)) + ' days' )
+	$('#diff_YMWD').html( (dFmt(YMWD_arr.Y,0) + dFmt(YMWD_arr.M,1) + dFmt(MWD_arr.W,2) + dFmt(YMWD_arr.D,3)).trim() )
+	$('#diff_YMD').html( (dFmt(YMD_arr.Y,0) + dFmt(YMD_arr.M,1) + dFmt(YMD_arr.D,3)).trim() )
+	$('#diff_YWD').html( (dFmt(YWD_arr.Y,0) + dFmt(YWD_arr.W,2) + dFmt(YWD_arr.D,3)).trim() )
+	$('#diff_YD').html( (dFmt(YD_arr.Y,0) + dFmt(YD_arr.D,3)).trim() )
+	$('#diff_MWD').html( (dFmt(MWD_arr.M,1) + dFmt(MWD_arr.W,2) + dFmt(MWD_arr.D,3)).trim() )
+	$('#diff_MD').html( (dFmt(MD_arr.M,1) + dFmt(MD_arr.D,3)).trim() )
+	$('#diff_WD').html( (dFmt(WD_arr.W,2) + dFmt(WD_arr.D,3)).trim() )
+	$('#diff_D').html( (dFmt(getDayDiff(d_max, d_min),3)).trim() )
 }
 
-function dFmt(val) { // style for numbers
-	o = '<span class="durVal">'+val+'</span>'
+function dFmt(val, mode) { // formatting and label for date durations, y,m,w,d is 0,1,2,3 (optional)
+	var o = ''
+	var dLabel = ['years','months','weeks','days']
+	if (val == 1) dLabel = ['year','month','week','day']
+	if (typeof mode !== 'undefined') { o = '<span class="durVal">'+val+'</span>'+' '+dLabel[mode]+' ' }
+	else { o = '<span class="durVal">'+val+'</span>' }
 	return o
 }
 

@@ -229,6 +229,7 @@ function populateStarNumbers(n) { // inclusive - 1,13,37,73
 }
 
 function getNumDivisors(val) { // first element is sum of all divisors
+	var i
 	if (val == 0 || val >= 10000000) return ["n/a","n/a"]
 	var arr = [1]; var sum = 1
 	for (i = 2; i <= val; i++) {
@@ -239,6 +240,7 @@ function getNumDivisors(val) { // first element is sum of all divisors
 }
 
 function getNumFactorization(val) {
+	var i
 	if (val < 2 || val >= 10000000) return ["n/a"]
 	var arr = []; var p = 0
 	for (i = 0; i < primeNums.length; i++) {
@@ -299,6 +301,7 @@ function numBaseXtoY (num, x, y, separator = "") { // convert number from one ba
 
 	if (num == 0) return num
 
+	var i
 	var baseDigits = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
 	var newBase = [] // array for new base digits
 
@@ -340,8 +343,8 @@ function numBaseXtoY (num, x, y, separator = "") { // convert number from one ba
 }
 
 function incEachDigit(num, inc, separator = "") { // 314 + 1 -> 425
+	var i; var res = ""
 	num = num.toString()
-	var res = ""
 	for (i = 0; i < num.length; i++) { // increment each digit
 		res += (parseInt(num.substring(i,i+1)) + inc).toString() + separator
 	}
@@ -351,7 +354,7 @@ function incEachDigit(num, inc, separator = "") { // 314 + 1 -> 425
 
 function reduceNumber(num) { // digital root of a number
 	num = parseInt(num), 10
-	var droot = num; var d = 0
+	var droot = num; var d = 0; var i
 	while (num > 9 && num !== 11 && num !== 22 && num !== 33) { // not single digit and not a master number
 		droot = 0 // reset droot
 		for (i = 0; i < String(num).length; i++) {
@@ -364,12 +367,12 @@ function reduceNumber(num) { // digital root of a number
 }
 
 function getRomanNumerals(num) {
+	var i; var res = ""
 	if (num == 0 || num >= 4000) return "n/a"
 	var roman = [[1000, 'M'],[900, 'CM'],[500, 'D'],
 		[400, 'CD'],[100, 'C'],[90, 'XC'],
 		[50, 'L'],[40, 'XL'],[10, 'X'],
 		[9, 'IX'],[5, 'V'],[4, 'IV'],[1, 'I']]
-	var res = ""
 	for (i = 0; i < roman.length; i++) {
 		while ( num >= roman[i][0] ) {
 			res += roman[i][1] // append character
