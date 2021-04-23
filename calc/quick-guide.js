@@ -68,7 +68,7 @@ function displayQuickstartGuide() {
 	o += '<hr class="numPropSeparator">'
 	o += '<p><span class="qgBold2">Export</p>'
 
-	o += '<ul><li><span class="qgBold">"Print Cipher Chart", etc</span> - render correspondent element as an image (PNG), image preview is opened first</li>'
+	o += '<ul><li><span class="qgBold">"Print Cipher Chart", etc</span> - render correspondent element as an image (PNG), image preview is opened first<br><span class="qgNote">Note: If text or table are misaligned, click "Refresh" button to generate a new image. Sometimes outer borders may be missing on the preview (bug in Chrome), however the saved image has no such defects</span></li>'
 
 	o += '<li><span class="qgBold">"Import File"</span> - import a <span class="qgBold">.txt</span> file (one phrase per line), previously exported CSV history, exported matches or user ciphers<br><span class="qgNote">Note: You can also drag and drop file into Phrase Box</span></li>'
 

@@ -730,7 +730,7 @@ body {
 	-ms-user-select: none;
 	user-select: none;
 }
-.downImgBtn {
+.downImgBtn, .refreshImgBtn {
     font-size: 125%;
     font-weight: 500;
     color: var(--font-white-2);
@@ -740,7 +740,7 @@ body {
     border: none;
     outline: none;
     border-radius: 20px;
-    margin-top: 1.25em;
+	margin: 1.25em 0.3em 0em 0.3em;
 }
 .previewImg {
 	max-height: 100%;
@@ -750,8 +750,8 @@ body {
 	left: 50%;
 	transform: translate(-50%,-50%);
 }
-.downImgBtn:hover { background-color: var(--btn-hover-accent); }
-.downImgBtn:active { background-color: var(--btn-active-accent); }
+.downImgBtn:hover, .refreshImgBtn:hover { background-color: var(--btn-hover-accent); }
+.downImgBtn:active, .refreshImgBtn:active { background-color: var(--btn-active-accent); }
 
 /*              Number Properties             */
 /* ########################################## */

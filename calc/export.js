@@ -123,23 +123,64 @@ function openImageWindow(element, imgName = "", sRatio = window.devicePixelRatio
 			//wnd = window.open(""); // open new window
 			//wnd.document.body.innerHTML = "<div style='max-height: 100%; max-width: 100%; position: absolute; top: 50%; left: 50%; -webkit-transform: translate(-50%,-50%); transform: translate(-50%,-50%);'><center><br><a href='"+imageDataURL+"' download='"+imgName+"' style='font-family: arial, sans-serif; color: #dedede' >Download</a></center><br><img src="+canvas.toDataURL("image/png")+"></div>";
 			//wnd.document.body.style.backgroundColor = "#000000"; // black background
-			showPrintImagePreview(imageDataURL, imgName)
+			showPrintImagePreview(imageDataURL, imgName, element, sRatio)
 		});
 	}
 }
 
-function showPrintImagePreview(imageDataURL, imgName) {
+function showPrintImagePreview(imageDataURL, imgName, element, sRatio) {
 	$('<div id="darkOverlay" onclick="closePrintImagePreview()"></div>').appendTo('body'); // overlay
 
-	var o = '<div class="printImageContainer">'
-	o += '<div class="previewImg">'
-	o += '<center><input class="downImgBtn" type="button" value="Save Image" onclick="download(&#39;'+imgName+'&#39;, &#39;'+imageDataURL+'&#39;)"></center>' // &#39; - single quote
-	o += '<img src="'+imageDataURL+'" style="padding: 1.5em 2em;">'
-	o += '</div>'
-	o += '</div>'
+	// while .onload code is executed, browser renders the page, there is no need in dimensions
+	// however the extra step with a callback function solves the issue
+	getImgDimensions(imageDataURL, function(imgW, imgH) {
 
-	$(o).appendTo('body'); // preview image
-	$('body').addClass('noScroll') // prevent scrolling
+		// console.log(imgW + 'px ' + imgH + 'px')
+
+		var o = '<div class="printImageContainer">'
+		o += '<div class="previewImg">'
+		o += '<center>'
+		o += '<input class="downImgBtn" type="button" value="Save Image" onclick="download(&#39;'+imgName+'&#39;, &#39;'+imageDataURL+'&#39;)">'
+		o += '<input class="refreshImgBtn" type="button" value="Refresh" onclick="refreshImgPreview(&#39;'+element+'&#39;, &#39;'+imgName+'&#39;, +&#39;'+sRatio+'&#39;);">'
+		o += '</center>' // &#39; - single quote
+		o += '<img id="imgData" src="'+imageDataURL+'" style="padding: 1.5em 2em;">'
+		o += '</div>'
+		o += '</div>'
+
+		$(o).appendTo('body'); // preview image
+		$('body').addClass('noScroll') // prevent scrolling
+
+		// console.log("imgW(display): "+$('#imgData').innerWidth());
+		// console.log("imgW(real): "+imgW);
+		// console.log("areaW: "+$('.printImageContainer').innerWidth());
+		// console.log("---------");
+		// console.log("btnH: "+$('.downImgBtn').outerHeight());
+		// console.log("imgH(display): "+$('#imgData').outerHeight());
+		// console.log("imgH(real): "+imgH);
+		// console.log("areaH: "+$('.printImageContainer').innerHeight());
+		// console.log("---------");
+
+		// if image fits container use nearest neighbor scaling
+		// elements are drawn by a separate thread, so $('#imgData') has padding information only (callback function resolves the issue)
+		if ( $('.downImgBtn').outerHeight() + $('#imgData').outerHeight() <= $('.printImageContainer').innerHeight() &&
+			 $('#imgData').outerWidth() <= $('.printImageContainer').innerWidth() ) {
+			st = $('#imgData').attr('style');
+			st += ' image-rendering: pixelated;'; // render sharp image (no support in Firefox)
+			$('#imgData').attr("style", st); 
+		}
+
+	});
+}
+
+function refreshImgPreview(element, imgName, sRatio) { // close preview, redraw the image
+	closePrintImagePreview()
+	openImageWindow(element, imgName, sRatio);
+}
+
+function getImgDimensions(url, callback) { // w - width, h - height
+    var img = new Image();
+    img.src = url;
+    img.onload = function() { callback(this.width, this.height); }
 }
 
 function closePrintImagePreview() {
