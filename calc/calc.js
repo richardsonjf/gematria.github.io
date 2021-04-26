@@ -71,6 +71,7 @@ function createCiphersMenu() { // create menu with all cipher catergories
 	o += '<div><center>'
 	o += '<input class="intBtn3" type="button" value="Empty" onclick="disableAllCiphers()">'
 	o += '<input class="intBtn3" type="button" value="Default" onclick="enableDefaultCiphers()">'
+	o += '<input class="intBtn3" type="button" value="All (EN)" onclick="enableAllEnglishCiphers()">'
 	o += '<input class="intBtn3" type="button" value="All" onclick="enableAllCiphers()">'
 	o += '</center></div>'
 
@@ -634,6 +635,19 @@ function enableAllCiphers() {
 		cur_chkbox = document.getElementById("cipher_chkbox"+i)
 		cipherList[i].enabled = true
 		if (cur_chkbox !== null) cur_chkbox.checked = true
+	}
+	updateTables() // update
+}
+
+function enableAllEnglishCiphers() {
+	prevCiphIndex = -1 // reset cipher selection
+	var cur_chkbox
+	for (i = 0; i < cipherList.length; i++) {
+		if (cipherList[i].cArr.indexOf(97) > -1) { // lowercase "a"
+			cur_chkbox = document.getElementById("cipher_chkbox"+i)
+			cipherList[i].enabled = true
+			if (cur_chkbox !== null) cur_chkbox.checked = true
+		}
 	}
 	updateTables() // update
 }
