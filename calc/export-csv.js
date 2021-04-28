@@ -40,6 +40,12 @@ function dropHandler(ev) {
 	importFileAction(file)
 }
 
+function processDateFile(userHist) { // calculated date durations for imported file
+	var t = compareDateArray(userHist) // get durations for each pair
+	t = 'data:text/plain;charset=utf-8,'+encodeURIComponent(t) // format as text file
+	download(getTimestamp()+"_GEMATRO_DATES.txt", t); // download file
+}
+	
 function importFileAction(file) {
 	var reader = new FileReader()
 	
@@ -61,7 +67,14 @@ function importFileAction(file) {
 			exportHistoryCSV(userHist, true) // export database
 			return
 		}
-		
+
+		// detect file with dates
+		if (uCiph[0] == "GEMATRO_DATES") {
+			userHist.splice(0,1) // remove the first line
+			processDateFile(userHist) // compare dates
+			return
+		}
+	
 		// detect cipher.js, load user ciphers
 		if (uCiph[0] == "// ciphers.js") {
 			if (dbLoaded) { // return if database is loaded

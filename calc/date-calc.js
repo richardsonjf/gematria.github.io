@@ -123,6 +123,14 @@ function dFmt(val, mode) { // formatting and label for date durations, y,m,w,d i
 	return o
 }
 
+function dFmt2(val, mode) { // label for date durations (array), y,m,w,d is 0,1,2,3 (optional)
+	var o = ''
+	var dLabel = ['years','months','weeks','days']
+	if (val == 1) dLabel = ['year','month','week','day']
+	if (typeof mode !== 'undefined') { o = val+' '+dLabel[mode]+' ' }
+	return o
+}
+
 function n_th(i, yr) { // number ordinal suffix - 1st, 2nd, etc, marked with asterisk on leap year
 	var out;
 	var j = i % 10
@@ -478,4 +486,65 @@ function getWDdiff(d1, d2) { // week, day difference
 
 function getDayDiff(d1, d2) { // days
 	return Math.round( Math.abs(d2-d1) / 86400000 )
+}
+
+function compareDateArray(dArrRaw) { // array as input, e.g. ["09/30/2020", "09/15/2021"]
+	var i, n, d_min, d_max, d_min_comment, d_max_comment
+	var dArr = []; var tmp = ""; var tmp2 = []; var tmpComment = ""
+	for (i = 0; i < dArrRaw.length; i++) { // parse dates
+		tmpComment = "" // reset
+		commentMatch = dArrRaw[i].match(/\[.+\]/g) // find comment
+		if (commentMatch !== null) { tmpComment = commentMatch[0].slice(1,-1) } // remove brackets
+		tmp = dArrRaw[i].replace(/\[.+\]/g, '').trim() // remove comment
+		tmp2 = tmp.split('/') // split m/d/y "09/30/2020" into array
+		dArr.push( [new Date(tmp2[2], tmp2[0]-1, tmp2[1]), tmpComment] ); // y,m,d - month is minus one, [0] - date, [1] - comment
+	}
+	var datePairs = []
+	for (i = 0; i < dArr.length; i++) { // construct date pairs
+		for (n = i+1; n < dArr.length; n++) { // start with the next index
+			d_min = new Date( Math.min(dArr[i][0], dArr[n][0]) ) // earlier date
+			d_max = new Date( Math.max(dArr[i][0], dArr[n][0]) ) // later date
+			if (dArr[i][0] < dArr[n][0]) { // assign comments to each date
+				d_min_comment = dArr[i][1]
+				d_max_comment = dArr[n][1]
+			} else {
+				d_min_comment = dArr[n][1]
+				d_max_comment = dArr[i][1]
+			}
+			if (d_min_comment == "") d_min_comment = "Start Date"
+			if (d_max_comment == "") d_max_comment = "End Date"
+			datePairs.push( [d_min, d_min_comment, d_max, d_max_comment] )
+		}
+	}
+
+	var o = ""
+	var YMWD_arr, YMD_arr, YWD_arr, YD_arr, MWD_arr, MD_arr, WD_arr
+	for (i = 0; i < datePairs.length; i++) { // for each date pair
+		d_min = datePairs[i][0]
+		d_max = datePairs[i][2]
+		YMWD_arr = getYMWDdiff(d_min, d_max) // functions sort dates as well
+		YMD_arr = getYMDdiff(d_min, d_max)
+		YWD_arr = getYWDdiff(d_min, d_max)
+		YD_arr = getYDdiff(d_min, d_max)
+		MWD_arr = getMWDdiff(d_min, d_max)
+		MD_arr = getMDdiff(d_min, d_max)
+		WD_arr = getWDdiff(d_min, d_max)
+
+		o += '============================================\n'
+		o += d_min.getMonth()+1 + '/' + d_min.getDate() + '/' + d_min.getFullYear() + ' ('
+		o += monthNames(d_min.getMonth()) + ' ' + d_min.getDate() + ', ' + d_min.getFullYear() + ') - ' + datePairs[i][1] + '\n' // date - comment
+		o += d_max.getMonth()+1 + '/' + d_max.getDate() + '/' + d_max.getFullYear() + ' ('
+		o += monthNames(d_max.getMonth()) + ' ' + d_max.getDate() + ', ' + d_max.getFullYear() + ') - ' + datePairs[i][3] + '\n' // date - comment
+		o += '--------------------------------------------\n'
+		o += (dFmt2(YMWD_arr.Y,0) + dFmt2(YMWD_arr.M,1) + dFmt2(MWD_arr.W,2) + dFmt2(YMWD_arr.D,3)).trim()+'\n'
+		o += (dFmt2(YMD_arr.Y,0) + dFmt2(YMD_arr.M,1) + dFmt2(YMD_arr.D,3)).trim()+'\n'
+		o += (dFmt2(YWD_arr.Y,0) + dFmt2(YWD_arr.W,2) + dFmt2(YWD_arr.D,3)).trim()+'\n'
+		o += (dFmt2(YD_arr.Y,0) + dFmt2(YD_arr.D,3)).trim()+'\n'
+		o += (dFmt2(MWD_arr.M,1) + dFmt2(MWD_arr.W,2) + dFmt2(MWD_arr.D,3)).trim()+'\n'
+		o += (dFmt2(MD_arr.M,1) + dFmt2(MD_arr.D,3)).trim()+'\n'
+		o += (dFmt2(WD_arr.W,2) + dFmt2(WD_arr.D,3)).trim()+'\n'
+		o += (dFmt2(getDayDiff(d_max, d_min),3)).trim()+'\n\n\n'
+	}
+	o = o.slice(0,-3) // remove last line breaks
+	return o
 }

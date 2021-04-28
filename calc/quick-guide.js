@@ -55,7 +55,7 @@ function displayQuickstartGuide() {
 	o += '<hr class="numPropSeparator">'
 	o += '<p><span class="qgBold2">Features</p>'
 
-	o += '<p class="qgMedium">Date Calculator</p>\n<ul><li>Calculate interval between two dates according to Gregorian calendar, supports <span class="qgBold">Add/Subtract</span> mode<br><span class="qgNote">Note: Make sure to consult timeanddate.com or other websites for precise calculations for old dates or other calendars (e.g. Julian)</span></li></ul>'
+	o += '<p class="qgMedium">Date Calculator</p>\n<ul><li>Calculate interval between two dates according to Gregorian calendar, supports <span class="qgBold">Add/Subtract</span> mode<br><span class="qgNote">Note: Make sure to consult timeanddate.com or other websites for precise calculations for old dates or other calendars (e.g. Julian)</span></li><li>You can <span class="qgBold">import</span> a text file to calculate durations between multiple dates at once.<br>One date per line, <span class="qgBold">M/D/YYYY</span> format, comments are optional:<br><br>GEMATRO_DATES<br>1/28/2006 [comment]<br>11/7/1968 [comment]</li></ul>'
 
 	o += '<p class="qgMedium">Color Controls</p>\n<ul><li>Change cipher colors (<span class="qgBold">HSL</span> - Hue, Saturation, Lightness)</li><li>Make sure to <span class="qgBold">"Export Ciphers"</span> before you make any modifications inside <span class="qgBold">"Edit Ciphers"</span> menu</li></ul>'
 
