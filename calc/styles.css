@@ -1084,6 +1084,10 @@ body {
 	font-size: 85%;
 	color: rgb(128,128,128);
 }
+.qgLink{
+	font-size: 100%;
+	color: var(--font-white-1);
+}
 .noScroll {
 	overflow: hidden;
 }

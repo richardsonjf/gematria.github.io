@@ -109,6 +109,11 @@ function displayQuickstartGuide() {
 
 	o += '<li><span class="qgBold">"Right Click"</span> on horizontal scroll bar to temporarily minimize the table if it obstructs the interface. Right click again to bring the table back<br><span class="qgNote">Hint: You can zoom out the page if too many ciphers are active</span></ul>'
 
+	o += '<hr class="numPropSeparator">'
+	o += '<p><span class="qgBold2">Additional Resources</p>'
+
+	o += '<ul><li><a class="qgLink" href="https://gematriaresearch.blogspot.com/">https://gematriaresearch.blogspot.com/</a><br><span class="qgNote">"Improve your Gematria practice by knowing the History behind your Ciphers"<br>"To know your tools means to know your work"</span></li></ul>'
+
 	o += '</div>'
 
 	$(o).appendTo('body'); // guide
