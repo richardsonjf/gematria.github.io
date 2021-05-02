@@ -45,7 +45,7 @@ $(document).ready(function(){
 
 	$("body").on("click", "#btn-print-history-png", function () {
 		// phrase-with-spaces_2021-03-26_10-23-52_table.png
-		var fileName = sHistory[0].normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-")+
+		var fileName = sHistory[0].normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-").replace(/["|']/g, "")+
 			"_"+getTimestamp()+"_table.png";
 		openImageWindow(".HistoryTable", fileName);
 	});
@@ -53,7 +53,7 @@ $(document).ready(function(){
 	$("body").on("click", "#btn-print-word-break-png", function () {
 		// phrase-with-spaces_English-Ordinal_190_breakdown.png
 		for (var i = 0; i < cipherList.length; i++) { if (cipherList[i].cipherName == breakCipher) break; } // get current cipher index
-		var fileName = sVal().normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-")+
+		var fileName = sVal().normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-").replace(/["|']/g, "")+
 			"_"+breakCipher.replace(/ /g, "-")+"_"+cipherList[i].calcGematria(sVal())+"_breakdown.png";
 		openImageWindow("#BreakTableContainer", fileName);
 	});
@@ -74,7 +74,7 @@ $(document).ready(function(){
 		updateCipherChartGemCard(); // redraw cipher chart for current cipher (with borders)
 
 		// phrase-with-spaces_English-Ordinal_190_card.png
-		var fileName = sVal().normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-")+
+		var fileName = sVal().normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-").replace(/["|']/g, "")+
 			"_"+breakCipher.replace(/ /g, "-")+"_"+cipherList[i].calcGematria(sVal())+"_card.png";
 		openImageWindow("#BreakdownDetails", fileName, 1.5); // scale 1.5x
 	});
