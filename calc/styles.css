@@ -730,7 +730,7 @@ body {
 	-ms-user-select: none;
 	user-select: none;
 }
-.downImgBtn, .refreshImgBtn {
+#downImgBtn, .refreshImgBtn {
     font-size: 125%;
     font-weight: 500;
     color: var(--font-white-2);
@@ -752,8 +752,8 @@ body {
 	display: grid;
 	place-items: center;
 }
-.downImgBtn:hover, .refreshImgBtn:hover { background-color: var(--btn-hover-accent); }
-.downImgBtn:active, .refreshImgBtn:active { background-color: var(--btn-active-accent); }
+#downImgBtn:hover, .refreshImgBtn:hover { background-color: var(--btn-hover-accent); }
+#downImgBtn:active, .refreshImgBtn:active { background-color: var(--btn-active-accent); }
 
 /*              Number Properties             */
 /* ########################################## */

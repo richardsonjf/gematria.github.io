@@ -127,6 +127,7 @@ function openImageWindow(element, imgName = "", sRatio = window.devicePixelRatio
 				showPrintImagePreview(imageDataURL, imgName, element, sRatio) // show preview panel
 			} else {
 				$('#imgData').attr("src", imageDataURL) // update image only
+				$('#downImgBtn').attr("onclick", "download('"+imgName+"', '"+imageDataURL+"')")
 			}
 		});
 	}
@@ -137,7 +138,7 @@ function showPrintImagePreview(imageDataURL, imgName, element, sRatio) {
 
 	var o = '<div class="printImageContainer">'
 	o += '<center><div class="prevBtnArea">'
-	o += '<input class="downImgBtn" type="button" value="Save Image" onclick="download(&#39;'+imgName+'&#39;, &#39;'+imageDataURL+'&#39;)">' // &#39; - single quote
+	o += '<input id="downImgBtn" type="button" value="Save Image" onclick="download(&#39;'+imgName+'&#39;, &#39;'+imageDataURL+'&#39;)">' // &#39; - single quote
 	o += '<input class="refreshImgBtn" type="button" value="Refresh" onclick="openImageWindow(&#39;'+element+'&#39;, &#39;'+imgName+'&#39;, +&#39;'+sRatio+'&#39;, true);">'
 	o += '</div></center>'
 	o += '<div class="imgDataArea"><img id="imgData" src="'+imageDataURL+'"></div>'
