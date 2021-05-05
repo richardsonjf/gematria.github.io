@@ -23,6 +23,7 @@ function updateWordBreakdown(impName = breakCipher, impBool = false, chartUpd = 
 
 	updateEnabledCipherCount()
 	$("#BreakTableContainer").removeClass("hideValue") // unhide breakdown
+	$("#BreakdownDetails").attr("style", "") // reset padding (gematria card)
 
 	if (impBool == true) breakCipher = impName // lock to a specific cipher
 		
