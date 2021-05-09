@@ -316,7 +316,7 @@ body {
 	text-align: center;
 }
 #BreakTableContainer {
-	padding: 0.2em;
+	padding: 0.4em 0.4em 0.4em 0.8em;
 	border: 1px solid var(--border-dark-accent);
 	width: -webkit-fit-content;
 	width: -moz-fit-content;
@@ -326,6 +326,7 @@ body {
 	font-weight: 500;
 	padding-right: 2px;
 	padding-left: 2px;
+	font-family: "Roboto Mono", "Arial", sans-serif;
 }
 .breakCipher {
 	display: inline;
@@ -356,11 +357,13 @@ body {
 	width: -moz-fit-content;
 }
 .BreakTable td {
-	min-width: 20px;
+	min-width: 14px;
 }
 .BreakVal {
 	color: var(--font-white-2);
-	font-size: 95%;
+    color: hsl(0 0% 75% / 1);
+    font-weight: 600;
+	font-size: 74%;
 	padding-right: 3px;
 	padding-left: 3px;
 }
@@ -406,6 +409,8 @@ body {
 	font-size: 90%;
 	padding-top: 2px;
 	padding-bottom: 2px;
+	font-weight: 500;
+	padding-right: 0.5em;
 }
 .LetterCounts {
 	color: var(--font-white-1);
