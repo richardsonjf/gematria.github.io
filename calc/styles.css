@@ -308,6 +308,7 @@ body {
 	padding: 1em 1.5em 1em 1.5em;
 	width: -webkit-fit-content;
 	width: -moz-fit-content;
+	background: var(--body-bg-accent);
 }
 #SimpleBreak {
 	max-width: 800px;
