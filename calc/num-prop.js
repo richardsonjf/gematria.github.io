@@ -136,6 +136,7 @@ function listNumberProperties(val) {
 }
 
 function listNumberPropertiesAlt(val) {
+	var pm = getNumPermutations(val) // number permutations
 
 	var o = '<table class="numPropTable"><tbody>'
 	// Roman Numerals <->
@@ -148,6 +149,16 @@ function listNumberPropertiesAlt(val) {
 	o += '<tr><td><span class="numPropBaseLabel">base36</span></td><td class="numPropBaseValue"><span class="numPropValPad">'+numBaseXtoY(val, 10, 36)+'</span></td></tr>'
 	o += '<tr><td><span class="numPropBaseLabel">base60</span></td><td class="numPropBaseValue"><span class="numPropValPad">'+numBaseXtoY(val, 10, 60, ":")+'</span></td></tr>'
 	// o += '<tr><td><span class="numPropBaseLabel">base7 (+1)</span></td><td class="numPropBaseValue"><span class="numPropValPad">'+incEachDigit(numBaseXtoY(val, 10, 7), 1, "-")+'</span></td></tr>'
+
+	o += '<tr><td colspan=2><hr class="numPropSeparator"></td></tr>'
+
+	o += '<tr><td colspan=2 class="numPropLabel">Permutations</td></tr>'
+	o += '<tr><td colspan=2>'+pm[0][0]
+	for (n = 1; n < pm[0].length; n++) {
+	 	o += ', '+pm[0][n]
+	}
+	o += '</td></tr>'
+	o += '<tr><td colspan=2><b>'+'&#931;'+'</b>'+'<span class="numPropValPad">'+pm[1]+'</span></td></tr>'
 
 	o += '<tr><td colspan=2><hr class="numPropSeparator"></td></tr>'
 
@@ -382,4 +393,43 @@ function getRomanNumerals(num) {
 		}
 	}
 	return res;
+}
+
+var permutator = (inputArr) => { // list all possible permutations
+	let result = [];
+	const permute = (arr, m = []) => {
+		if (arr.length === 0) {
+			result.push(m)
+		} else {
+			for (let i = 0; i < arr.length; i++) {
+				let curr = arr.slice();
+				let next = curr.splice(i, 1);
+				permute(curr.slice(), m.concat(next))
+			}
+		}
+	}
+	permute(inputArr)
+	return result;
+}
+
+function getNumPermutations(n) {
+	var i, m
+	var num = ""; var sum = 0
+	var tmp = n.toString().split("") // number to array with separate digits
+	tmp = permutator(tmp) // get permutations
+
+	var permArr = [] // unique permutations
+	for (i = 0; i < tmp.length; i++) {
+		num = "" // reset
+		for (m = 0; m < tmp[i].length; m++) {
+			num += tmp[i][m] // array to string
+		}
+		if (permArr.indexOf(num) == -1) {
+			permArr.push(num) // add unique permutation
+			sum += parseInt(num) // add to total
+		}
+	}
+	permArr = permArr.map(function (e) { return parseInt(e, 10); }) // parse string array as integer array to exclude quotes
+	permArr.sort(function(a, b) { return a - b; }) // sort ascending order, "b - a" for descending sort
+	return [permArr, sum] // [0] - array with permutations, [1] - total 
 }
