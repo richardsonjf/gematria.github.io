@@ -153,7 +153,7 @@ function listNumberPropertiesAlt(val) {
 	o += '<tr><td colspan=2><hr class="numPropSeparator"></td></tr>'
 
 	o += '<tr><td colspan=2 class="numPropLabel">Permutations</td></tr>'
-	o += '<tr><td colspan=2>'+pm[0][0]
+	o += '<tr><td colspan=2 style="max-width: 350px">'+pm[0][0]
 	for (n = 1; n < pm[0].length; n++) {
 	 	o += ', '+pm[0][n]
 	}
@@ -413,6 +413,7 @@ var permutator = (inputArr) => { // list all possible permutations
 }
 
 function getNumPermutations(n) {
+	if (n == 0 || n >= 10000) return [["n/a"],"n/a"]
 	var i, m
 	var num = ""; var sum = 0
 	var tmp = n.toString().split("") // number to array with separate digits
