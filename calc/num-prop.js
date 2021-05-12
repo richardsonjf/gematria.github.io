@@ -101,6 +101,9 @@ function listNumberProperties(val) {
 
 	var o = '<table class="numPropTable"><tbody>'
 
+	o += '<tr><td class="numValLabel">'+val+'</td></tr>'
+	o += '<tr><td><hr class="numPropSeparator"></td></tr>'
+
 	o += '<tr><td class="numPropLabel">Prime</td></tr>'
 	o += '<tr><td class="npLine">'+getNumProp(val, primeNums)+'</td></tr>'
 	o += '<tr><td class="numPropLabel">Fibonacci</td></tr>'
@@ -139,7 +142,9 @@ function listNumberPropertiesAlt(val) {
 	var pm = getNumPermutations(val) // number permutations
 
 	var o = '<table class="numPropTable"><tbody>'
-	// Roman Numerals <->
+
+	o += '<tr><td colspan=2 class="numValLabel">'+val+'</td></tr>'
+	o += '<tr><td colspan=2><hr class="numPropSeparator"></td></tr>'
 
 	o += '<tr><td colspan=2 class="numPropLabel">Number Bases</td><tr>'
 	o += '<tr><td><span class="numPropBaseLabel">base2</span></td><td class="numPropBaseValue"><span class="numPropValPad">'+numBaseXtoY(val, 10, 2)+'</span></td></tr>'
@@ -153,7 +158,7 @@ function listNumberPropertiesAlt(val) {
 	o += '<tr><td colspan=2><hr class="numPropSeparator"></td></tr>'
 
 	o += '<tr><td colspan=2 class="numPropLabel">Permutations</td></tr>'
-	o += '<tr><td colspan=2 style="max-width: 350px">'+pm[0][0]
+	o += '<tr><td colspan=2 style="max-width: 200px">'+pm[0][0]
 	for (n = 1; n < pm[0].length; n++) {
 	 	o += ', '+pm[0][n]
 	}
