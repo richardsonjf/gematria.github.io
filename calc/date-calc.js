@@ -530,21 +530,78 @@ function compareDateArray(dArrRaw) { // array as input, e.g. ["09/30/2020", "09/
 		MD_arr = getMDdiff(d_min, d_max)
 		WD_arr = getWDdiff(d_min, d_max)
 
-		o += '============================================\n'
+		// combine digits for date duration
+		YMWD_all = concat_YMWD(YMWD_arr)
+		YMD_all = concat_YMWD(YMD_arr)
+		YWD_all = concat_YMWD(YWD_arr)
+		YD_all = concat_YMWD(YD_arr)
+		MWD_all = concat_YMWD(MWD_arr)
+		MD_all = concat_YMWD(MD_arr)
+		WD_all = concat_YMWD(WD_arr)
+
+		// -1 day (negative)
+		d_max_n1 = new Date(d_max.getFullYear(), d_max.getMonth(), d_max.getDate()-1)
+		YMWD_all_n1 = concat_YMWD(getYMWDdiff(d_min, d_max_n1))
+		YMD_all_n1 = concat_YMWD(getYMDdiff(d_min, d_max_n1))
+		YWD_all_n1 = concat_YMWD(getYWDdiff(d_min, d_max_n1))
+		YD_all_n1 = concat_YMWD(getYDdiff(d_min, d_max_n1))
+		MWD_all_n1 = concat_YMWD(getMWDdiff(d_min, d_max_n1))
+		MD_all_n1 = concat_YMWD(getMDdiff(d_min, d_max_n1))
+		WD_all_n1 = concat_YMWD(getWDdiff(d_min, d_max_n1))
+
+		// +1 day (positive)
+		d_max_p1 = new Date(d_max.getFullYear(), d_max.getMonth(), d_max.getDate()+1)
+		YMWD_all_p1 = concat_YMWD(getYMWDdiff(d_min, d_max_p1))
+		YMD_all_p1 = concat_YMWD(getYMDdiff(d_min, d_max_p1))
+		YWD_all_p1 = concat_YMWD(getYWDdiff(d_min, d_max_p1))
+		YD_all_p1 = concat_YMWD(getYDdiff(d_min, d_max_p1))
+		MWD_all_p1 = concat_YMWD(getMWDdiff(d_min, d_max_p1))
+		MD_all_p1 = concat_YMWD(getMDdiff(d_min, d_max_p1))
+		WD_all_p1 = concat_YMWD(getWDdiff(d_min, d_max_p1))
+
+		o += '=========================================================================\n'
 		o += d_min.getMonth()+1 + '/' + d_min.getDate() + '/' + d_min.getFullYear() + ' ('
 		o += monthNames(d_min.getMonth()) + ' ' + d_min.getDate() + ', ' + d_min.getFullYear() + ') - ' + datePairs[i][1] + '\n' // date - comment
 		o += d_max.getMonth()+1 + '/' + d_max.getDate() + '/' + d_max.getFullYear() + ' ('
 		o += monthNames(d_max.getMonth()) + ' ' + d_max.getDate() + ', ' + d_max.getFullYear() + ') - ' + datePairs[i][3] + '\n' // date - comment
-		o += '--------------------------------------------\n'
-		o += (dFmt2(YMWD_arr.Y,0) + dFmt2(YMWD_arr.M,1) + dFmt2(MWD_arr.W,2) + dFmt2(YMWD_arr.D,3)).trim()+'\n'
-		o += (dFmt2(YMD_arr.Y,0) + dFmt2(YMD_arr.M,1) + dFmt2(YMD_arr.D,3)).trim()+'\n'
-		o += (dFmt2(YWD_arr.Y,0) + dFmt2(YWD_arr.W,2) + dFmt2(YWD_arr.D,3)).trim()+'\n'
-		o += (dFmt2(YD_arr.Y,0) + dFmt2(YD_arr.D,3)).trim()+'\n'
-		o += (dFmt2(MWD_arr.M,1) + dFmt2(MWD_arr.W,2) + dFmt2(MWD_arr.D,3)).trim()+'\n'
-		o += (dFmt2(MD_arr.M,1) + dFmt2(MD_arr.D,3)).trim()+'\n'
-		o += (dFmt2(WD_arr.W,2) + dFmt2(WD_arr.D,3)).trim()+'\n'
-		o += (dFmt2(getDayDiff(d_max, d_min),3)).trim()+'\n\n\n'
+		o += '-------------------------------------------------------------------------\n'
+		if (YMWD_arr.Y !== 0) { // exclude durations if less than a year
+			o += padStr((dFmt2(YMWD_arr.Y,0) + dFmt2(YMWD_arr.M,1) + dFmt2(MWD_arr.W,2) + dFmt2(YMWD_arr.D,3)).trim()) + '| '
+			o += YMWD_all + '; '+ YMWD_all_n1 + ';(-1) ' + YMWD_all_p1 + ';(+1)\n'
+			o += padStr((dFmt2(YMD_arr.Y,0) + dFmt2(YMD_arr.M,1) + dFmt2(YMD_arr.D,3)).trim()) + '| '
+			o += YMD_all + '; '+ YMD_all_n1 + ';(-1) ' + YMD_all_p1 + ';(+1)\n'
+			o += padStr((dFmt2(YWD_arr.Y,0) + dFmt2(YWD_arr.W,2) + dFmt2(YWD_arr.D,3)).trim()) + '| '
+			o += YWD_all + '; '+ YWD_all_n1 + ';(-1) ' + YWD_all_p1 + ';(+1)\n'
+			o += padStr((dFmt2(YD_arr.Y,0) + dFmt2(YD_arr.D,3)).trim()) + '| '
+			o += YD_all + '; '+ YD_all_n1 + ';(-1) ' + YD_all_p1 + ';(+1)\n'
+		}
+
+		o += padStr((dFmt2(MWD_arr.M,1) + dFmt2(MWD_arr.W,2) + dFmt2(MWD_arr.D,3)).trim()) + '| '
+		o += MWD_all + '; '+ MWD_all_n1 + ';(-1) ' + MWD_all_p1 + ';(+1)\n'
+		o += padStr((dFmt2(MD_arr.M,1) + dFmt2(MD_arr.D,3)).trim()) + '| '
+		o += MD_all + '; '+ MD_all_n1 + ';(-1) ' + MD_all_p1 + ';(+1)\n'
+		o += padStr((dFmt2(WD_arr.W,2) + dFmt2(WD_arr.D,3)).trim()) + '| '
+		o += WD_all + '; '+ WD_all_n1 + ';(-1) ' + WD_all_p1 + ';(+1)\n'
+		o += padStr((dFmt2(getDayDiff(d_max, d_min),3)).trim()) + '| '
+		o += getDayDiff(d_max, d_min) + '; ' + parseInt(getDayDiff(d_max, d_min)-1) + ';(-1) ' + parseInt(getDayDiff(d_max, d_min)+1) + ';(+1)\n\n\n'
 	}
 	o = o.slice(0,-3) // remove last line breaks
 	return o
+}
+
+function concat_YMWD(obj) { // object .Y/M/W/D
+	var str = ""
+	if (obj.Y !== undefined) str += obj.Y
+	if (obj.M !== undefined) str += obj.M
+	if (obj.W !== undefined) str += obj.W
+	if (obj.D !== undefined) str += obj.D
+	str = str.replace(/(^0|0$)/g, "") // removes zeroes from both sides
+	return str
+}
+
+function padStr(str, chars = 40) { // add spaces to string to match length
+	var i = 0
+	n_sp = chars - str.length
+	while (i < n_sp) { str += " "; i++ }
+	return str
 }

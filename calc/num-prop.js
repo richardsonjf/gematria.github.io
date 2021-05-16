@@ -330,7 +330,7 @@ function numBaseXtoY (num, x, y, separator = "") { // convert number from one ba
 		num = 0
 		for (i = 0; i < len; i++) {
 			// choose last digit, replace with decimal equivalent from array, multiply result by base raised to power
-			num += baseDigits.indexOf(num_str.substring(len-i-1,len-i)) * Math.pow(x, pow)
+			num += baseDigits.indexOf(num_str.substring(len-i-1,len-i).toLowerCase()) * Math.pow(x, pow)
 			pow++ // increment power for tens, hundrends, etc.
 		}
 	}
