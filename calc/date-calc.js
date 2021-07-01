@@ -78,6 +78,7 @@ function updDates(offsetMode = false) { // offsetMode - add/subtract
 
 	var d_min = new Date( Math.min(d1,d2) ) // dates used for calculation
 	var d_max = new Date( Math.max(d1,d2) )
+	var d_max_disp = new Date( Math.max(d1,d2) ) // date for display
 	d_max.setDate(d_max.getDate() + endDate) // +1 day to include end date if necessary
 
 	// from Date 1 to Date 2 is:
@@ -88,11 +89,11 @@ function updDates(offsetMode = false) { // offsetMode - add/subtract
 	o += dFmt(daysLeftInYear(d_min))+'<span style="font-weight: 400;"> days remaining</span>'
 	$('#d1full_t2').html(o)
 
-	var o = '<span class="weekDayLabel">'+dayOfWeek(d_max.getDay())+',</span>'+' '
-	o += '<span class="dateFullTable2">'+monthNames(d_max.getMonth())+' '+d_max.getDate()+', '+d_max.getFullYear()+'</span>'
+	var o = '<span class="weekDayLabel">'+dayOfWeek(d_max_disp.getDay())+',</span>'+' '
+	o += '<span class="dateFullTable2">'+monthNames(d_max_disp.getMonth())+' '+d_max_disp.getDate()+', '+d_max_disp.getFullYear()+'</span>'
 	o += '<br>'
-	o += dFmt(dayOfYear(d_max))+n_th(dayOfYear(d_max), d_max.getFullYear())+'<span style="font-weight: 400;"> day of the year / <span>'
-	o += dFmt(daysLeftInYear(d_max))+'<span style="font-weight: 400;"> days remaining</span>'
+	o += dFmt(dayOfYear(d_max_disp))+n_th(dayOfYear(d_max_disp), d_max_disp.getFullYear())+'<span style="font-weight: 400;"> day of the year / <span>'
+	o += dFmt(daysLeftInYear(d_max_disp))+'<span style="font-weight: 400;"> days remaining</span>'
 	$('#d2full_t2').html(o)
 
 	// date difference
@@ -560,10 +561,10 @@ function compareDateArray(dArrRaw) { // array as input, e.g. ["09/30/2020", "09/
 		WD_all_p1 = concat_YMWD(getWDdiff(d_min, d_max_p1))
 
 		o += '=========================================================================\n'
-		o += d_min.getMonth()+1 + '/' + d_min.getDate() + '/' + d_min.getFullYear() + ' ('
-		o += monthNames(d_min.getMonth()) + ' ' + d_min.getDate() + ', ' + d_min.getFullYear() + ') - ' + datePairs[i][1] + '\n' // date - comment
-		o += d_max.getMonth()+1 + '/' + d_max.getDate() + '/' + d_max.getFullYear() + ' ('
-		o += monthNames(d_max.getMonth()) + ' ' + d_max.getDate() + ', ' + d_max.getFullYear() + ') - ' + datePairs[i][3] + '\n' // date - comment
+		o += d_min.getMonth()+1 + '/' + d_min.getDate() + '/' + d_min.getFullYear() + ' | '
+		o += monthNames(d_min.getMonth()) + ' ' + d_min.getDate() + ', ' + d_min.getFullYear() + ' (' + dayOfYear(d_min) + '/' + daysLeftInYear(d_min) + ') - ' + datePairs[i][1] + '\n' // date - comment
+		o += d_max.getMonth()+1 + '/' + d_max.getDate() + '/' + d_max.getFullYear() + ' | '
+		o += monthNames(d_max.getMonth()) + ' ' + d_max.getDate() + ', ' + d_max.getFullYear() + ' (' + dayOfYear(d_max) + '/' + daysLeftInYear(d_max) + ') - ' + datePairs[i][3] + '\n' // date - comment
 		o += '-------------------------------------------------------------------------\n'
 		if (YMWD_arr.Y !== 0) { // exclude durations if less than a year
 			o += padStr((dFmt2(YMWD_arr.Y,0) + dFmt2(YMWD_arr.M,1) + dFmt2(MWD_arr.W,2) + dFmt2(YMWD_arr.D,3)).trim()) + '| '
